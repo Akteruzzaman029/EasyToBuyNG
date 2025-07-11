@@ -1,0 +1,45 @@
+<div class="row g-0">
+
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <input type="text" class="form-control" placeholder="Search by name"
+                [(ngModel)]="oUserPackageFilterRequestDto.name" name="name">
+        </div>
+    </div>
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <input type="text" class="form-control" placeholder="Search by id no"
+                [(ngModel)]="oUserPackageFilterRequestDto.idNo" name="idNo">
+        </div>
+    </div>
+
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <input type="date" class="form-control" [(ngModel)]="startDate" name="startDate">
+        </div>
+    </div>
+
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <input type="date" class="form-control" [(ngModel)]="endDate" name="endDate">
+        </div>
+    </div>
+
+
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <button class="btn btn-success" (click)="Filter()">Search</button>
+        </div>
+    </div>
+
+        <div class="col text-end">
+        <button class="btn btn-success mx-2" (click)="onBtnExport()">XL</button>
+        <button class="btn btn-success" (click)="PDFGenerate()">PDF</button>
+    </div>
+    <div class="col-md-12">
+        <ag-grid-angular class="ag-theme-alpine" style="height: 70vh;width: 100%;" [columnDefs]="colDefsTransection"
+            [rowData]="rowData" [rowSelection]="'single'" (gridReady)="onGridReadyTransection($event)"
+            [defaultColDef]="DeafultCol">
+        </ag-grid-angular>
+    </div>
+</div>

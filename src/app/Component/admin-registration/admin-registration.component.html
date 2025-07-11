@@ -1,0 +1,160 @@
+<div class="card card-warning card-outline mb-4">
+  <div class="card-header text-center">
+    <h5 class="card-title mb-0">Registration Form</h5>
+    <button type="button" class="btn btn-secondary float-end" (click)="BackToList()">Back To List</button>
+  </div>
+
+  <form>
+    <div class="card-body">
+      <!-- Section: Personal Information -->
+      <h6 class="mb-3 text-primary">Personal Information</h6>
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Full Name</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" [(ngModel)]="oRegistrationRequestDto.fullName" name="fullName"
+            placeholder="Enter full name">
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Gender</label>
+        <div class="col-sm-9">
+          <select class="form-select" [(ngModel)]="oRegistrationRequestDto.gender" name="gender">
+            <option value="">-- Select gender --</option>
+            <option value="Male">Male</option>
+            <option value="Fimale">Fimale</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Date of Birth</label>
+        <div class="col-sm-9">
+          <input type="date" class="form-control" [(ngModel)]="oRegistrationRequestDto.dateOfBirth" name="dateOfBirth">
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Postal Code</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" [(ngModel)]="oRegistrationRequestDto.postalCode" name="postalCode"
+            placeholder="Enter postal code">
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="address" class="col-sm-3 col-form-label">Address</label>
+        <div class="col-sm-9">
+          <textarea class="form-control" name="address" [(ngModel)]="oRegistrationRequestDto.address" id="address"
+            rows="2"></textarea>
+        </div>
+      </div>
+
+      <!-- Section: Contact Details -->
+      <h6 class="mb-3 text-primary mt-4">Contact Details</h6>
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Email</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" [(ngModel)]="oRegistrationRequestDto.email" name="email"
+            placeholder="Enter email">
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Phone Number</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" [(ngModel)]="oRegistrationRequestDto.phoneNumber" name="phoneNumber"
+            placeholder="Enter phone number">
+        </div>
+      </div>
+
+
+
+      <!-- Section: Package & Vehicle -->
+      <h6 class="mb-3 text-primary mt-4">Package </h6>
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Package</label>
+        <div class="col-sm-9">
+          <select class="form-select" (change)="PackageChange()" [(ngModel)]="oRegistrationRequestDto.packageId"
+            name="packageId">
+            <option value="0">-- Select package --</option>
+            <option *ngFor="let item of packageList; trackBy: trackByPackage" [value]="item.id">{{ item.name }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">No Of Lesson</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" [(ngModel)]="oRegistrationRequestDto.nooflesson"
+            (keyup)="LessonRateChange()" name="nooflesson" placeholder="Enter no of lesson">
+        </div>
+      </div>
+
+
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Lesson Rate</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" [(ngModel)]="oRegistrationRequestDto.lessonRate"
+            (keyup)="LessonRateChange()" name="lessonRate" placeholder="Enter lesson per rate">
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Learning Stage</label>
+        <div class="col-sm-9">
+          <select class="form-select" [(ngModel)]="oRegistrationRequestDto.learningStage" name="learningStage">
+            <option value="0">Not Started</option>
+            <option value="1">Introduction</option>
+            <option value="2">Intermediate</option>
+            <option value="3">Advanced</option>
+            <option value="4">Mastered</option>
+          </select>
+        </div>
+      </div>
+
+
+
+      <!-- Section: Payment -->
+      <h6 class="mb-3 text-primary mt-4">Payment Info</h6>
+
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Amount</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" disabled [(ngModel)]="oRegistrationRequestDto.amount" name="amount"
+            placeholder="Enter amount">
+        </div>
+      </div>
+      
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Discount Amount</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" [(ngModel)]="oRegistrationRequestDto.discount"
+            (keyup)="DisCountChange()" name="discount" placeholder="Enter discount amount">
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Net Amount</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" disabled [(ngModel)]="oRegistrationRequestDto.netAmount"
+            name="netAmount" placeholder="">
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Payment Amount</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" [(ngModel)]="oRegistrationRequestDto.paymentAmount"
+            name="paymentAmount" placeholder="">
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="card-footer">
+      <button type="button" class="btn btn-warning me-2 float-end" (click)="Registration()">Register</button>
+      <!-- <button type="reset" class="btn btn-secondary">Reset</button> -->
+    </div>
+  </form>
+</div>

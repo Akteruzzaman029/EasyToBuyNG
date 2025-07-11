@@ -1,0 +1,166 @@
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title fs-5" id="examplecardLabel">Student Lesson Assignment
+        </h1>
+    </div>
+    <div class="card-body">
+        <div class="row g-0">
+            <!-- Left Section: Form -->
+            <div class="col-md-8">
+                <div class="row g-0">
+
+                    <!-- Section: Student Info -->
+                    <div class="col-12 px-2 mb-3">
+                        <h5 class="border-bottom pb-1">Student Info</h5>
+                    </div>
+
+                    <div class="col-md-4 px-2">
+                        <div class="mb-2">
+                            <label class="form-label">Student</label>
+                            <select class="form-select" disabled [(ngModel)]="oBookingAssignRequestDto.studentId"
+                                name="studentId">
+                                <option value="">-- select student -- </option>
+                                <option *ngFor="let item of studentList; trackBy: trackByUser" [value]="item.id">{{
+                                    item.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Section: Booking Info -->
+                    <div class="col-12 px-2 mb-3 mt-3">
+                        <h5 class="border-bottom pb-1">Booking Info</h5>
+                    </div>
+
+                    <div class="col-md-4 px-2">
+                        <div class="mb-2">
+                            <label class="form-label">Slot</label>
+                            <select class="form-select" [(ngModel)]="oBookingAssignRequestDto.slotId" name="slotId">
+                                <option value="0">-- select slot -- </option>
+                                <option *ngFor="let item of slotList; trackBy: trackBySlot" [value]="item.id">
+                                   {{item.startTime }} - {{item.endTime }}
+                                    </option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <!-- Section: Dates -->
+                    <div class="col-12 px-2 mb-3 mt-3">
+                        <h5 class="border-bottom pb-1">Schedule Info</h5>
+                    </div>
+
+                    <div class="col-md-4 px-2">
+                        <div class="mb-2">
+                            <label class="form-label">Package Start Date</label>
+                            <input type="date" class="form-control" [(ngModel)]="packageStartDate"
+                                name="packageStartDate">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 px-2">
+                        <div class="mb-2">
+                            <label class="form-label">Expiry Date</label>
+                            <input type="date" class="form-control" [(ngModel)]="expiryDate" name="expiryDate">
+                        </div>
+                    </div>
+
+                    <!-- Section: Package Info -->
+                    <div class="col-12 px-2 mb-3 mt-3">
+                        <h5 class="border-bottom pb-1">Package Info</h5>
+                    </div>
+
+                    <div class="col-md-4 px-2">
+                        <div class="mb-2">
+                            <label class="form-label">Package Name</label>
+                            <input type="text" class="form-control" disabled
+                                [(ngModel)]="oStudentResponseDto.packageName">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 px-2">
+                        <div class="mb-2">
+                            <label class="form-label">Total Lessons</label>
+                            <input type="text" class="form-control" disabled
+                                [(ngModel)]="oStudentResponseDto.totalLessons">
+                        </div>
+                    </div>
+
+                    <!-- Section: Remarks -->
+                    <div class="col-12 px-2 mt-3">
+                        <h5 class="border-bottom pb-1">Remarks</h5>
+                        <textarea class="form-control" rows="3"
+                            [(ngModel)]="oBookingAssignRequestDto.remarks"></textarea>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Section: Grid -->
+            <div class="col-md-4">
+                <h5 class="border-bottom pb-1">Schedule Table</h5>
+                <ag-grid-angular class="ag-theme-alpine" style="height: 48vh; width: 100%;" [columnDefs]="colDefsDay"
+                    [rowData]="rowDataDay" [rowSelection]="'multiple'" [defaultColDef]="DeafultCol"
+                    (gridReady)="onGridReadyDay($event)">
+                </ag-grid-angular>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="card-footer text-end">
+
+        <button type="button" class="btn btn-primary" (click)="GeneratedBookingSlot()">Generated Booking Slot</button>
+        <!-- @if (bookingId==0){
+        <button type="button" class="btn btn-primary" (click)="InsertBooking()">Save</button>
+        }
+        @if (bookingId>0){
+        <button type="button" class="btn btn-primary" (click)="UpdateBooking()">Update</button>
+        } -->
+    </div>
+</div>
+
+
+<div class="row g-0">
+    <div class="col-md-12 my-2">
+        <ag-grid-angular class="ag-theme-alpine" style="height: 50vh;width: 100%;" [columnDefs]="colDefsBookingSlot"
+            [rowData]="rowDataBookingSlot" [rowSelection]="'single'" (gridReady)="onGridReadyBookingSlot($event)"
+            [defaultColDef]="DeafultCol">
+        </ag-grid-angular>
+    </div>
+    <div class="col-md-12 text-end">
+        <button type="button" class="btn btn-success" (click)="ConfirmBookingSlot()">Confirm</button>
+    </div>
+</div>
+
+
+
+
+<button type="button" class="btn btn-primary" hidden data-bs-toggle="modal" id="openCommonDelete"
+    data-bs-target="#staticCommonBackdrop">
+    Launch static backdrop modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticCommonBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Slot Assignment Delete</h1>
+                <button type="button" class="btn-close" id="closeCommonDelete" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-0">
+                    <div class="col-md-6 h2 text-center">
+                        are you confirm delete?
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Close </button>
+                <button type="button" class="btn btn-primary" (click)="DeleteBooking()"> Confirm </button>
+            </div>
+        </div>
+    </div>
+</div>

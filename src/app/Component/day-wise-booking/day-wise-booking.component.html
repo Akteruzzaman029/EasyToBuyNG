@@ -1,0 +1,41 @@
+<div class="row g-0">
+
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <input type="text" class="form-control" [(ngModel)]="oBookingFilterRequestDto.name" name="name" placeholder="Type student name ..">
+        </div>
+    </div>
+
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <select class="form-select" [(ngModel)]="oBookingFilterRequestDto.isActive" name="isActive"
+                aria-label="Default select example">
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <button class="btn btn-success" (click)="Filter()">Search</button>
+        </div>
+    </div>
+
+    <div class="col text-end">
+        <button class="btn btn-success mx-1" (click)="add()"><i class="bi bi-plus"></i> Add Lesson</button>
+    </div>
+
+
+    <div class="col-md-12">
+        <ag-grid-angular class="ag-theme-alpine" style="height: 70vh;width: 100%;" [columnDefs]="colDefsTransection"
+            [rowData]="rowData" [rowSelection]="'single'" (gridReady)="onGridReadyTransection($event)"
+            [defaultColDef]="DeafultCol">
+        </ag-grid-angular>
+    </div>
+    <div class="col-md-12">
+        <app-pagination [pageSize]="10" [currentPage]="pageIndex" [totalItems]="totalRecords"
+            (pageChange)="PageChange($event)"></app-pagination>
+    </div>
+
+</div>
