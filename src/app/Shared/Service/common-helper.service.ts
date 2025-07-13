@@ -59,7 +59,7 @@ export class CommonHelper {
     }
   }
 
-  public static GetUser(): UserResponseDto | null {
+  public static GetUser(): UserResponseDto {
     let oUserResponseDto = new UserResponseDto();
     if (typeof window !== 'undefined' && localStorage) {
       var user = localStorage.getItem("UserResponseDto");
