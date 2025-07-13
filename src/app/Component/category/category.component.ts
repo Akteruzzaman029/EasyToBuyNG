@@ -9,11 +9,12 @@ import { AGGridHelper } from '../../Shared/Service/AGGridHelper';
 import { AuthService } from '../../Shared/Service/auth.service';
 import { CommonHelper } from '../../Shared/Service/common-helper.service';
 import { HttpHelperService } from '../../Shared/Service/http-helper.service';
+import { PaginationComponent } from "../../Shared/pagination/pagination.component";
 
 @Component({
   selector: 'app-category',
   standalone: true,
-  imports: [CommonModule, FormsModule, AgGridAngular],
+  imports: [CommonModule, FormsModule, AgGridAngular, PaginationComponent],
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss',
   providers: [DatePipe]
@@ -57,6 +58,11 @@ export class CategoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.GetCategorys();
+    this.GetCategory();
+  }
+
+  PageChange(event: any) {
+    this.pageIndex = Number(event);
     this.GetCategory();
   }
 
