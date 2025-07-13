@@ -38,8 +38,8 @@ export class PackTypeComponent implements OnInit {
 
   public colDefsTransection: any[] = [
     { valueGetter: "node.rowIndex + 1", headerName: 'SL', width: 90, editable: false, checkboxSelection: false },
-    { field: 'name', width: 150, headerName: 'PackType Name', filter: true },
-    { field: 'subPackTypeName', width: 150, headerName: 'Sub PackType Name', filter: true },
+    { field: 'name', width: 150, headerName: 'Name', filter: true },
+    { field: 'shortName', width: 150, headerName: 'Short Name', filter: true },
     { field: 'remarks', headerName: 'Remarks' },
     { field: 'isActive', headerName: 'Status' },
   ];

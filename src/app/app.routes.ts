@@ -46,6 +46,11 @@ import { DayWiseBookingComponent } from './Component/day-wise-booking/day-wise-b
 import { CheckListComponent } from './Component/check-list/check-list.component';
 import { CheckListCreateComponent } from './Component/check-list-create/check-list-create.component';
 import { CalenderSlotComponent } from './Component/calender-slot/calender-slot.component';
+import { PackTypeComponent } from './Component/pack-type/pack-type.component';
+import { MeasurementUnitComponent } from './Component/measurement-unit/measurement-unit.component';
+import { ProductComponent } from './Component/product/product.component';
+import { OrderPaymentComponent } from './Component/order-payment/order-payment.component';
+import { OrderComponent } from './Component/order/order.component';
 
 export const routes: Routes = [
     {
@@ -109,6 +114,12 @@ export const routes: Routes = [
             { path: 'head/:id', component: ExpenditureHeadCreateComponent, title: ' Expenditure Head Create' },
             { path: 'calender', component: CalenderComponent, title: ' Calender Create' },
             { path: 'calender/:id', component: DayWiseBookingComponent, title: ' Calender Create' },
+
+            { path: 'packType', component: PackTypeComponent, title: ' PackType' },
+            { path: 'measurement-unit', component: MeasurementUnitComponent, title: ' Measurement Unit' },
+            { path: 'product', component: ProductComponent, title: ' pPoduct' },
+            { path: 'order', component: OrderComponent, title: ' Order' },
+            { path: 'order-payment', component: OrderPaymentComponent, title: ' Order Payment' },
             { path: '', pathMatch: 'full', redirectTo: 'dashboard' }
         ]
     },
