@@ -43,6 +43,7 @@ export class ProductRequestDto {
         this.isFixedAmount =false;
         this.discount = 0;
         this.remarks =  "";
+        this.userId =  "";
         this.isActive = true;
     }
     public companyId: number;
@@ -63,5 +64,6 @@ export class ProductRequestDto {
     public isFixedAmount: boolean;
     public discount: number;
     public remarks: string;
+    public userId: string;
     public isActive: boolean;
 }

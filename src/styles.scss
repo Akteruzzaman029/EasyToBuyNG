@@ -30,7 +30,7 @@
 
 /* Reduce row height */
 .custom-grid .ag-row {
-    height: 30px;
+    height: 30px;                   
 }
 
 /* Reduce padding inside header cells */
@@ -48,3 +48,7 @@
     height: 140px;
     width: 100%;
 } 
+
+.bg-theme{
+    background-color: #ffffff !important;
+}

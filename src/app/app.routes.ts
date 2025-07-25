@@ -74,7 +74,6 @@ export const routes: Routes = [
             { path: 'login', component: LoginComponent, canActivate: [LoginGuard], title: 'Log in User' },
             { path: 'registration', component: RegistrationComponent, canActivate: [LoginGuard], title: 'Registration' },
             { path: 'dashboard', component: DashboardComponent, title: 'Dashboard' },
-            { path: 'category', component: CategoryComponent, title: 'Category List' },
             { path: 'appointment', component: AppointmentComponent, title: 'Appointment List' },
             { path: 'instructor', component: InstructorComponent, title: 'Instructor List' },
             { path: 'student', component: StudentComponent, title: 'Student List' },
@@ -114,12 +113,13 @@ export const routes: Routes = [
             { path: 'head/:id', component: ExpenditureHeadCreateComponent, title: ' Expenditure Head Create' },
             { path: 'calender', component: CalenderComponent, title: ' Calender Create' },
             { path: 'calender/:id', component: DayWiseBookingComponent, title: ' Calender Create' },
-
+            
+            { path: 'category', component: CategoryComponent, title: 'Category List' },
             { path: 'packType', component: PackTypeComponent, title: ' PackType' },
             { path: 'measurement-unit', component: MeasurementUnitComponent, title: ' Measurement Unit' },
-            { path: 'product', component: ProductComponent, title: ' pPoduct' },
-            { path: 'order', component: OrderComponent, title: ' Order' },
-            { path: 'order-payment', component: OrderPaymentComponent, title: ' Order Payment' },
+            { path: 'product', component: ProductComponent, title: ' Product List' },
+            { path: 'order', component: OrderComponent, title: ' Order List' },
+            { path: 'order-payment', component: OrderPaymentComponent, title: ' Order Payment List' },
             { path: '', pathMatch: 'full', redirectTo: 'dashboard' }
         ]
     },

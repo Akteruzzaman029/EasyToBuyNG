@@ -3,20 +3,63 @@
     <div class="col-2 px-1">
         <div class="mb-2">
             <input type="text" class="form-control" [(ngModel)]="oProductFilterDto.name" name="name"
-                placeholder="type here ...">
+                placeholder="product name ...">
         </div>
     </div>
     <div class="col-2 px-1">
         <div class="mb-2">
-            <select class="form-select" [(ngModel)]="oProductFilterDto.categoryId" name="categoryId"
-                aria-label="Default select example">
-                <option value="0">-- select product -- </option>
-                <option *ngFor="let item of productList; trackBy: trackByProduct" [value]="item.id">
+            <input type="text" class="form-control" [(ngModel)]="oProductFilterDto.modelNo" name="modelNo"
+                placeholder="model name ...">
+        </div>
+    </div>
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <select class="form-select" [(ngModel)]="oProductFilterDto.categoryId"
+                (change)="onCategoryChange($event)" name="categoryId" aria-label="Default select example">
+                <option value="0">-- select category -- </option>
+                <option *ngFor="let item of categoryList; trackBy: trackByCategoryFrom" [value]="item.id">
                     {{ item.name }}
                 </option>
             </select>
         </div>
     </div>
+
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <select class="form-select" [(ngModel)]="oProductFilterDto.subCategoryId" name="subCategoryId"
+                aria-label="Default select example">
+                <option value="0">-- select category -- </option>
+                <option *ngFor="let item of subCategoryList; trackBy: trackBySubCategory" [value]="item.id">
+                    {{ item.name }}
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <select class="form-select" [(ngModel)]="oProductFilterDto.measurementUnitId" name="measurementUnitId"
+                aria-label="Default select example">
+                <option value="0">-- select measurement unit -- </option>
+                <option *ngFor="let item of measurementUnitList; trackBy: trackByProduct" [value]="item.id">
+                    {{ item.unitName }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <select class="form-select" [(ngModel)]="oProductFilterDto.packTypeId" name="packTypeId"
+                aria-label="Default select example">
+                <option value="0">-- select pack type -- </option>
+                <option *ngFor="let item of packTypeList; trackBy: trackByProduct" [value]="item.id">
+                    {{ item.name }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+
     <div class="col-2 px-1">
         <div class="mb-2">
             <select class="form-select" [(ngModel)]="oProductFilterDto.isActive" name="isActive"
@@ -66,7 +109,7 @@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Product
@@ -78,31 +121,62 @@
             <div class="modal-body">
                 <div class="row g-0">
 
-                    <div class="col-12 px-1">
+                    <div class="col-6 px-1">
                         <div class="mb-2">
                             <label for="categoryId" class="form-label">Category</label>
-                            <select class="form-select" [(ngModel)]="oProductRequestDto.categoryId" name="categoryId"
+                            <select class="form-select" [(ngModel)]="oProductRequestDto.categoryId"
+                                (change)="onCategoryChangeFrom($event)" name="categoryId"
                                 aria-label="Default select example">
                                 <option value="0">-- select category -- </option>
-                                <option *ngFor="let item of productList; trackBy: trackByProduct" [value]="item.id">
+                                <option *ngFor="let item of categoryList; trackBy: trackByCategoryFrom"
+                                    [value]="item.id">
                                     {{ item.name }}
                                 </option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-12 px-1">
+
+                    <div class="col-6 px-1">
                         <div class="mb-2">
                             <label for="subCategoryId" class="form-label">Sub Category</label>
-                            <select class="form-select" [(ngModel)]="oProductRequestDto.subCategoryId" name="subCategoryId"
-                                aria-label="Default select example">
+                            <select class="form-select" [(ngModel)]="oProductRequestDto.subCategoryId"
+                                name="subCategoryId" aria-label="Default select example">
                                 <option value="0">-- select category -- </option>
-                                <option *ngFor="let item of productList; trackBy: trackByProduct" [value]="item.id">
+                                <option *ngFor="let item of subCategoryFromList; trackBy: trackBySubCategoryFrom"
+                                    [value]="item.id">
                                     {{ item.name }}
                                 </option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-12 px-1">
+                    <div class="col-6 px-1">
+                        <div class="mb-2">
+                            <label for="measurementUnitId" class="form-label">Measurement Unit</label>
+                            <select class="form-select" [(ngModel)]="oProductRequestDto.measurementUnitId"
+                                name="measurementUnitId" aria-label="Default select example">
+                                <option value="0">-- select measurement unit -- </option>
+                                <option *ngFor="let item of measurementUnitList; trackBy: trackByProduct"
+                                    [value]="item.id">
+                                    {{ item.unitName }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-6 px-1">
+                        <div class="mb-2">
+                            <label for="packTypeId" class="form-label">Pack Type</label>
+                            <select class="form-select" [(ngModel)]="oProductRequestDto.packTypeId" name="packTypeId"
+                                aria-label="Default select example">
+                                <option value="0">-- select pack type -- </option>
+                                <option *ngFor="let item of packTypeList; trackBy: trackByProduct" [value]="item.id">
+                                    {{ item.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-6 px-1">
                         <div class="mb-2">
                             <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control" [(ngModel)]="oProductRequestDto.name" name="name"
@@ -110,7 +184,99 @@
                         </div>
                     </div>
 
-                    <div class="col-12 px-1">
+                    <div class="col-6 px-1">
+                        <div class="mb-2">
+                            <label for="shortName" class="form-label">Short Name</label>
+                            <input type="text" class="form-control" [(ngModel)]="oProductRequestDto.shortName"
+                                name="shortName" placeholder="Please enter short name">
+                        </div>
+                    </div>
+
+                    <div class="col-6 px-1">
+                        <div class="mb-2">
+                            <label for="modelNo" class="form-label">Model No</label>
+                            <input type="text" class="form-control" [(ngModel)]="oProductRequestDto.modelNo"
+                                name="modelNo" placeholder="Please enter model no">
+                        </div>
+                    </div>
+
+                    <div class="col-6 px-1">
+                        <div class="mb-2">
+                            <label for="uploadFile" class="form-label">Product Image</label>
+                            <input type="file" class="form-control" id="uploadFile" (change)="onFileChange($event)"
+                                placeholder="Select file to upload">
+                        </div>
+                    </div>
+
+                    <div class="col-6 px-1">
+                        <div class="mb-2">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" name="description"
+                                [(ngModel)]="oProductRequestDto.description" id="description" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-6 px-1">
+                        <div class="mb-2">
+                            <label for="purchasePrice" class="form-label">Purchase Price</label>
+                            <input type="text" class="form-control" [(ngModel)]="oProductRequestDto.purchasePrice"
+                                name="purchasePrice" placeholder="Please enter purchasePrice">
+                        </div>
+                    </div>
+                    <div class="col-6 px-1">
+                        <div class="mb-2">
+                            <label for="vat" class="form-label">VAT</label>
+                            <input type="text" class="form-control" [(ngModel)]="oProductRequestDto.vat" name="vat"
+                                placeholder="Please enter VAT">
+                        </div>
+                    </div>
+                    <div class="col-6 px-1">
+                        <div class="mb-2">
+                            <label for="stock" class="form-label">Stock</label>
+                            <input type="text" class="form-control" [(ngModel)]="oProductRequestDto.stock" name="stock"
+                                placeholder="Please enter stock">
+                        </div>
+                    </div>
+
+                    <div class="col-6 px-1">
+                        <div class="mb-2">
+                            <label for="isConsider" class="form-label">Is Consider</label>
+                            <select class="form-select" [(ngModel)]="oProductRequestDto.isConsider" name="isConsider"
+                                aria-label="Default select example">
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6 px-1">
+                        <div class="mb-2">
+                            <label for="isBarCode" class="form-label">Is Bar Code</label>
+                            <select class="form-select" [(ngModel)]="oProductRequestDto.isBarCode" name="isBarCode"
+                                aria-label="Default select example">
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-6 px-1">
+                        <div class="mb-2">
+                            <label for="discount" class="form-label">Discount</label>
+                            <input type="text" class="form-control" [(ngModel)]="oProductRequestDto.discount"
+                                name="discount" placeholder="Please enter discount">
+                        </div>
+                    </div>
+
+                    <div class="col-6 px-1">
+                        <div class="mb-2">
+                            <label for="isFixedAmount" class="form-label">Is FixedAmount</label>
+                            <select class="form-select" [(ngModel)]="oProductRequestDto.isFixedAmount"
+                                name="isFixedAmount" aria-label="Default select example">
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6 px-1">
                         <div class="mb-2">
                             <label for="isActive" class="form-label">Status</label>
                             <select class="form-select" [(ngModel)]="oProductRequestDto.isActive" name="isActive"
@@ -120,7 +286,8 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-12 mb-3">
+
+                    <div class="col-6 mb-3">
                         <label for="remarks" class="form-label">Remarks</label>
                         <textarea class="form-control" name="remarks" [(ngModel)]="oProductRequestDto.remarks"
                             id="remarks" rows="3"></textarea>

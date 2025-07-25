@@ -87,6 +87,7 @@ export class CategoryComponent implements OnInit {
   private GetCategory() {
 
     let currentUser = CommonHelper.GetUser();
+    this.oCategoryFilterRequestDto.companyId = Number(currentUser?.companyId);
     this.oCategoryFilterRequestDto.parentId = Number(this.oCategoryFilterRequestDto.parentId);
     this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(this.oCategoryFilterRequestDto.isActive);
     // After the hash is generated, proceed with the API call
@@ -112,10 +113,11 @@ export class CategoryComponent implements OnInit {
   private GetCategorys() {
 
     let currentUser = CommonHelper.GetUser();
+    this.oCategoryFilterRequestDto.companyId = Number(currentUser?.companyId);
     this.oCategoryFilterRequestDto.parentId = 0;
     this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(this.oCategoryFilterRequestDto.isActive);
     // After the hash is generated, proceed with the API call
-    this.http.Get(`Category/GetAllCategories/${0}`).subscribe(
+    this.http.Post(`Category/GetAllCategories`, this.oCategoryFilterRequestDto).subscribe(
       (res: any) => {
         this.categoryList = res;
       },
@@ -134,7 +136,8 @@ export class CategoryComponent implements OnInit {
       return;
     }
     let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.parentId = Number(this.oCategoryFilterRequestDto.parentId);
+    this.oCategoryRequestDto.companyId = Number(currentUser.companyId);
+    this.oCategoryRequestDto.parentId = Number(this.oCategoryRequestDto.parentId);
     this.oCategoryRequestDto.isActive = CommonHelper.booleanConvert(this.oCategoryRequestDto.isActive);
     // After the hash is generated, proceed with the API call
     this.http.Post(`Category/InsertCategory`, this.oCategoryRequestDto).subscribe(
@@ -156,6 +159,9 @@ export class CategoryComponent implements OnInit {
       this.toast.warning("Please enter name", "Warning!!", { progressBar: true });
       return;
     }
+    let currentUser = CommonHelper.GetUser();
+    this.oCategoryFilterRequestDto.companyId = Number(currentUser.companyId);
+    this.oCategoryFilterRequestDto.parentId = Number(this.oCategoryFilterRequestDto.parentId);
     this.oCategoryRequestDto.isActive = CommonHelper.booleanConvert(this.oCategoryRequestDto.isActive);
     // After the hash is generated, proceed with the API call
     this.http.Post(`Category/UpdateCategory/${this.categoryId}`, this.oCategoryRequestDto).subscribe(

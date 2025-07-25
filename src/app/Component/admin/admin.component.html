@@ -230,6 +230,59 @@
                             <a href="#" class="nav-link" [class.active]="studentOpen" (click)="toggleStudent($event)">
                                 <i class="nav-icon bi bi-mortarboard-fill"></i>
                                 <p>
+                                    Config
+                                    <i class="nav-arrow bi"
+                                        [ngClass]="studentOpen ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" [style.display]="studentOpen ? 'block' : 'none'">
+                                <li class="nav-item">
+                                    <a routerLink="/admin/category" class="nav-link"
+                                        routerLinkActive="active">
+                                        <i class="nav-icon bi bi-person"></i>
+                                        <p>Category</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a routerLink="/admin/packType" class="nav-link"
+                                        routerLinkActive="active">
+                                        <i class="nav-icon bi bi-person"></i>
+                                        <p>Pack Type</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a routerLink="/admin/measurement-unit" class="nav-link" routerLinkActive="active">
+                                        <i class="nav-icon bi bi-mortarboard-fill"></i>
+                                        <p>Measurement Unit</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a routerLink="/admin/product" class="nav-link" routerLinkActive="active">
+                                        <i class="nav-icon bi bi-journal-check"></i>
+                                        <p>Product List</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a routerLink="/admin/order" class="nav-link" routerLinkActive="active">
+                                        <i class="nav-icon bi bi-journal-check"></i>
+                                        <p>Order List</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a routerLink="/admin/order-payment" class="nav-link" routerLinkActive="active">
+                                        <i class="nav-icon bi bi-journal-check"></i>
+                                        <p>Order Payment List</p>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <!-- Student
+                        <li class="nav-item" [class.menu-open]="studentOpen">
+                            <a href="#" class="nav-link" [class.active]="studentOpen" (click)="toggleStudent($event)">
+                                <i class="nav-icon bi bi-mortarboard-fill"></i>
+                                <p>
                                     Student
                                     <i class="nav-arrow bi"
                                         [ngClass]="studentOpen ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
@@ -258,7 +311,7 @@
                                 </li>
 
                             </ul>
-                        </li>
+                        </li> -->
 
 
                         <!-- Student -->

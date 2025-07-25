@@ -11,6 +11,9 @@ import { AuthService } from '../../Shared/Service/auth.service';
 import { CommonHelper } from '../../Shared/Service/common-helper.service';
 import { HttpHelperService } from '../../Shared/Service/http-helper.service';
 import { UserResponseDto } from '../../Model/UserResponseDto';
+import { PackTypeFilterDto } from '../../Model/PackType';
+import { MeasurementUnitFilterDto } from '../../Model/MeasurementUnit';
+import { CategoryFilterRequestDto } from '../../Model/Category';
 
 @Component({
   selector: 'app-product',
@@ -26,6 +29,17 @@ export class ProductComponent implements OnInit {
   public DeafultCol = AGGridHelper.DeafultCol;
   public rowData!: any[];
   public productList: any[] = [];
+
+  public categoryList: any[] = [];
+  public categoryFromList: any[] = [];
+  public subCategoryList: any[] = [];
+  public subCategoryFromList: any[] = [];
+  public measurementUnitList: any[] = [];
+  public packTypeList: any[] = [];
+
+  public oPackTypeFilterDto = new PackTypeFilterDto();
+  public oCategoryFilterRequestDto = new CategoryFilterRequestDto();
+  public oMeasurementUnitFilterDto = new MeasurementUnitFilterDto();
   public oProductFilterDto = new ProductFilterDto();
   public oProductRequestDto = new ProductRequestDto();
   public oCurrentUser = new UserResponseDto();
@@ -39,14 +53,38 @@ export class ProductComponent implements OnInit {
 
   public colDefsTransection: any[] = [
     { valueGetter: "node.rowIndex + 1", headerName: 'SL', width: 90, editable: false, checkboxSelection: false },
+    { field: 'categoryName', width: 150, headerName: 'Category', filter: true },
+    { field: 'subCategoryName', width: 150, headerName: 'Sub Category', filter: true },
+    { field: 'measurementUnitName', width: 150, headerName: 'Measurement Unit', filter: true },
+    { field: 'packTypeName', width: 150, headerName: 'Pack Type', filter: true },
     { field: 'name', width: 150, headerName: 'Product Name', filter: true },
-    { field: 'subProductName', width: 150, headerName: 'Sub Product Name', filter: true },
+    { field: 'modelNo', width: 150, headerName: 'Model No', filter: true },
+    { field: 'purchasePrice', width: 150, headerName: 'Purchase Price', filter: true },
+    { field: 'vat', width: 150, headerName: 'VAT', filter: true },
+    { field: 'shortName', width: 150, headerName: 'Short Name', filter: true },
+    { field: 'description', width: 150, headerName: 'Description', filter: true },
+    { field: 'isConsider', width: 150, headerName: 'Is Consider', filter: true },
+    { field: 'isBarCode', width: 150, headerName: 'Is Bar Code', filter: true },
+    { field: 'fileId', width: 150, headerName: 'File ID', filter: true },
+    { field: 'stock', width: 150, headerName: 'Stock', filter: true },
+    { field: 'isFixedAmount', width: 150, headerName: 'Is Fixed Amount', filter: true },
+    { field: 'discount', width: 150, headerName: 'Discount', filter: true },
     { field: 'remarks', headerName: 'Remarks' },
     { field: 'isActive', headerName: 'Status' },
   ];
   trackByFn: TrackByFunction<any> | any;
   trackByProduct: TrackByFunction<any> | any;
+
+  trackByCategory: TrackByFunction<any> | any;
+  trackByCategoryFrom: TrackByFunction<any> | any;
+  trackBySubCategory: TrackByFunction<any> | any;
+  trackBySubCategoryFrom: TrackByFunction<any> | any;
+  trackByPackType: TrackByFunction<any> | any;
+  trackByPackTypeFrom: TrackByFunction<any> | any;
+  trackByMeasurementUnit: TrackByFunction<any> | any;
+  trackByMeasurementUnitFrom: TrackByFunction<any> | any;
   trackByProductFrom: TrackByFunction<any> | any;
+
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -58,7 +96,9 @@ export class ProductComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.GetProducts();
+    this.GetAllCategories();
+    this.GetAllPackTypes();
+    this.GetAllMeasurementUnits();
     this.GetProduct();
   }
 
@@ -100,7 +140,7 @@ export class ProductComponent implements OnInit {
         this.pageIndex = res.pageIndex;
         this.totalPages = res.totalPages;
         this.totalRecords = res.totalRecords;
-        this.productGridApi.sizeColumnsToFit();
+        // this.productGridApi.sizeColumnsToFit();
       },
       (err) => {
         this.toast.error(err.ErrorMessage, "Error!!", { progressBar: true });
@@ -109,13 +149,57 @@ export class ProductComponent implements OnInit {
 
   }
 
-  private GetProducts() {
-    this.oProductFilterDto.categoryId = 0;
-    this.oProductFilterDto.isActive = CommonHelper.booleanConvert(this.oProductFilterDto.isActive);
+
+  public onCategoryChangeFrom(event: any) {
+    this.subCategoryFromList = [];
+    this.GetAllSubCategoriesFrom();
+  }
+
+  public onCategoryChange(event: any) {
+    this.oProductFilterDto.categoryId = Number(event.target.value);
+    this.subCategoryList = [];
+    this.GetAllSubCategories();
+  }
+
+  private GetAllCategories() {
+    this.oCategoryFilterRequestDto.parentId = 0;
+    this.oCategoryFilterRequestDto.companyId = Number(this.oCurrentUser?.companyId) || 0;
+    this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(this.oCategoryFilterRequestDto.isActive);
     // After the hash is generated, proceed with the API call
-    this.http.Get(`Product/GetAllCategories/${0}`).subscribe(
+    this.http.Post(`Category/GetAllCategories`, this.oCategoryFilterRequestDto).subscribe(
       (res: any) => {
-        this.productList = res;
+        this.categoryList = res;
+        this.GetAllSubCategories();
+      },
+      (err) => {
+        this.toast.error(err.ErrorMessage, "Error!!", { progressBar: true });
+      }
+    );
+
+  }
+  private GetAllSubCategories() {
+    this.oCategoryFilterRequestDto.parentId = Number(this.oProductFilterDto.categoryId) || 0;
+    this.oCategoryFilterRequestDto.companyId = Number(this.oCurrentUser?.companyId) || 0;
+    this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(this.oCategoryFilterRequestDto.isActive);
+    // After the hash is generated, proceed with the API call
+    this.http.Post(`Category/GetAllCategories`, this.oCategoryFilterRequestDto).subscribe(
+      (res: any) => {
+        this.subCategoryList = res;
+      },
+      (err) => {
+        this.toast.error(err.ErrorMessage, "Error!!", { progressBar: true });
+      }
+    );
+
+  }
+  private GetAllSubCategoriesFrom() {
+    this.oCategoryFilterRequestDto.parentId = Number(this.oProductRequestDto.categoryId) || 0;
+    this.oCategoryFilterRequestDto.companyId = Number(this.oCurrentUser?.companyId) || 0;
+    this.oCategoryFilterRequestDto.isActive = true;
+    // After the hash is generated, proceed with the API call
+    this.http.Post(`Category/GetAllCategories`, this.oCategoryFilterRequestDto).subscribe(
+      (res: any) => {
+        this.subCategoryFromList = res;
       },
       (err) => {
         this.toast.error(err.ErrorMessage, "Error!!", { progressBar: true });
@@ -124,6 +208,51 @@ export class ProductComponent implements OnInit {
 
   }
 
+  private GetAllPackTypes() {
+    this.oPackTypeFilterDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oPackTypeFilterDto.isActive = CommonHelper.booleanConvert(this.oPackTypeFilterDto.isActive);
+    // After the hash is generated, proceed with the API call
+    this.http.Post(`PackType/GetAllPackTypes`, this.oPackTypeFilterDto).subscribe(
+      (res: any) => {
+        this.packTypeList = res;
+      },
+      (err) => {
+        this.toast.error(err.ErrorMessage, "Error!!", { progressBar: true });
+      }
+    );
+
+  }
+  private GetAllMeasurementUnits() {
+    this.oMeasurementUnitFilterDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oMeasurementUnitFilterDto.isActive = CommonHelper.booleanConvert(this.oMeasurementUnitFilterDto.isActive);
+    // After the hash is generated, proceed with the API call
+    this.http.Post(`MeasurementUnit/GetAllMeasurementUnits`, this.oMeasurementUnitFilterDto).subscribe(
+      (res: any) => {
+        this.measurementUnitList = res;
+      },
+      (err) => {
+        this.toast.error(err.ErrorMessage, "Error!!", { progressBar: true });
+      }
+    );
+
+  }
+
+
+  public onFileChange(event: any): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.http.UploadFile(`UploadedFile/Upload`, file).subscribe(
+        (res: any) => {
+          this.oProductRequestDto.fileId = res.id;
+        },
+        (err) => {
+          console.log(err.ErrorMessage);
+        }
+      );
+    }
+
+  }
 
   public InsertProduct() {
 
@@ -132,11 +261,19 @@ export class ProductComponent implements OnInit {
       return;
     }
 
-    this.oProductFilterDto.categoryId = Number(this.oCurrentUser?.companyId);
-    this.oProductFilterDto.categoryId = Number(this.oProductFilterDto.categoryId);
-    this.oProductFilterDto.subCategoryId = Number(this.oProductFilterDto.subCategoryId);
-    this.oProductFilterDto.measurementUnitId = Number(this.oProductFilterDto.measurementUnitId);
-    this.oProductFilterDto.packTypeId = Number(this.oProductFilterDto.packTypeId);
+    this.oProductRequestDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oProductRequestDto.categoryId = Number(this.oProductRequestDto.categoryId);
+    this.oProductRequestDto.subCategoryId = Number(this.oProductRequestDto.subCategoryId);
+    this.oProductRequestDto.measurementUnitId = Number(this.oProductRequestDto.measurementUnitId);
+    this.oProductRequestDto.packTypeId = Number(this.oProductRequestDto.packTypeId);
+    this.oProductRequestDto.discount = Number(this.oProductRequestDto.discount);
+    this.oProductRequestDto.vat = Number(this.oProductRequestDto.vat);
+    this.oProductRequestDto.purchasePrice = Number(this.oProductRequestDto.purchasePrice);
+    this.oProductRequestDto.fileId = Number(this.oProductRequestDto.fileId);
+    this.oProductRequestDto.stock = Number(this.oProductRequestDto.stock);
+    this.oProductRequestDto.isConsider = CommonHelper.booleanConvert(this.oProductRequestDto.isConsider);
+    this.oProductRequestDto.isBarCode = CommonHelper.booleanConvert(this.oProductRequestDto.isBarCode);
+    this.oProductRequestDto.isFixedAmount = CommonHelper.booleanConvert(this.oProductRequestDto.isFixedAmount);
     this.oProductRequestDto.isActive = CommonHelper.booleanConvert(this.oProductRequestDto.isActive);
     // After the hash is generated, proceed with the API call
     this.http.Post(`Product/InsertProduct`, this.oProductRequestDto).subscribe(
@@ -159,13 +296,22 @@ export class ProductComponent implements OnInit {
       return;
     }
 
-    this.oProductFilterDto.categoryId = Number(this.oCurrentUser?.companyId);
-    this.oProductFilterDto.categoryId = Number(this.oProductFilterDto.categoryId);
-    this.oProductFilterDto.subCategoryId = Number(this.oProductFilterDto.subCategoryId);
-    this.oProductFilterDto.measurementUnitId = Number(this.oProductFilterDto.measurementUnitId);
-    this.oProductFilterDto.packTypeId = Number(this.oProductFilterDto.packTypeId);
-
+    this.oProductRequestDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oProductRequestDto.categoryId = Number(this.oProductRequestDto.categoryId);
+    this.oProductRequestDto.subCategoryId = Number(this.oProductRequestDto.subCategoryId);
+    this.oProductRequestDto.measurementUnitId = Number(this.oProductRequestDto.measurementUnitId);
+    this.oProductRequestDto.packTypeId = Number(this.oProductRequestDto.packTypeId);
+    this.oProductRequestDto.discount = Number(this.oProductRequestDto.discount);
+    this.oProductRequestDto.vat = Number(this.oProductRequestDto.vat);
+    this.oProductRequestDto.purchasePrice = Number(this.oProductRequestDto.purchasePrice);
+    this.oProductRequestDto.fileId = Number(this.oProductRequestDto.fileId);
+    this.oProductRequestDto.stock = Number(this.oProductRequestDto.stock);
+    this.oProductRequestDto.isConsider = CommonHelper.booleanConvert(this.oProductRequestDto.isConsider);
+    this.oProductRequestDto.isBarCode = CommonHelper.booleanConvert(this.oProductRequestDto.isBarCode);
+    this.oProductRequestDto.isFixedAmount = CommonHelper.booleanConvert(this.oProductRequestDto.isFixedAmount);
     this.oProductRequestDto.isActive = CommonHelper.booleanConvert(this.oProductRequestDto.isActive);
+
+    this.oProductRequestDto.userId = (this.oCurrentUser?.userId);
     // After the hash is generated, proceed with the API call
     this.http.Post(`Product/UpdateProduct/${this.productId}`, this.oProductRequestDto).subscribe(
       (res: any) => {
@@ -211,7 +357,6 @@ export class ProductComponent implements OnInit {
     this.oProductRequestDto.modelNo = getSelectedItem.modelNo;
     this.oProductRequestDto.description = getSelectedItem.description;
     this.oProductRequestDto.categoryId = Number(getSelectedItem.categoryId);
-    this.oProductRequestDto.categoryId = Number(getSelectedItem.categoryId);
     this.oProductRequestDto.subCategoryId = Number(getSelectedItem.subCategoryId);
     this.oProductRequestDto.measurementUnitId = Number(getSelectedItem.measurementUnitId);
     this.oProductRequestDto.packTypeId = Number(getSelectedItem.packTypeId);
@@ -225,6 +370,8 @@ export class ProductComponent implements OnInit {
     this.oProductRequestDto.isFixedAmount = CommonHelper.booleanConvert(getSelectedItem.isFixedAmount);
     this.oProductRequestDto.isActive = CommonHelper.booleanConvert(getSelectedItem.isActive);
     this.oProductRequestDto.remarks = getSelectedItem.remarks;
+    this.oProductRequestDto.userId = (this.oCurrentUser?.userId);
+    this.GetAllSubCategoriesFrom();
     CommonHelper.CommonButtonClick("openCommonModel");
   }
 
@@ -234,7 +381,7 @@ export class ProductComponent implements OnInit {
       this.toast.warning("Please select an item", "Warning!!", { progressBar: true })
     }
     this.productId = Number(getSelectedItem.id);
- this.oProductRequestDto.name = getSelectedItem.name;
+    this.oProductRequestDto.name = getSelectedItem.name;
     this.oProductRequestDto.shortName = getSelectedItem.shortName;
     this.oProductRequestDto.modelNo = getSelectedItem.modelNo;
     this.oProductRequestDto.description = getSelectedItem.description;
