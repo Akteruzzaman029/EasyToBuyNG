@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid bg-danger">
-        <a class="navbar-brand text-white" href="#">Driving School</a>
+        <a class="navbar-brand text-white" href="#">Easy To Buy</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -30,8 +30,9 @@
 
             </ul>
 
-           <span class="px-2 text-white">  <i class="bi bi-telephone-fill"></i> 01940-533029 </span>
-            <button class="btn btn-outline-secondary my-1 text-white" [routerLink]="'/admin/login'" type="submit">Login</button>
+            <span class="px-2 text-white"> <i class="bi bi-telephone-fill"></i> 01940-533029 </span>
+            <button class="btn btn-outline-secondary my-1 text-white" [routerLink]="'/admin/login'"
+                type="submit">Login</button>
         </div>
     </div>
 </nav>
@@ -44,6 +45,33 @@
 
 
 
+
+
+<div class="floating-compare" (click)="offcanvasButton()"
+    style="position: fixed; bottom: 80px; right: 20px; z-index: 1050;">
+    <a class="btn btn-outline-primary position-relative">
+        <i class="bi bi-cart3 fs-4"></i> <!-- Bootstrap cart icon -->
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ cartItemCount }}
+            <span class="visually-hidden">cart items</span>
+        </span>
+    </a>
+</div>
+
+
+
+<button class="btn btn-primary" hidden id="offcanvasButton" type="button" data-bs-toggle="offcanvas"
+    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Toggle right offcanvas</button>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">Cart Items</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <app-add-to-cart-item></app-add-to-cart-item>
+    </div>
+</div>
 <!-- Footer -->
 <footer class="text-center text-lg-start bg-body-tertiary text-muted">
     <!-- Section: Social media -->

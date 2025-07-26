@@ -5,12 +5,11 @@ import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../Shared/Service/auth.service';
 import { HttpHelperService } from '../../Shared/Service/http-helper.service';
-import { RegistrationComponent } from "../../Component/registration/registration.component";
 
 @Component({
   selector: 'app-driving',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, RegistrationComponent],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './driving.component.html',
   styleUrl: './driving.component.scss',
   providers: [DatePipe]

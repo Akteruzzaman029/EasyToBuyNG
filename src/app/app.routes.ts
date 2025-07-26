@@ -51,20 +51,19 @@ import { MeasurementUnitComponent } from './Component/measurement-unit/measureme
 import { ProductComponent } from './Component/product/product.component';
 import { OrderPaymentComponent } from './Component/order-payment/order-payment.component';
 import { OrderComponent } from './Component/order/order.component';
+import { EasyToBuyHomeComponent } from './General/easy-to-buy-home/easy-to-buy-home.component';
+import { AddToCartItemComponent } from './General/add-to-cart-item/add-to-cart-item.component';
 
 export const routes: Routes = [
-    {
-        path: '',
-        redirectTo: 'admin/login',
-        pathMatch: 'full'
-    },
+
 
     {
-        path: "home",
+        path: "",
         component: HomeComponent,
-        title: "Driving",
-        children: [
-            { path: '', component: DrivingComponent, title: 'Driving Home' },
+        title: "Product", children: [
+            { path: '', component: EasyToBuyHomeComponent, title: 'Easy To Buy Home' },
+            { path: 'checkout', component: AddToCartItemComponent, title: 'Checkout' },
+
         ]
     },
     {
@@ -113,7 +112,7 @@ export const routes: Routes = [
             { path: 'head/:id', component: ExpenditureHeadCreateComponent, title: ' Expenditure Head Create' },
             { path: 'calender', component: CalenderComponent, title: ' Calender Create' },
             { path: 'calender/:id', component: DayWiseBookingComponent, title: ' Calender Create' },
-            
+
             { path: 'category', component: CategoryComponent, title: 'Category List' },
             { path: 'packType', component: PackTypeComponent, title: ' PackType' },
             { path: 'measurement-unit', component: MeasurementUnitComponent, title: ' Measurement Unit' },

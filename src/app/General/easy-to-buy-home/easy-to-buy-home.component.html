@@ -1,0 +1,15 @@
+
+<div class="row g-0">
+    <div class="col-md-2 my-2 px-2" *ngFor="let product of productList">
+        <div class="card" style="width: 18rem;">
+            <img [src]="GetImageUrl(product.fileId)" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">{{product.description  | truncate:100 }}</p>
+                <p class="card-text">Price {{product.purchasePrice | currency:'Tk.' }}</p>
+                <a (click)="AddToCart(product)" class="btn btn-primary">Add To Cart</a>
+            </div>
+        </div>
+    </div>
+</div>
+
