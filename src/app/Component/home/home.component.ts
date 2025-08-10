@@ -1,4 +1,4 @@
-import { Component, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
@@ -17,9 +17,9 @@ import { CartFilterDto } from '../../Model/Cart';
   imports: [CommonModule, FormsModule, RouterOutlet, RouterModule, RouterModule, AddToCartItemComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
-  providers: [DatePipe, CartService, { provide: LOCALE_ID, useValue: 'en-US' }]
+  providers: [DatePipe, { provide: LOCALE_ID, useValue: 'en-US' }]
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   public cartItemCount: number = 0;
   public oCurrentUser = new UserResponseDto();
@@ -34,12 +34,19 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private datePipe: DatePipe) {
     this.oCurrentUser = CommonHelper.GetUser();
+
   }
 
   ngOnInit(): void {
     this.subscription = this.cartService.onCartUpdated().subscribe(() => {
-      this.loadCart(); // your method to refresh cart items
+      debugger
+      // re‑load your cart count, re‑render badge, etc.
+      this.loadCart();
     });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   private GetAllCarts() {
@@ -50,6 +57,7 @@ export class HomeComponent implements OnInit {
     // After the hash is generated, proceed with the API call
     this.http.Post(`Cart/GetAllCarts`, this.oCartFilterDto).subscribe(
       (res: any) => {
+        debugger;
         this.cartItemCount = res.length;
       },
       (err) => {

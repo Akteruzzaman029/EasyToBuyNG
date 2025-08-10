@@ -17,6 +17,7 @@ export class CartFilterDto {
 export class CartRequestDto {
 
     constructor() {
+        this.actionType = 0;
         this.companyId = 0;
         this.userId = '';
         this.guestId = '';
@@ -27,6 +28,7 @@ export class CartRequestDto {
         this.remarks = "";
     }
     public companyId: number;
+    public actionType: number;
     public userId: string;
     public guestId: string;
     public cartType: number;

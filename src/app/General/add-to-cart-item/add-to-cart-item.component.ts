@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../Shared/Service/auth.service';
 import { CommonHelper } from '../../Shared/Service/common-helper.service';
 import { UserResponseDto } from '../../Model/UserResponseDto';
-import { CartFilterDto } from '../../Model/Cart';
+import { CartFilterDto, CartRequestDto } from '../../Model/Cart';
 import { CartService } from '../../Shared/Service/cart.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { HttpHelperService } from '../../Shared/Service/http-helper.service';
@@ -18,13 +18,14 @@ import { HttpHelperService } from '../../Shared/Service/http-helper.service';
   imports: [CommonModule, FormsModule, RouterModule, TruncatePipe],
   templateUrl: './add-to-cart-item.component.html',
   styleUrl: './add-to-cart-item.component.scss',
-  providers: [DatePipe, { provide: LOCALE_ID, useValue: 'en-US' }, CartService]
+  providers: [DatePipe, { provide: LOCALE_ID, useValue: 'en-US' }]
 })
-export class AddToCartItemComponent  implements OnInit, OnDestroy {
+export class AddToCartItemComponent implements OnInit, OnDestroy {
   public oCartFilterDto = new CartFilterDto();
   public oCurrentUser = new UserResponseDto();
+  public oCartRequestDto = new CartRequestDto()
   public cartItemList: any[] = [];
-  private subscription: Subscription | undefined;
+  private subscription: Subscription | any;
 
   constructor(
     public authService: AuthService,
@@ -35,13 +36,17 @@ export class AddToCartItemComponent  implements OnInit, OnDestroy {
     private datePipe: DatePipe
   ) {
     this.oCurrentUser = CommonHelper.GetUser();
+
+
   }
 
   ngOnInit(): void {
+    debugger
     this.subscription = this.cartService.onCartUpdated().subscribe(() => {
+      // re‑load your cart count, re‑render badge, etc.
       this.loadCart();
     });
-    this.loadCart();
+
   }
 
   ngOnDestroy(): void {
@@ -64,43 +69,55 @@ export class AddToCartItemComponent  implements OnInit, OnDestroy {
     );
   }
 
-  increaseQty(index: number): void {
-    if (this.cartItemList[index].quantity < 99) {
-      this.cartItemList[index].quantity += 1;
-      this.updateCartBackend(this.cartItemList[index]);
-    }
+  increaseQty(item: any): void {
+    this.oCartRequestDto = new CartRequestDto();
+    this.oCartRequestDto.guestId = this.cartService.getOrCreateGuestId();
+    this.oCartRequestDto.companyId = item.companyId;
+    this.oCartRequestDto.productId = item.productId;
+    this.oCartRequestDto.quantity = 1;
+    this.oCartRequestDto.actionType = 1;
+    this.http.Post("Cart/InsertCart", this.oCartRequestDto).subscribe(
+      (res) => {
+        this.cartService.notifyCartUpdated(); // Notify cart update
+      },
+      (err) => {
+        this.toast.error(err.ErrorMessage, "Error!!", { progressBar: true });
+      }
+    );
   }
 
-  decreaseQty(index: number): void {
-    if (this.cartItemList[index].quantity > 1) {
-      this.cartItemList[index].quantity -= 1;
-      this.updateCartBackend(this.cartItemList[index]);
-    }
+  decreaseQty(item: any): void {
+    this.oCartRequestDto = new CartRequestDto();
+    this.oCartRequestDto.guestId = this.cartService.getOrCreateGuestId();
+    this.oCartRequestDto.companyId = item.companyId;
+    this.oCartRequestDto.productId = item.productId;
+    this.oCartRequestDto.quantity = 1;
+    this.oCartRequestDto.actionType = -1;
+    this.http.Post("Cart/InsertCart", this.oCartRequestDto).subscribe(
+      (res) => {
+        this.cartService.notifyCartUpdated(); // Notify cart update
+      },
+      (err) => {
+        this.toast.error(err.ErrorMessage, "Error!!", { progressBar: true });
+      }
+    );
   }
 
-  updateCartBackend(cartItem: any): void {
-    // this.cartService.updateQuantity(cartItem).subscribe({
-    //   next: () => {
-    //     this.toast.success('Cart updated!', 'Success');
-    //     this.loadCart(); // reload after update if needed
-    //   },
-    //   error: (err) => {
-    //     this.toast.error(err?.ErrorMessage || 'Failed to update cart.', 'Error');
-    //   }
-    // });
-  }
-
-  removeItem(index: number): void {
-    const item = this.cartItemList[index];
-    // this.cartService.removeItem(item).subscribe({
-    //   next: () => {
-    //     this.toast.success('Item removed from cart');
-    //     this.loadCart();
-    //   },
-    //   error: (err) => {
-    //     this.toast.error('Could not remove item', 'Error');
-    //   }
-    // });
+  removeItem(item: any): void {
+    this.oCartRequestDto = new CartRequestDto();
+    this.oCartRequestDto.guestId = this.cartService.getOrCreateGuestId();
+    this.oCartRequestDto.companyId = item.companyId;
+    this.oCartRequestDto.productId = item.productId;
+    this.oCartRequestDto.quantity = 1;
+    this.oCartRequestDto.actionType = 0;
+    this.http.Post("Cart/InsertCart", this.oCartRequestDto).subscribe(
+      (res) => {
+        this.cartService.notifyCartUpdated(); // Notify cart update
+      },
+      (err) => {
+        this.toast.error(err.ErrorMessage, "Error!!", { progressBar: true });
+      }
+    );
   }
 
   getTotalItems(): number {

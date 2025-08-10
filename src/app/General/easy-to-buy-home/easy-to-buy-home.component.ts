@@ -18,7 +18,7 @@ import { CartRequestDto } from '../../Model/Cart';
   imports: [CommonModule, FormsModule, RouterModule, TruncatePipe],
   templateUrl: './easy-to-buy-home.component.html',
   styleUrl: './easy-to-buy-home.component.scss',
-  providers: [DatePipe,CartService, { provide: LOCALE_ID, useValue: 'en-US' }]
+  providers: [DatePipe, { provide: LOCALE_ID, useValue: 'en-US' }]
 })
 export class EasyToBuyHomeComponent implements OnInit {
 
@@ -75,8 +75,11 @@ export class EasyToBuyHomeComponent implements OnInit {
     this.oCartRequestDto.companyId = product.companyId;
     this.oCartRequestDto.productId = product.id;
     this.oCartRequestDto.quantity = 1;
+    this.oCartRequestDto.actionType = 1;
     this.http.Post("Cart/InsertCart", this.oCartRequestDto).subscribe(
       (res) => {
+        // this.cartService.notifyCartUpdated(); // Notify cart update
+        debugger
         this.cartService.notifyCartUpdated(); // Notify cart update
       },
       (err) => {

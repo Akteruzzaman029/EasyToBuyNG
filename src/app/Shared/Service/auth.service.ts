@@ -9,6 +9,7 @@ import { HttpHelperService } from './http-helper.service';
 export class AuthService {
 
   public tokenSubject = new Subject<any>();
+  public cartChange = new Subject<any>();
   constructor(private http: HttpHelperService) { }
 
   public isLogin(): boolean {

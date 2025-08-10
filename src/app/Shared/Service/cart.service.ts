@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@microsoft/signalr';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { CartRequestDto } from '../../Model/Cart';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

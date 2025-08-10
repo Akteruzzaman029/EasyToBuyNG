@@ -13,7 +13,7 @@ import { AuthService } from '../Service/auth.service';
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
-  providers: [ToastrService, HttpHelperService]
+  providers: [ToastrService]
 })
 export class LoginComponent implements OnInit, AfterViewChecked {
 
