@@ -70,7 +70,7 @@ export const routes: Routes = [
         path: 'admin',
         component: AdminComponent,
         children: [
-            { path: 'login', component: LoginComponent, canActivate: [LoginGuard], title: 'Log in User' },
+            { path: 'login', component: LoginComponent,  title: 'Log in User' },
             { path: 'registration', component: RegistrationComponent, canActivate: [LoginGuard], title: 'Registration' },
             { path: 'dashboard', component: DashboardComponent, title: 'Dashboard' },
             { path: 'appointment', component: AppointmentComponent, title: 'Appointment List' },
