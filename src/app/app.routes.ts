@@ -52,7 +52,7 @@ import { ProductComponent } from './Component/product/product.component';
 import { OrderPaymentComponent } from './Component/order-payment/order-payment.component';
 import { OrderComponent } from './Component/order/order.component';
 import { EasyToBuyHomeComponent } from './General/easy-to-buy-home/easy-to-buy-home.component';
-import { AddToCartItemComponent } from './General/add-to-cart-item/add-to-cart-item.component';
+import { CheckOutComponent } from './General/check-out/check-out.component';
 
 export const routes: Routes = [
 
@@ -62,7 +62,7 @@ export const routes: Routes = [
         component: HomeComponent,
         title: "Product", children: [
             { path: '', component: EasyToBuyHomeComponent, title: 'Easy To Buy Home' },
-            { path: 'checkout', component: AddToCartItemComponent, title: 'Checkout' },
+            { path: 'checkout', component: CheckOutComponent, title: 'Checkout' },
 
         ]
     },

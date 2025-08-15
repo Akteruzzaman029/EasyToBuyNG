@@ -79,7 +79,7 @@ export class EasyToBuyHomeComponent implements OnInit {
     this.http.Post("Cart/InsertCart", this.oCartRequestDto).subscribe(
       (res) => {
         // this.cartService.notifyCartUpdated(); // Notify cart update
-        debugger
+        
         this.cartService.notifyCartUpdated(); // Notify cart update
       },
       (err) => {

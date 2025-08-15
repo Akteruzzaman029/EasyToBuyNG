@@ -41,7 +41,7 @@ export class AddToCartItemComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    debugger
+    
     this.subscription = this.cartService.onCartUpdated().subscribe(() => {
       // re‑load your cart count, re‑render badge, etc.
       this.loadCart();

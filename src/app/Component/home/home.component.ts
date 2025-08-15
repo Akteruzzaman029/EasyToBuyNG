@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription = this.cartService.onCartUpdated().subscribe(() => {
-      debugger
+      
       // re‑load your cart count, re‑render badge, etc.
       this.loadCart();
     });
@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     // After the hash is generated, proceed with the API call
     this.http.Post(`Cart/GetAllCarts`, this.oCartFilterDto).subscribe(
       (res: any) => {
-        debugger;
+        
         this.cartItemCount = res.length;
       },
       (err) => {
