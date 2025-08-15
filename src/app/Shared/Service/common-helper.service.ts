@@ -15,6 +15,18 @@ export class CommonHelper {
     document.getElementById(elementId)?.click();
   }
 
+
+  public static GetComapyId(): number {
+    let companyId = 0;
+    if (typeof window !== 'undefined' && localStorage) {
+      var company = localStorage.getItem("Company");
+      if (company != null) {
+        companyId = Number(company);
+      }
+    }
+    return companyId;
+  }
+
   public static resetFileInput(elementId: string) {
     const fileInput = document.getElementById(elementId) as HTMLInputElement;
     if (fileInput) {

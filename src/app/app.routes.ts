@@ -53,6 +53,8 @@ import { OrderPaymentComponent } from './Component/order-payment/order-payment.c
 import { OrderComponent } from './Component/order/order.component';
 import { EasyToBuyHomeComponent } from './General/easy-to-buy-home/easy-to-buy-home.component';
 import { CheckOutComponent } from './General/check-out/check-out.component';
+import { CompanyComponent } from './Component/company/company.component';
+import { CheckOutProcessComponent } from './General/check-out-process/check-out-process.component';
 
 export const routes: Routes = [
 
@@ -63,6 +65,7 @@ export const routes: Routes = [
         title: "Product", children: [
             { path: '', component: EasyToBuyHomeComponent, title: 'Easy To Buy Home' },
             { path: 'checkout', component: CheckOutComponent, title: 'Checkout' },
+            { path: 'checkout-process', component: CheckOutProcessComponent, title: 'Checkout Process' },
 
         ]
     },
@@ -114,6 +117,7 @@ export const routes: Routes = [
             { path: 'calender/:id', component: DayWiseBookingComponent, title: ' Calender Create' },
 
             { path: 'category', component: CategoryComponent, title: 'Category List' },
+            { path: 'company', component: CompanyComponent, title: 'Company List' },
             { path: 'packType', component: PackTypeComponent, title: ' PackType' },
             { path: 'measurement-unit', component: MeasurementUnitComponent, title: ' Measurement Unit' },
             { path: 'product', component: ProductComponent, title: ' Product List' },

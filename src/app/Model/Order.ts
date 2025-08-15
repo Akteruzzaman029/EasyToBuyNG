@@ -1,3 +1,5 @@
+import { OrderItemRequestDto } from "./OrderItem";
+
 export class OrderFilterDto {
 
     constructor() {
@@ -22,6 +24,8 @@ export class OrderFilterDto {
 export class OrderRequestDto {
 
     constructor() {
+        this.addressId = 0;
+        this.orderType = 0;
         this.companyId = 0;
         this.userId = '';
         this.orderNo = "";
@@ -30,7 +34,10 @@ export class OrderRequestDto {
         this.orderStatus = 0;
         this.isActive = true;
         this.remarks = "";
+        this.orderItems = [];
     }
+    public addressId: number;
+    public orderType: number;
     public companyId: number;
     public userId: string;
     public orderNo: string;
@@ -39,4 +46,5 @@ export class OrderRequestDto {
     public orderStatus: number;
     public remarks: string;
     public isActive: boolean;
+    public orderItems: OrderItemRequestDto[];
 }

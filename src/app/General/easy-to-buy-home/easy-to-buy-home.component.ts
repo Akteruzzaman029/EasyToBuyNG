@@ -69,17 +69,14 @@ export class EasyToBuyHomeComponent implements OnInit {
 
   public AddToCart(product: any): void {
     // Logic to add the product to the cart
-
     this.oCartRequestDto = new CartRequestDto();
     this.oCartRequestDto.guestId = this.cartService.getOrCreateGuestId();
-    this.oCartRequestDto.companyId = product.companyId;
+    this.oCartRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oCartRequestDto.productId = product.id;
     this.oCartRequestDto.quantity = 1;
     this.oCartRequestDto.actionType = 1;
     this.http.Post("Cart/InsertCart", this.oCartRequestDto).subscribe(
       (res) => {
-        // this.cartService.notifyCartUpdated(); // Notify cart update
-        
         this.cartService.notifyCartUpdated(); // Notify cart update
       },
       (err) => {

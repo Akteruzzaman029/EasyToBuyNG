@@ -15,10 +15,10 @@ import { HttpHelperService } from '../../Shared/Service/http-helper.service';
 @Component({
   selector: 'app-company',
   standalone: true,
-  imports: [CommonModule, FormsModule,RouterModule, AgGridAngular, PaginationComponent],
+  imports: [CommonModule, FormsModule, RouterModule, AgGridAngular, PaginationComponent],
   templateUrl: './company.component.html',
   styleUrl: './company.component.scss',
-  providers:[DatePipe]
+  providers: [DatePipe]
 })
 export class CompanyComponent implements OnInit {
 
@@ -38,8 +38,10 @@ export class CompanyComponent implements OnInit {
 
   public colDefsTransection: any[] = [
     { valueGetter: "node.rowIndex + 1", headerName: 'SL', width: 90, editable: false, checkboxSelection: false },
+    { field: 'code', width: 150, headerName: 'Code', filter: true },
     { field: 'name', width: 150, headerName: 'Name', filter: true },
     { field: 'shortName', width: 150, headerName: 'Short Name', filter: true },
+    { field: 'address', width: 150, headerName: 'Address', filter: true },
     { field: 'remarks', headerName: 'Remarks' },
     { field: 'isActive', headerName: 'Status' },
   ];

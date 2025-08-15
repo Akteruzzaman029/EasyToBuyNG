@@ -39,7 +39,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription = this.cartService.onCartUpdated().subscribe(() => {
-      
       // re‑load your cart count, re‑render badge, etc.
       this.loadCart();
     });
@@ -50,14 +49,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private GetAllCarts() {
-    this.oCartFilterDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oCartFilterDto.companyId = Number(CommonHelper.GetComapyId());
     this.oCartFilterDto.userId = "";
     this.oCartFilterDto.guestId = this.cartService.getOrCreateGuestId();
     this.oCartFilterDto.isActive = true;
     // After the hash is generated, proceed with the API call
     this.http.Post(`Cart/GetAllCarts`, this.oCartFilterDto).subscribe(
       (res: any) => {
-        
+
         this.cartItemCount = res.length;
       },
       (err) => {
