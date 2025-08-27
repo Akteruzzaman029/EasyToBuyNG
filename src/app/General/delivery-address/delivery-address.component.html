@@ -2,7 +2,9 @@
     <div class="card-header">
         <div class="row g-0">
             <div class="col-md-8">
-
+                <h6>Delivering to {{defaultAddress.pickerName}}</h6>
+                <div class=""> {{defaultAddress.building}} {{defaultAddress.streetAddress}} {{defaultAddress.city}}
+                    {{defaultAddress.zipCode}}</div>
             </div>
             <div class="col-md-4 text-end">
                 <a (click)="ChangeAddress()" class="mx-2">Change</a>
@@ -10,7 +12,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="rowData.length>0" class="card-body">
+    <div *ngIf="rowData.length>0 && !defaultAddress" class="card-body">
 
         <div *ngFor="let address of rowData; let i = index" class="row g-0">
             <div class="col-md-12">
@@ -43,7 +45,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Address
+                <h1 class="modal-title fs-5" id="exampleModalLabel"> Delivery Address
                     @if (addressId==0){Create} @if (addressId>0){Update}
                 </h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeCommonModel"
@@ -52,59 +54,61 @@
             <div class="modal-body">
                 <div class="row g-0">
 
-                   
 
-                    <div class="col-12 px-1">
+
+                    <div class="col-12 col-md-6 px-1">
                         <div class="mb-2">
-                            <label for="pickerName" class="form-label">Short Name</label>
-                            <input type="text" class="form-control" [(ngModel)]="oAddressRequestDto.pickerName" name="pickerName"
-                                placeholder="Please enter short name">
+                            <label for="pickerName" class="form-label">Full name (First and Last name)</label>
+                            <input type="text" class="form-control" [(ngModel)]="oAddressRequestDto.pickerName"
+                                name="pickerName" placeholder="Please enter full name">
                         </div>
                     </div>
-                    <div class="col-12 px-1">
+                    <div class="col-12 col-md-6 px-1">
                         <div class="mb-2">
-                            <label for="pickerNumber" class="form-label">Short Name</label>
-                            <input type="text" class="form-control" [(ngModel)]="oAddressRequestDto.pickerNumber" name="pickerNumber"
-                                placeholder="Please enter short name">
+                            <label for="pickerNumber" class="form-label">Phone number</label>
+                            <input type="text" class="form-control" [(ngModel)]="oAddressRequestDto.pickerNumber"
+                                name="pickerNumber" placeholder="Please enter phone number">
                         </div>
                     </div>
-                    <div class="col-12 px-1">
+                    <div class="col-12 col-md-6 px-1">
                         <div class="mb-2">
-                            <label for="streetAddress" class="form-label">Short Name</label>
-                            <input type="text" class="form-control" [(ngModel)]="oAddressRequestDto.streetAddress" name="streetAddress"
-                                placeholder="Please enter short name">
+                            <label for="streetAddress" class="form-label">Street Address</label>
+                            <textarea class="form-control" name="streetAddress"
+                                [(ngModel)]="oAddressRequestDto.streetAddress" id="streetAddress" rows="2"
+                                placeholder="Street address or P.O. Box"></textarea>
                         </div>
                     </div>
-                    <div class="col-12 px-1">
+                    <div class="col-12 col-md-6 px-1">
                         <div class="mb-2">
-                            <label for="building" class="form-label">Short Name</label>
-                            <input type="text" class="form-control" [(ngModel)]="oAddressRequestDto.building" name="building"
-                                placeholder="Please enter short name">
+                            <label for="building" class="form-label">Building Info</label>
+
+                            <textarea class="form-control" name="building" [(ngModel)]="oAddressRequestDto.building"
+                                id="building" rows="2" placeholder="Apt, suite, unit, building, floor, etc."></textarea>
                         </div>
                     </div>
-                    <div class="col-12 px-1">
+                    <div class="col-12 col-md-6 px-1">
                         <div class="mb-2">
-                            <label for="city" class="form-label">Short Name</label>
+                            <label for="city" class="form-label">City</label>
                             <input type="text" class="form-control" [(ngModel)]="oAddressRequestDto.city" name="city"
-                                placeholder="Please enter short name">
+                                placeholder="Please enter city">
                         </div>
                     </div>
-                    <div class="col-12 px-1">
+                    <div class="col-12 col-md-6 px-1">
                         <div class="mb-2">
-                            <label for="state" class="form-label">Short Name</label>
+                            <label for="state" class="form-label">State</label>
                             <input type="text" class="form-control" [(ngModel)]="oAddressRequestDto.state" name="state"
-                                placeholder="Please enter short name">
+                                placeholder="Please enter state">
                         </div>
                     </div>
-                    <div class="col-12 px-1">
+                    <div class="col-12 col-md-6 px-1">
                         <div class="mb-2">
-                            <label for="zipCode" class="form-label">Short Name</label>
-                            <input type="text" class="form-control" [(ngModel)]="oAddressRequestDto.zipCode" name="zipCode"
-                                placeholder="Please enter short name">
+                            <label for="zipCode" class="form-label">Zip Code</label>
+                            <input type="text" class="form-control" [(ngModel)]="oAddressRequestDto.zipCode"
+                                name="zipCode" placeholder="Please enter zip code">
                         </div>
                     </div>
 
-                    <div class="col-12 px-1">
+                    <div class="col-12 col-md-6 px-1">
                         <div class="mb-2">
                             <label for="isDefault" class="form-label">isDefault</label>
                             <select class="form-select" [(ngModel)]="oAddressRequestDto.isDefault" name="isDefault"
@@ -114,7 +118,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-12 mb-3">
+                    <div class="col-12 col-md-12 mb-3">
                         <label for="remarks" class="form-label">Remarks</label>
                         <textarea class="form-control" name="remarks" [(ngModel)]="oAddressRequestDto.remarks"
                             id="remarks" rows="3"></textarea>

@@ -55,6 +55,8 @@ import { EasyToBuyHomeComponent } from './General/easy-to-buy-home/easy-to-buy-h
 import { CheckOutComponent } from './General/check-out/check-out.component';
 import { CompanyComponent } from './Component/company/company.component';
 import { CheckOutProcessComponent } from './General/check-out-process/check-out-process.component';
+import { GeneralRegistrationComponent } from './General/general-registration/general-registration.component';
+import { GeneralLoginComponent } from './General/general-login/general-login.component';
 
 export const routes: Routes = [
 
@@ -66,6 +68,8 @@ export const routes: Routes = [
             { path: '', component: EasyToBuyHomeComponent, title: 'Easy To Buy Home' },
             { path: 'checkout', component: CheckOutComponent, title: 'Checkout' },
             { path: 'checkout-process', component: CheckOutProcessComponent, title: 'Checkout Process' },
+            { path: 'registration', component: GeneralRegistrationComponent, title: 'Registration' },
+            { path: 'login', component: GeneralLoginComponent, title: 'Login' },
 
         ]
     },

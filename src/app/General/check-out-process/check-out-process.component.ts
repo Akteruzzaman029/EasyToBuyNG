@@ -16,6 +16,7 @@ import { OrderRequestDto } from '../../Model/Order';
 import { OrderItemRequestDto } from '../../Model/OrderItem';
 import { AddressFilterDto, AddressRequestDto } from '../../Model/Address';
 import { DeliveryAddressComponent } from "../delivery-address/delivery-address.component";
+import { LoginRequestDto } from '../../Model/LoginRequestDto';
 
 @Component({
   selector: 'app-check-out-process',
@@ -38,18 +39,23 @@ export class CheckOutProcessComponent implements OnInit, OnDestroy {
 
   selectedPayment: string = 'online'; // default selection
 
+  public oLoginRequestDto = new LoginRequestDto();
+
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
     private http: HttpHelperService,
     private cartService: CartService,
-    private router: Router,
+    private route: Router,
     private datePipe: DatePipe
   ) {
     this.oCurrentUser = CommonHelper.GetUser();
   }
 
   ngOnInit(): void {
+    if (this.oCurrentUser.userId == '') {
+      this.route.navigateByUrl("login");
+    }
     this.subscription = this.cartService.onCartUpdated().subscribe(() => {
       this.loadCart();
     });
@@ -183,8 +189,44 @@ export class CheckOutProcessComponent implements OnInit, OnDestroy {
   }
 
 
+  public Login() {
 
+    if (this.oLoginRequestDto.UserName == "") {
+      this.toast.warning("Enter your user name!!", "Warning!!", { progressBar: true });
+      return;
+    }
 
+    if (this.oLoginRequestDto.Password == "") {
+      this.toast.warning("Enter your password!!", "Warning!!", { progressBar: true });
+      return;
+    }
 
+    const payload = {
+      userName: this.oLoginRequestDto.UserName,
+      password: this.oLoginRequestDto.Password,
+    }
+    this.http.Login("Auth/Login", payload).subscribe(
+      (res: any) => {
+        console.log(res);
+        if (res.data != null) {
+          this.toast.success("Login Successfully!!", "Success!!", { progressBar: true });
+          localStorage.setItem("Token", res.data.jwtToken)
+          localStorage.setItem("UserResponseDto", JSON.stringify(res.data))
+          CommonHelper.CommonButtonClick("closeCommonLogin");
+        } else {
+          this.toast.error(res?.message, "Error!!", { progressBar: true });
+        }
+      },
+      (err) => {
+
+        console.log(err)
+        this.toast.error(err.error.message, "Error!!", { progressBar: true });
+      });
+
+  }
+
+  Registration() {
+
+  }
 
 }

@@ -5,9 +5,10 @@ export class UserResponseDto {
         this.jwtToken = "";
         this.expires = new Date;
         this.refreshToken = "";
-        this.refreshTokenExpires =new Date;
+        this.refreshTokenExpires = new Date;
         this.userId = "";
         this.companyId = "";
+        this.type = 0;
     }
     public userName: string;
     public jwtToken: string;
@@ -16,4 +17,5 @@ export class UserResponseDto {
     public refreshTokenExpires: Date;
     public userId: string;
     public companyId: string;
+    public type: number;
 }

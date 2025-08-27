@@ -113,3 +113,64 @@
     </div>
 
 </div>
+
+
+
+
+
+
+<button type="button" class="btn btn-primary" hidden data-bs-toggle="modal" id="openCommonLogin"
+    data-bs-target="#staticLoginBackdrop">
+    Launch static backdrop modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticLoginBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                Login
+                <button type="button" class="btn-close" id="closeCommonLogin" hidden data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+
+
+                <div class="text-center mb-4">
+                    <img src="logo.png" alt="Logo" class="img-fluid" style="max-width: 150px;">
+                </div>
+
+                <div class="mb-3 text-center fw-bold">
+                    <!-- Sign in to your account -->
+                    Sign in to your account
+                </div>
+
+                <div class="mb-3">
+                    <label for="UserName" class="form-label">Phone/Email</label>
+                    <input type="text" [(ngModel)]="oLoginRequestDto.UserName" name="UserName" class="form-control"
+                        id="UserName" placeholder="">
+                </div>
+
+                <div class="mb-3">
+                    <label for="Password" class="form-label">Password</label>
+                    <input type="password" [(ngModel)]="oLoginRequestDto.Password" name="Password" class="form-control"
+                        id="Password">
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button type="button" (click)="Login()" class="btn btn-success fw-bold">
+                        Log in
+                    </button>
+                </div>
+
+                <div class="text-center mt-3">
+                    Not have an account?
+                    <a (click)="Registration()" class="text-decoration-none">Register</a>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

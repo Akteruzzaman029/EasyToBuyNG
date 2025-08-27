@@ -26,6 +26,8 @@ export class DeliveryAddressComponent implements OnInit {
   public oAddressRequestDto = new AddressRequestDto();
   public oCurrentUser = new UserResponseDto();
 
+  public defaultAddress:any;
+
   public addressId = 0;
   // pagination setup
   public pageIndex: number = 1;
@@ -69,8 +71,8 @@ export class DeliveryAddressComponent implements OnInit {
     this.http.Post(`Address/GetAddress?pageNumber=${this.pageIndex}`, this.oAddressFilterDto).subscribe(
       (res: any) => {
         this.rowData = res.items;
-        this.pageIndex = res.pageIndex;
-        this.totalRecords = res.totalRecords;
+        this.defaultAddress=this.rowData.find(x=>x.isDefault==true)
+
       },
       (err) => {
         this.toast.error(err.ErrorMessage, "Error!!", { progressBar: true });
