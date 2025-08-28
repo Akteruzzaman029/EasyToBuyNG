@@ -71,6 +71,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   offcanvasButton() {
+
     CommonHelper.CommonButtonClick("offcanvasButton");
   }
 }

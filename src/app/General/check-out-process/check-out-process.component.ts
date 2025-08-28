@@ -170,6 +170,8 @@ export class CheckOutProcessComponent implements OnInit, OnDestroy {
 
     this.oOrderRequestDto.orderType = Number(this.selectedPayment == 'cash' ? 1 : this.selectedPayment == 'online' ? 2 : 0);
     this.oOrderRequestDto.orderStatus = 1;
+    this.oOrderRequestDto.totalAmount =Number(this.getGrandTotal());
+    this.oOrderRequestDto.totalDiscount = Number(this.getTotalDiscount());
     this.oOrderRequestDto.addressId = Number(this.oAddressRequestDto.id);
     this.oOrderRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oOrderRequestDto.userId = this.oCurrentUser.userId;

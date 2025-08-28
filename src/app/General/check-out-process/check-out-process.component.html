@@ -85,7 +85,7 @@
 
     <div class="col-3">
 
-        <div class="card">
+        <div class="card" *ngIf="cartItemList.length>0">
             <div class="card-header">
                 <span>Grand Total:</span>
                 <span>{{ getGrandTotal() | currency: 'Tk.' }}</span>
