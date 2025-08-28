@@ -1,4 +1,4 @@
-import { Component, OnInit, TrackByFunction } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, TrackByFunction } from '@angular/core';
 import { AddressRequestDto, AddressFilterDto } from '../../Model/Address';
 import { CommonHelper } from '../../Shared/Service/common-helper.service';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -19,6 +19,7 @@ import { AGGridHelper } from '../../Shared/Service/AGGridHelper';
 })
 export class DeliveryAddressComponent implements OnInit {
 
+  @Output() deliveryAddress = new EventEmitter<any>();
   private addressGridApi!: any;
   public DeafultCol = AGGridHelper.DeafultCol;
   public rowData!: any[];
@@ -26,7 +27,7 @@ export class DeliveryAddressComponent implements OnInit {
   public oAddressRequestDto = new AddressRequestDto();
   public oCurrentUser = new UserResponseDto();
 
-  public defaultAddress:any;
+  public defaultAddress: any;
 
   public addressId = 0;
   // pagination setup
@@ -61,7 +62,7 @@ export class DeliveryAddressComponent implements OnInit {
   }
 
 
-  ChangeAddress(){
+  ChangeAddress() {
 
   }
 
@@ -71,8 +72,8 @@ export class DeliveryAddressComponent implements OnInit {
     this.http.Post(`Address/GetAddress?pageNumber=${this.pageIndex}`, this.oAddressFilterDto).subscribe(
       (res: any) => {
         this.rowData = res.items;
-        this.defaultAddress=this.rowData.find(x=>x.isDefault==true)
-
+        this.defaultAddress = this.rowData.find(x => x.isDefault == true)
+        this.deliveryAddress.emit(this.defaultAddress);
       },
       (err) => {
         this.toast.error(err.ErrorMessage, "Error!!", { progressBar: true });

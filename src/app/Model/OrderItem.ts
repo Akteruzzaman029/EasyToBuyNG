@@ -14,6 +14,7 @@ export class OrderItemFilterDto {
 export class OrderItemRequestDto {
 
     constructor() {
+        this.cartId = 0;
         this.orderId = 0;
         this.productId = 0;
         this.quantity = 0;
@@ -23,6 +24,7 @@ export class OrderItemRequestDto {
         this.isActive = true;
         this.remarks = "";
     }
+    public cartId: number;
     public orderId: number;
     public productId: number;
     public quantity: number;

@@ -1,5 +1,4 @@
 import { Component, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
-import { AddToCartItemComponent } from "../add-to-cart-item/add-to-cart-item.component";
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
@@ -30,7 +29,7 @@ export class CheckOutProcessComponent implements OnInit, OnDestroy {
   public oCartFilterDto = new CartFilterDto();
   public oCurrentUser = new UserResponseDto();
   public oCartRequestDto = new CartRequestDto()
-  public oAddressRequestDto = new AddressRequestDto()
+  public oAddressRequestDto: any = {};
   public oAddressFilterDto = new AddressFilterDto()
   public cartItemList: any[] = [];
   private subscription: Subscription | any;
@@ -63,6 +62,10 @@ export class CheckOutProcessComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
+  }
+  ReceivedDeliveryAddress(event: any) {
+    this.oAddressRequestDto = event;
+    debugger
   }
 
   private loadCart(): void {
@@ -149,38 +152,53 @@ export class CheckOutProcessComponent implements OnInit, OnDestroy {
   }
 
   checkout(): void {
-    if (this.selectedPayment == 'online') {
-      this.toast.success("Order Online", "Success!!", { progressBar: true });
 
-    } else if (this.selectedPayment == 'cash') {
-      this.toast.success("Order Cash on Delivery", "Success!!", { progressBar: true });
+    if (this.selectedPayment == 'online') {
+      this.InsertOrder();
     }
+    else if (this.selectedPayment == 'cash') {
+      this.InsertOrder();
+    } else {
+      this.toast.warning("Please select payment method", "Warning!!", { progressBar: true });
+      return;
+    }
+
   }
 
 
   InsertOrder(): void {
 
     this.oOrderRequestDto.orderType = Number(this.selectedPayment == 'cash' ? 1 : this.selectedPayment == 'online' ? 2 : 0);
-    this.oOrderRequestDto.orderStatus = 0;
+    this.oOrderRequestDto.orderStatus = 1;
+    this.oOrderRequestDto.addressId = Number(this.oAddressRequestDto.id);
     this.oOrderRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oOrderRequestDto.userId = this.oCurrentUser.userId;
     this.cartItemList.forEach((element: any) => {
       let oOrderItemRequestDto = new OrderItemRequestDto();
       oOrderItemRequestDto.orderId = 0;
-      oOrderItemRequestDto.productId = element.productId;
-      oOrderItemRequestDto.quantity = element.quantity;
-      oOrderItemRequestDto.unitPrice = element.unitPriceAfterDiscount;
-      oOrderItemRequestDto.discount = element.discount;
+      oOrderItemRequestDto.cartId = Number(element.id);
+      oOrderItemRequestDto.productId = Number(element.productId);
+      oOrderItemRequestDto.quantity = Number(element.quantity);
+      oOrderItemRequestDto.unitPrice = Number(element.unitPriceAfterDiscount);
+      oOrderItemRequestDto.discount = Number(element.discount);
       oOrderItemRequestDto.isFixedAmount = true;
       oOrderItemRequestDto.isActive = element.isActive;
       this.oOrderRequestDto.orderItems.push(oOrderItemRequestDto);
     });
-
-
     this.http.Post("Order/InsertOrder", this.oOrderRequestDto).subscribe(
       (res) => {
-
         this.cartService.notifyCartUpdated(); // Notify cart update
+
+        if (this.selectedPayment == 'online') {
+          this.toast.success("Order Online Payment", "Success!!", { progressBar: true });
+
+        }
+        else if (this.selectedPayment == 'cash') {
+          this.toast.success("Order Cash on Delivery", "Success!!", { progressBar: true });
+        } else {
+
+
+        }
       },
       (err) => {
         this.toast.error(err.ErrorMessage, "Error!!", { progressBar: true });
