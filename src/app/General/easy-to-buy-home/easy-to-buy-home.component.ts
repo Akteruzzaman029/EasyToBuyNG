@@ -44,7 +44,7 @@ export class EasyToBuyHomeComponent implements OnInit {
 
 
   private GetProduct() {
-    this.oProductFilterDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oProductFilterDto.companyId = Number(CommonHelper.GetComapyId());
     this.oProductFilterDto.categoryId = Number(this.oProductFilterDto.categoryId);
     this.oProductFilterDto.subCategoryId = Number(this.oProductFilterDto.subCategoryId);
     this.oProductFilterDto.measurementUnitId = Number(this.oProductFilterDto.measurementUnitId);
