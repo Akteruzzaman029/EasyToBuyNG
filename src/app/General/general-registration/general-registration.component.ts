@@ -66,11 +66,11 @@ export class GeneralRegistrationComponent {
 
     let currentUser = CommonHelper.GetUser();
     this.oAspNetUsersRequestDto.type = 5;
+    this.oAspNetUsersRequestDto.companyId = Number(CommonHelper.GetComapyId());
 
     // After the hash is generated, proceed with the API call
     this.http.Post(`AspNetUsers/InsertAspNetUsers`, this.oAspNetUsersRequestDto).subscribe(
       (res: any) => {
-        debugger
         this.toast.success("Data Save Successfully!!", "Success!!", { progressBar: true });
         this.oAspNetUsersRequestDto = new AspNetUsersRequestDto();
         this.route.navigateByUrl("/login");

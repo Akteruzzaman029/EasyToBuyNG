@@ -1,14 +1,17 @@
-<div class="card">
+<div class="card border-0">
     <div class="card-header">
         <div class="row g-0">
             <div class="col-md-8">
-                <h6>Delivering to {{defaultAddress.pickerName}}</h6>
-                <div class=""> {{defaultAddress.building}} {{defaultAddress.streetAddress}} {{defaultAddress.city}}
-                    {{defaultAddress.zipCode}}</div>
+                @if (defaultAddress) {
+                <h6>Delivering to {{defaultAddress?.pickerName}}</h6>
+                <div class=""> {{defaultAddress?.building}} {{defaultAddress?.streetAddress}} {{defaultAddress?.city}}
+                    {{defaultAddress?.zipCode}}</div>
+                }
+
             </div>
             <div class="col-md-4 text-end">
-                <a (click)="ChangeAddress()" class="mx-2">Change</a>
-                <a (click)="add()" class="mx-2">Add new Address</a>
+                <a (click)="ChangeAddress()" class="mx-2 cursor">Change</a>
+                <a (click)="add()" class="mx-2 cursor">Add new Address</a>
             </div>
         </div>
     </div>
@@ -16,7 +19,7 @@
 
         <div *ngFor="let address of rowData; let i = index" class="row g-0">
             <div class="col-md-12">
-                Delivery to {{address.pickerName}} Phone {{address.pickerNumber}}
+                Delivery to {{address?.pickerName}} Phone {{address?.pickerNumber}}
             </div>
             <div class="col-md-12">
                 {{address.streetAddress}}
@@ -37,7 +40,6 @@
     data-bs-target="#exampleModal">
     Launch demo modal
 </button>
-
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

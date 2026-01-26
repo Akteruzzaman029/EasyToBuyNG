@@ -65,7 +65,6 @@ export class CheckOutProcessComponent implements OnInit, OnDestroy {
   }
   ReceivedDeliveryAddress(event: any) {
     this.oAddressRequestDto = event;
-    debugger
   }
 
   private loadCart(): void {
@@ -153,6 +152,7 @@ export class CheckOutProcessComponent implements OnInit, OnDestroy {
 
   checkout(): void {
 
+
     if (this.selectedPayment == 'online') {
       this.InsertOrder();
     }
@@ -187,6 +187,21 @@ export class CheckOutProcessComponent implements OnInit, OnDestroy {
       oOrderItemRequestDto.isActive = element.isActive;
       this.oOrderRequestDto.orderItems.push(oOrderItemRequestDto);
     });
+
+    if(this.oOrderRequestDto.userId==""){
+       this.toast.warning("Please login", "Warning!!", { progressBar: true });
+       return;
+    }
+
+    if(this.oOrderRequestDto.addressId==0){
+       this.toast.warning("Please select address", "Warning!!", { progressBar: true });
+       return;
+    }
+    if(this.oOrderRequestDto.totalAmount<0){
+       this.toast.warning("Amount must be geather 0", "Warning!!", { progressBar: true });
+       return;
+    }
+
     this.http.Post("Order/InsertOrder", this.oOrderRequestDto).subscribe(
       (res) => {
         this.cartService.notifyCartUpdated(); // Notify cart update

@@ -17,7 +17,7 @@ export class CartFilterDto {
 export class CartRequestDto {
 
     constructor() {
-        this.actionType = 0;
+        this.actionType = 0;// 0 =remove  , 1=increase , -1 decrise 
         this.companyId = 0;
         this.userId = '';
         this.guestId = '';

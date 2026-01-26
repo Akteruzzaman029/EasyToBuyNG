@@ -57,6 +57,7 @@ import { CompanyComponent } from './Component/company/company.component';
 import { CheckOutProcessComponent } from './General/check-out-process/check-out-process.component';
 import { GeneralRegistrationComponent } from './General/general-registration/general-registration.component';
 import { GeneralLoginComponent } from './General/general-login/general-login.component';
+import { CustomerOrderComponent } from './General/customer-order/customer-order.component';
 
 export const routes: Routes = [
 
@@ -69,6 +70,7 @@ export const routes: Routes = [
             { path: 'checkout', component: CheckOutComponent, title: 'Checkout' },
             { path: 'checkout-process', component: CheckOutProcessComponent, title: 'Checkout Process' },
             { path: 'registration', component: GeneralRegistrationComponent, title: 'Registration' },
+            { path: 'orders', component: CustomerOrderComponent, title: 'Order List' },
             { path: 'login', component: GeneralLoginComponent, title: 'Login' },
 
         ]

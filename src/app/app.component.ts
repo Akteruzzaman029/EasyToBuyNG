@@ -22,7 +22,6 @@ export class AppComponent implements OnInit {
   title = 'E-commerce';
   domain: string = "";
   ngOnInit() {
-    debugger
     this.domain = window.location.host;
     if (this.auth.getItem("Company") == null) {
       this.GetCompanyByCode();

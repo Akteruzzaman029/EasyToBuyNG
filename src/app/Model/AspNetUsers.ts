@@ -23,8 +23,7 @@ export class AspNetUsersRequestDto {
         this.gender = "";
         this.userName = "";
         this.dateOfBirth = new Date();
-        this.packageId = 0;
-        this.amount = 0;
+        this.companyId = 0;
     }
     public fullName: string;
     public email: string;
@@ -37,6 +36,5 @@ export class AspNetUsersRequestDto {
     public gender: string;
     public userName: string;
     public dateOfBirth: Date;
-    public packageId: number;
-    public amount: number;
+    public companyId: number;
 }
