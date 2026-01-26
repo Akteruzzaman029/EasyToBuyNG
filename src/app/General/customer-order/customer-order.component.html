@@ -1,1 +1,17 @@
-<p>customer-order works!</p>
+<div class="card">
+    <div class="card-header">
+        Order List
+    </div>
+    <div class="card-body">
+
+        <div *ngFor="let item of this.orderList" class="row g-0 my-3 border">
+            <div class="col">{{item.orderNo}}</div>
+            <div class="col">{{item.totalAmount}}</div>
+            <div class="col">{{item.totalDiscount}}</div>
+            <div class="col">{{item.orderStatus}}</div>
+            <div class="col">{{item.isActive}}</div>
+        </div>
+
+    </div>
+</div>
+
