@@ -58,6 +58,7 @@ import { CheckOutProcessComponent } from './General/check-out-process/check-out-
 import { GeneralRegistrationComponent } from './General/general-registration/general-registration.component';
 import { GeneralLoginComponent } from './General/general-login/general-login.component';
 import { CustomerOrderComponent } from './General/customer-order/customer-order.component';
+import { WebSectionComponent } from './Component/web-section/web-section.component';
 
 export const routes: Routes = [
 
@@ -129,7 +130,8 @@ export const routes: Routes = [
             { path: 'product', component: ProductComponent, title: ' Product List' },
             { path: 'order', component: OrderComponent, title: ' Order List' },
             { path: 'order-payment', component: OrderPaymentComponent, title: ' Order Payment List' },
-            { path: '', pathMatch: 'full', redirectTo: 'dashboard' }
+            { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+            { path: 'web-section', component: WebSectionComponent, title: 'Web Section List' }
         ]
     },
     {
