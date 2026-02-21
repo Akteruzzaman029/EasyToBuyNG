@@ -289,7 +289,6 @@ export class CategoryComponent implements OnInit {
   }
 
   public onFileChange(event: any): void {
-    debugger;
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
