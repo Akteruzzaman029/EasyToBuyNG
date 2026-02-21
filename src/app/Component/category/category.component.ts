@@ -227,6 +227,22 @@ export class CategoryComponent implements OnInit {
   }
 
 
+    public onFileChange(event: any): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.http.UploadFile(`UploadedFile/Upload`, file).subscribe(
+        (res: any) => {
+          this.oCategoryRequestDto.fileId = res.id;
+        },
+        (err) => {
+          console.log(err.ErrorMessage);
+        }
+      );
+    }
+
+  }
+
   public onPreviousPage(): void {
     if (this.hasPreviousPage) {
       this.pageIndex--;
