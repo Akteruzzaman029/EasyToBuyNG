@@ -40,7 +40,9 @@ export class CategoryWiseProductComponent implements OnInit {
     this.GetCategorys();
   }
 
-
+  public GetImageUrl(fileId: number): string {
+    return `${this.http.appUrl}UploadedFile/GetImage/${fileId}`;
+  }
 
   detailToGrid(params: any) {
     const eDiv = document.createElement('div');
