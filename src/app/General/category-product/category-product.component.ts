@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CartRequestDto } from '../../Model/Cart';
@@ -26,6 +26,7 @@ export class CategoryProductComponent implements OnInit {
   public oCurrentUser = new UserResponseDto();
   public productList: any[] = [];
 
+  @Input() categoty: any;
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -39,6 +40,8 @@ export class CategoryProductComponent implements OnInit {
 
   ngOnInit(): void {
     // Initialization logic can go here
+    console.log(this.categoty);
+    this.oProductFilterDto.categoryId = Number(this.categoty.id);
     this.GetProduct();
   }
 

@@ -1,6 +1,8 @@
-<div  class="border p-2 my-2" *ngFor="let item of categoryList; trackBy: trackByCategory">
+<div class="border p-2 my-2" *ngFor="let item of categoryList; trackBy: trackByCategory">
     {{ item.name }}
-</div>
 
-
-<app-category-product></app-category-product>
+    <div class="card">
+        <div class="card-body">
+            <app-category-product [categoty]="item"></app-category-product>
+        </div>
+    </div>
