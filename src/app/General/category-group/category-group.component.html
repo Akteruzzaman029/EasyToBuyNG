@@ -1,0 +1,21 @@
+
+<div class="row g-0">
+    <div class="col-12" *ngFor="let category of categoryList; let i = index; trackBy: trackByCategory">
+        <section class="products-section">
+            <div class="section-header">
+                <div class="section-title-group">
+                    <span class="section-eyebrow">Our Collection</span>
+                    <h2 class="section-title">{{ category.name }}</h2>
+                </div>
+                <div class="section-line"></div>
+                <div class="text-end">      <a class="btn btn-primary">View Products</a> </div>
+
+            </div>
+
+            <!-- <div class="products-grid"> -->
+                <app-category-product [categoty]="category"></app-category-product>
+            <!-- </div> -->
+        </section>
+
+    </div>
+</div>
