@@ -3,6 +3,12 @@ import { Subject, Observable, tap, catchError, throwError } from 'rxjs';
 import { CommonHelper } from './common-helper.service';
 import { HttpHelperService } from './http-helper.service';
 
+export enum UserRole {
+  GENERALUSER = 'GeneralUser',
+  SYSTEMADMIN = 'SystemAdmin',
+  ADMIN = 'Admin',
+  NORMALUSER = 'NormalUser',
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -35,12 +41,12 @@ export class AuthService {
     try {
       let token = localStorage.getItem("Token");
       if (!token) {
-        return ""
+        return "NormalUser"
       }
       const payload = JSON.parse(atob(token.split('.')[1]));
       return payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
     } catch (error) {
-      return "";
+      return "NormalUser";
     }
   }
 

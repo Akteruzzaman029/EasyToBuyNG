@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
       this.GetCompanyByCode();
     }
     this.notification.startConnection();
+    console.log(this.auth.GetCurrentUserRole());
   }
 
 

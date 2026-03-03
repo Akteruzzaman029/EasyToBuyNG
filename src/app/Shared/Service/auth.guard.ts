@@ -7,11 +7,20 @@ export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
   let currentUser = CommonHelper.GetUser();
-  if (authService.isLogin()) {
-    return true;
-  } else {
-    router.navigate(['/']);
+  if (!authService.isLogin()) {
+    router.navigate(['/'], {
+      queryParams: { returnUrl: state.url },
+    });
     return false;
   }
-};
 
+  if (route.data['roles'] && Array.isArray(route.data['roles'])) {
+    const userRole = authService.GetCurrentUserRole();
+    if (!userRole || !route.data['roles'].includes(userRole)) {
+      router.navigate(['/']);
+      return false;
+    }
+  }
+
+  return true;
+};
