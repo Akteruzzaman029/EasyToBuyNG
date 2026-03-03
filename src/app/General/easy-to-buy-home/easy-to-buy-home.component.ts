@@ -12,11 +12,11 @@ import { TruncatePipe } from "../../Shared/Pipe/truncate.pipe";
 import { CartService } from '../../Shared/Service/cart.service';
 import { CartRequestDto } from '../../Model/Cart';
 import { CategoryWiseProductComponent } from "../category-wise-product/category-wise-product.component";
-
+import { NzStepsModule } from 'ng-zorro-antd/steps';
 @Component({
   selector: 'app-easy-to-buy-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TruncatePipe, CategoryWiseProductComponent],
+  imports: [CommonModule, FormsModule, RouterModule,NzStepsModule, TruncatePipe, CategoryWiseProductComponent],
   templateUrl: './easy-to-buy-home.component.html',
   styleUrl: './easy-to-buy-home.component.scss',
   providers: [DatePipe, { provide: LOCALE_ID, useValue: 'en-US' }]

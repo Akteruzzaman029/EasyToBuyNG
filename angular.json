@@ -38,6 +38,7 @@
               "./node_modules/ngx-toastr/toastr.css",
               "./node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "./node_modules/admin-lte/dist/css/adminlte.min.css",
+              "./node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
               "src/styles.scss"
             ],
             "scripts": [
