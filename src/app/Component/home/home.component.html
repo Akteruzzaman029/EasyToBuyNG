@@ -1,19 +1,41 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid bg-danger p-2">
-        <!-- <img src="logo.png"  alt="Easy To Buy Logo" width="45" height="40" class="d-inline-block align-text-top"> -->
-        <a class="navbar-brand text-white" href="#">Easy To Buy</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="">
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                <button class="btn btn-success" type="submit">Login</button>
-            </form>
+<!-- Header Component -->
+<header class="bg-danger p-3">
+    <div class="container d-flex justify-content-between align-items-center">
+        <!-- Left Side: Logo -->
+        <div class="d-flex align-items-center">
+            <img src="logo.png" alt="Logo" class="h-8">
+            <span class="text-white fs-4 fw-bold ms-2">Rong Tuli Cosmetics</span>
+        </div>
+
+        <!-- Center: Location and Search -->
+        <div class="d-flex align-items-center">
+            <!-- Delivery Location Button -->
+            <button class="btn btn-light text-danger me-3">
+                Select your delivery location
+            </button>
+
+            <!-- Search Bar -->
+            <div class="position-relative">
+                <input type="text" placeholder="Search your products" class="form-control rounded-pill ps-4 pe-5"
+                    style="width: 300px;">
+                <span class="position-absolute top-50 end-0 translate-middle-y me-3 text-muted">
+                    <i class="bi bi-search"></i> <!-- Bootstrap icon search -->
+                </span>
+            </div>
+        </div>
+
+        <!-- Right Side: App Download, Language, Sign In/Sign Up -->
+        <div class="d-flex align-items-center">
+            <button class="btn btn-warning text-white me-3">
+                Download App Now
+            </button>
+            <button class="btn btn-light me-3 text-black">বাংলা</button>
+            <button class="btn btn-light text-white">
+                <span class="fw-semibold text-black">Sign in / Sign up</span>
+            </button>
         </div>
     </div>
-</nav>
+</header>
 
 <div class="row g-0">
     <div class="col-12" style="min-height:50vh;">
@@ -45,125 +67,73 @@
         <app-add-to-cart-item></app-add-to-cart-item>
     </div>
 </div>
-<!-- Footer -->
-<footer class="text-center text-lg-start bg-body-tertiary text-muted">
-    <!-- Section: Social media -->
-    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
-        <!-- Left -->
-        <div class="me-5 d-none d-lg-block">
-            <span>Get connected with us on social networks:</span>
-        </div>
-        <!-- Left -->
 
-        <!-- Right -->
+<!-- Footer Component -->
+<footer class="bg-light py-5">
+  <div class="container">
+    <div class="row">
+      <!-- Left Section: Logo and Contact Info -->
+      <div class="col-md-3 mb-4 mb-md-0">
+        <img src="logo.png" alt="Logo" class="h-8">
+        <h5 class="mt-3">Always Here for You</h5>
+        <p>Call Us: 16469 (8am-11pm, Everyday)</p>
+        <p>Email Us: <a href="mailto:queries@rongtulicosmetics.com">{{email}}</a></p>
+        <p class="text-uppercase">Rong Tuli Cosmetics</p>
+      </div>
+
+      <!-- Center Section: Information Links -->
+      <div class="col-md-2 mb-4 mb-md-0">
+        <h5>Information</h5>
+        <ul class="list-unstyled">
+          <li><a routerLink="/office-address" >Office Address</a></li>
+          <li><a routerLink="/shipping-returns">Shipping & Returns</a></li>
+          <li><a routerLink="/about-us">About Us</a></li>
+          <li><a routerLink="/terms-and-conditions">Terms & Condition</a></li>
+        </ul>
+      </div>
+
+      <!-- Right Section: Customer Service Links -->
+      <div class="col-md-2 mb-4 mb-md-0">
+        <h5>Customer Service</h5>
+        <ul class="list-unstyled">
+          <li><a routerLink="/contact-us">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <!-- My Account Section -->
+      <div class="col-md-2 mb-4 mb-md-0">
+        <h5>My Account</h5>
+        <ul class="list-unstyled">
+          <li><a routerLink="/login">Login</a></li>
+          <li><a routerLink="/registration">Create Account</a></li>
+        </ul>
+      </div>
+
+      <!-- Payment and Social Media Links -->
+      <div class="col-md-3 mb-4 mb-md-0">
+        <h5>Pay With</h5>
+        <div class="d-flex flex-wrap">
+          <img src="path_to_mastercard_logo.png" alt="Mastercard" class="me-2 mb-2" style="width: 30px;">
+          <img src="path_to_visa_logo.png" alt="Visa" class="me-2 mb-2" style="width: 30px;">
+          <img src="path_to_bkash_logo.png" alt="Bkash" class="me-2 mb-2" style="width: 30px;">
+        </div>
+        <h5 class="mt-3">Follow Us</h5>
         <div>
-            <a href="" class="me-4 text-reset">
-                <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="" class="me-4 text-reset">
-                <i class="fab fa-twitter"></i>
-            </a>
-            <a href="" class="me-4 text-reset">
-                <i class="fab fa-google"></i>
-            </a>
-            <a href="" class="me-4 text-reset">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a href="" class="me-4 text-reset">
-                <i class="fab fa-linkedin"></i>
-            </a>
-            <a href="" class="me-4 text-reset">
-                <i class="fab fa-github"></i>
-            </a>
+          <a href="https://www.facebook.com/profile.php?id=61579918580234" class="me-3 mb-2">
+            <i class="bi bi-facebook"></i> Facebook
+          </a>
+          <a href="https://www.youtube.com" class="me-3 mb-2">
+            <i class="bi bi-youtube"></i> YouTube
+          </a>
         </div>
-        <!-- Right -->
-    </section>
-    <!-- Section: Social media -->
-
-    <!-- Section: Links  -->
-    <section class="">
-        <div class="container text-center text-md-start mt-5">
-            <!-- Grid row -->
-            <div class="row mt-3">
-                <!-- Grid column -->
-                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                    <!-- Content -->
-                    <h6 class="text-uppercase fw-bold mb-4">
-                        <i class="fas fa-gem me-3"></i>Easy To Buy
-                    </h6>
-                    <p>
-                        Here you can use rows and columns to organize your footer content. Lorem ipsum
-                        dolor sit amet, consectetur adipisicing elit.
-                    </p>
-                </div>
-                <!-- Grid column -->
-
-                <!-- Grid column -->
-                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-                    <!-- Links -->
-                    <h6 class="text-uppercase fw-bold mb-4">
-                        Products
-                    </h6>
-                    <p>
-                        <a href="#!" class="text-reset">Angular</a>
-                    </p>
-                    <p>
-                        <a href="#!" class="text-reset">React</a>
-                    </p>
-                    <p>
-                        <a href="#!" class="text-reset">Vue</a>
-                    </p>
-                    <p>
-                        <a href="#!" class="text-reset">Laravel</a>
-                    </p>
-                </div>
-                <!-- Grid column -->
-
-                <!-- Grid column -->
-                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-                    <!-- Links -->
-                    <h6 class="text-uppercase fw-bold mb-4">
-                        Useful links
-                    </h6>
-                    <p>
-                        <a href="#!" class="text-reset">Pricing</a>
-                    </p>
-                    <p>
-                        <a href="#!" class="text-reset">Settings</a>
-                    </p>
-                    <p>
-                        <a href="#!" class="text-reset">Orders</a>
-                    </p>
-                    <p>
-                        <a href="#!" class="text-reset">Help</a>
-                    </p>
-                </div>
-                <!-- Grid column -->
-
-                <!-- Grid column -->
-                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                    <!-- Links -->
-                    <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
-                    <p><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
-                    <p>
-                        <i class="fas fa-envelope me-3"></i>
-                        `infoexample.com
-                    </p>
-                    <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
-                    <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
-                </div>
-                <!-- Grid column -->
-            </div>
-            <!-- Grid row -->
-        </div>
-    </section>
-    <!-- Section: Links  -->
-
-    <!-- Copyright -->
-    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-        © 2021 Copyright:
-        <a class="text-reset fw-bold" href="https://suroz.com/">suro.com</a>
+      </div>
     </div>
-    <!-- Copyright -->
+
+    <!-- Footer Bottom Section -->
+    <div class="row mt-5">
+      <div class="col text-center">
+        <p class="mb-0">Copyright © 2026</p>
+      </div>
+    </div>
+  </div>
 </footer>
-<!-- Footer -->

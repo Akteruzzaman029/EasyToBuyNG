@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public oCurrentUser = new UserResponseDto();
   public oCartFilterDto = new CartFilterDto();
   subscription: any;
+  email: string = "queries@rongtulicosmetics.com";
 
   constructor(
     public authService: AuthService,

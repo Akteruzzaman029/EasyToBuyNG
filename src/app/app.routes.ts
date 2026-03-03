@@ -61,6 +61,11 @@ import { CustomerOrderComponent } from './General/customer-order/customer-order.
 import { WebSectionComponent } from './Component/web-section/web-section.component';
 import { UserRole } from './Shared/Service/auth.service';
 import { authGuard } from './Shared/Service/auth.guard';
+import { TermsAndConditionsComponent } from './General/terms-and-conditions/terms-and-conditions.component';
+import { AboutUsComponent } from './General/about-us/about-us.component';
+import { ShippingAndReturnsComponent } from './General/shipping-and-returns/shipping-and-returns.component';
+import { OfficeAddressComponent } from './General/office-address/office-address.component';
+import { ContractUsComponent } from './General/contract-us/contract-us.component';
 
 export const routes: Routes = [
   {
@@ -68,17 +73,64 @@ export const routes: Routes = [
     component: HomeComponent,
     title: 'Product',
     data: {
-      roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+      roles: [
+        UserRole.NORMALUSER,
+        UserRole.GENERALUSER,
+        UserRole.ADMIN,
+        UserRole.SYSTEMADMIN,
+      ],
     },
     children: [
       {
         path: '',
         component: EasyToBuyHomeComponent,
-        title: 'Easy To Buy Home',
+        title: 'Rong Tuli Cosmetics Home',
         data: {
           roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
         },
       },
+
+      {
+        path: 'contact-us',
+        component: ContractUsComponent,
+        title: 'Contact Us',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+      {
+        path: 'office-address',
+        component: OfficeAddressComponent,
+        title: 'Office Address',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+      {
+        path: 'shipping-returns',
+        component: ShippingAndReturnsComponent,
+        title: 'Shipping & Returns',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+      {
+        path: 'about-us',
+        component: AboutUsComponent,
+        title: 'About Us',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+      {
+        path: 'terms-and-conditions',
+        component: TermsAndConditionsComponent,
+        title: 'Terms & Conditions',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+
       {
         path: 'checkout',
         component: CheckOutComponent,
@@ -104,10 +156,18 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'login',
+        component: LoginComponent,
+        title: 'Log in User',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+      {
         path: 'orders',
         component: CustomerOrderComponent,
         title: 'Order List',
-         canActivate: [authGuard],
+        canActivate: [authGuard],
         data: {
           roles: [UserRole.GENERALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
         },
