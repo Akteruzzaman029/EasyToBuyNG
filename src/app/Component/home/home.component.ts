@@ -83,7 +83,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     } else if (this.authService.isTablet()) {
       return { 'width': '200px', 'font-size': '14px' }; // Tablet style
     } else {
-      return { 'width': '250px', 'font-size': '16px' }; // Desktop style
+      return { 'width': '560px', 'font-size': '16px' }; // Desktop style
     }
   }
 }
