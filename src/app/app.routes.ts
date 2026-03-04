@@ -84,7 +84,7 @@ export const routes: Routes = [
       {
         path: '',
         component: EasyToBuyHomeComponent,
-        title: 'Rong Tuli Cosmetics Home',
+        title: 'Rongtuli Cosmetics Home',
         data: {
           roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
         },
