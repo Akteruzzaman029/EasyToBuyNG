@@ -97,4 +97,34 @@ export class AuthService {
       })
     );
   }
+
+  // Method to detect mobile devices
+  isMobile(): boolean {
+    const userAgent = navigator.userAgent || navigator.vendor ;
+    // Check if the device is a mobile
+    return /iPhone|iPad|iPod|Android/i.test(userAgent);
+  }
+
+  // Method to detect tablet devices
+  isTablet(): boolean {
+    const userAgent = navigator.userAgent || navigator.vendor ;
+    // Check if the device is a tablet (could be further refined with media queries)
+    return /iPad|Android|tablet/i.test(userAgent);
+  }
+
+  // Method to detect desktop devices
+  isDesktop(): boolean {
+    // Check if the device is a desktop (everything that's not mobile or tablet)
+    return !this.isMobile() && !this.isTablet();
+  }
+
+  // Method to get the screen width for responsive design (optional)
+  getScreenWidth(): number {
+    return window.innerWidth;
+  }
+
+  // Method to check if it's a mobile view (using a width threshold)
+  isMobileView(): boolean {
+    return this.getScreenWidth() <= 768; // Consider 768px or any custom breakpoint as mobile view
+  }
 }

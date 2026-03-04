@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class HttpHelperService {
-  appUrl = "https://localhost:7278/api/";
-  // appUrl = "http://easytobuyapi.runasp.net/api/";
+  // appUrl = "https://localhost:7278/api/";
+  appUrl = "http://easytobuyapi.runasp.net/api/";
 
   constructor(private http: HttpClient) { }
 

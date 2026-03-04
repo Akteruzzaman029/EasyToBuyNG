@@ -39,6 +39,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log(this.authService.isMobile(),this.authService.isTablet(),this.authService.isDesktop());
     this.subscription = this.cartService.onCartUpdated().subscribe(() => {
       // re‑load your cart count, re‑render badge, etc.
       this.loadCart();
@@ -74,5 +75,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   offcanvasButton() {
 
     CommonHelper.CommonButtonClick("offcanvasButton");
+  }
+
+  getInputStyles() {
+    if (this.authService.isMobile()) {
+      return { 'width': '200px', 'font-size': '12px' }; // Mobile style
+    } else if (this.authService.isTablet()) {
+      return { 'width': '200px', 'font-size': '14px' }; // Tablet style
+    } else {
+      return { 'width': '250px', 'font-size': '16px' }; // Desktop style
+    }
   }
 }
