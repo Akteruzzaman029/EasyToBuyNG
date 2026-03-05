@@ -4,7 +4,7 @@
         <div class="row align-items-center">
             <!-- Left Side: Logo -->
             <div class=" col col-md-auto d-flex align-items-center mb-3 mb-md-0">
-                <img src="logo.png" alt="Logo" class="h-8">
+                <img src="logo.png" alt="Logo" routerLink="/" class="h-8">
                 <span *ngIf="this.authService.isMobile()==false" class="text-white fs-4 fw-bold ms-2">Rongtuli Cosmetics</span>
             </div>
 
@@ -34,10 +34,10 @@
                     Download App Now
                 </button>
                 <button class="btn btn-light me-3 text-black">বাংলা</button> -->
-                <button *ngIf="this.authService.isMobile()==false" class="btn btn-light text-white">
+                <button routerLink="/login" *ngIf="this.authService.isMobile()==false" class="btn btn-light text-white">
                     <span class="fw-semibold text-black">Sign in / Sign up</span>
                 </button>
-                <button *ngIf="this.authService.isMobile()==true" class="btn btn-light text-white">
+                <button *ngIf="this.authService.isMobile()==true" routerLink="/login" class="btn btn-light text-white">
                     <span class="fw-semibold text-black"><i class="bi bi-person-plus-fill"></i></span>
                 </button>
             </div>

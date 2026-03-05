@@ -66,6 +66,7 @@ import { AboutUsComponent } from './General/about-us/about-us.component';
 import { ShippingAndReturnsComponent } from './General/shipping-and-returns/shipping-and-returns.component';
 import { OfficeAddressComponent } from './General/office-address/office-address.component';
 import { ContractUsComponent } from './General/contract-us/contract-us.component';
+import { ProductCategoryComponent } from './General/product-category/product-category.component';
 
 export const routes: Routes = [
   {
@@ -85,6 +86,14 @@ export const routes: Routes = [
         path: '',
         component: EasyToBuyHomeComponent,
         title: 'Rongtuli Cosmetics Home',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+      {
+        path: 'product-category',
+        component: ProductCategoryComponent,
+        title: 'Product Category',
         data: {
           roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
         },
