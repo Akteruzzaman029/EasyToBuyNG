@@ -17,7 +17,7 @@ import { CategoryFilterRequestDto } from '../../Model/Category';
 import { TruncatePipe } from '../../Shared/Pipe/truncate.pipe';
 import { CartRequestDto } from '../../Model/Cart';
 import { CartService } from '../../Shared/Service/cart.service';
-import { NzSliderModule } from 'ng-zorro-antd/slider';
+  import { NzSliderModule } from 'ng-zorro-antd/slider';
 @Component({
   selector: 'app-product-category',
   standalone: true,

@@ -23,13 +23,7 @@ import {
 @Component({
   selector: 'app-category-tree',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    NzTreeModule,
-    PaginationComponent,
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, NzTreeModule],
   templateUrl: './category-tree.component.html',
   styleUrl: './category-tree.component.scss',
 })
@@ -80,7 +74,7 @@ export class CategoryTreeComponent implements OnInit {
   nzEvent(event: NzFormatEmitEvent): void {
     if (event.eventName === 'expand') {
       const node = event.node;
-
+      console.log(event);
       if (
         node &&
         node.isExpanded &&

@@ -68,6 +68,7 @@ import { OfficeAddressComponent } from './General/office-address/office-address.
 import { ContractUsComponent } from './General/contract-us/contract-us.component';
 import { ProductCategoryComponent } from './General/product-category/product-category.component';
 import { CategoryTreeComponent } from './Component/category-tree/category-tree.component';
+import { CommonCategoryTreeComponent } from './Shared/common-category-tree/common-category-tree.component';
 
 export const routes: Routes = [
   {
@@ -192,6 +193,12 @@ export const routes: Routes = [
     component: AdminComponent,
     children: [
       { path: 'login', component: LoginComponent, title: 'Log in User' },
+      {
+        path: 'common-category-tree',
+        component: CommonCategoryTreeComponent,
+        title: 'Category Tree',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
       {
         path: 'category-tree',
         component: CategoryTreeComponent,

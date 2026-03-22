@@ -1,0 +1,72 @@
+.category-tree {
+  width: 100%;
+}
+
+.node-row {
+  width: 100%;
+  padding: 0px 10px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.node-row:hover {
+  background-color: #f8f8f8;
+}
+
+.node-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  color: #4b5563;
+  font-weight: 500;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.node-count {
+  min-width: 36px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background-color: #f3f4f6;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.selected-node {
+  background-color: #fff1f5;
+}
+
+.selected-node .node-text {
+  color: #ff4f7d;
+  font-weight: 700;
+}
+
+.selected-count {
+  background-color: #ff5c8a;
+  color: #fff;
+}
+
+::ng-deep .category-tree .ant-tree-treenode {
+  width: 100%;
+}
+
+::ng-deep .category-tree .ant-tree-node-content-wrapper {
+  width: 100% !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+::ng-deep .category-tree .ant-tree-node-content-wrapper:hover {
+  background: transparent !important;
+}

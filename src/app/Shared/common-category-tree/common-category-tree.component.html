@@ -1,0 +1,37 @@
+<nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" class="category-tree">
+  <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodeIndentLine>
+    @if (showLeafIcon) {
+      <nz-tree-node-toggle nzTreeNodeNoopToggle>
+        <span nz-icon nzType="file" nzTheme="outline"></span>
+      </nz-tree-node-toggle>
+    }
+
+    <nz-tree-node-option (click)="onNodeClick(node)">
+      <div class="node-row" [class.selected-node]="selectedNode?.id === node.id">
+        <span class="node-text">{{ node.name }}</span>
+        <span class="node-count" [class.selected-count]="selectedNode?.id === node.id">
+          {{ node.productCount || 0 }}
+        </span>
+      </div>
+    </nz-tree-node-option>
+  </nz-tree-node>
+
+  <nz-tree-node *nzTreeNodeDef="let node; when: hasChild" nzTreeNodeIndentLine>
+    <nz-tree-node-toggle>
+      <span
+        nz-icon
+        [nzType]="treeControl.isExpanded(node) ? 'minus-square' : 'plus-square'"
+        nzTheme="outline"
+      ></span>
+    </nz-tree-node-toggle>
+
+    <nz-tree-node-option (click)="onNodeClick(node)">
+      <div class="node-row" [class.selected-node]="selectedNode?.id === node.id">
+        <span class="node-text">{{ node.name }}</span>
+        <span class="node-count" [class.selected-count]="selectedNode?.id === node.id">
+          {{ node.productCount || 0 }}
+        </span>
+      </div>
+    </nz-tree-node-option>
+  </nz-tree-node>
+</nz-tree-view>
