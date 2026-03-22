@@ -21,6 +21,7 @@
     <div class="cat-product-info">
       <h4 class="cat-product-name">{{ product.name }}</h4>
       <p class="cat-product-desc">{{ product.description | truncate: 70 }}</p>
+      <p class="cat-product-desc"><nz-rate [ngModel]="product.rating" /></p>
       <div class="cat-product-footer">
         <span class="cat-product-price">{{ product.purchasePrice | currency: 'Tk.' }}</span>
         <button class="cat-add-btn" (click)="AddToCart(product)">

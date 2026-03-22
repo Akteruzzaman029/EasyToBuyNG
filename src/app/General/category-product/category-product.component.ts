@@ -11,11 +11,11 @@ import { CommonHelper } from '../../Shared/Service/common-helper.service';
 import { HttpHelperService } from '../../Shared/Service/http-helper.service';
 import { TruncatePipe } from '../../Shared/Pipe/truncate.pipe';
 import { FormsModule } from '@angular/forms';
-
+import { NzRateModule } from 'ng-zorro-antd/rate';
 @Component({
   selector: 'app-category-product',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TruncatePipe],
+  imports: [CommonModule, FormsModule, RouterModule,NzRateModule, TruncatePipe],
   templateUrl: './category-product.component.html',
   styleUrl: './category-product.component.scss',
   providers: [DatePipe, { provide: LOCALE_ID, useValue: 'en-US' }],
