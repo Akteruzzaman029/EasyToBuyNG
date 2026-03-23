@@ -336,6 +336,87 @@ $transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
+
+.brand-filter-card {
+  width: 100%;
+  max-width: 320px;
+}
+
+.filter-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2230;
+  margin: 0 0 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ececf1;
+}
+
+.search-box {
+  margin-bottom: 14px;
+}
+
+.search-input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 0 14px;
+  font-size: 14px;
+  outline: none;
+  color: #4b5563;
+}
+
+.search-input:focus {
+  border-color: #d1d5db;
+}
+
+.brand-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.brand-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-name {
+  font-size: 14px;
+  color: #5b5f7a;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.brand-count {
+  min-width: 42px;
+  height: 26px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+
 // ============================================================
 // ANIMATIONS
 // ============================================================
@@ -377,4 +458,6 @@ $transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     grid-template-columns: 1fr;
   }
 }
+
+
 

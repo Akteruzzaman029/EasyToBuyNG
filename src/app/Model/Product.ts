@@ -8,7 +8,7 @@ export class ProductFilterDto {
     this.modelNo = '';
     this.name = '';
     this.isActive = true;
-    this.brandId = 0;
+    this.brandIds = "";
     this.minPrice = 0;
     this.maxPrice = 0;
     this.rating = 0;
@@ -23,7 +23,7 @@ export class ProductFilterDto {
   public modelNo: string;
   public name: string;
   public isActive: boolean;
-  public brandId: number;
+  public brandIds: string;
   public minPrice: number;
   public maxPrice: number;
   public rating: number;

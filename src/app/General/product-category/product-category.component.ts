@@ -17,7 +17,10 @@ import { CategoryFilterRequestDto } from '../../Model/Category';
 import { TruncatePipe } from '../../Shared/Pipe/truncate.pipe';
 import { CartRequestDto } from '../../Model/Cart';
 import { CartService } from '../../Shared/Service/cart.service';
-  import { NzSliderModule } from 'ng-zorro-antd/slider';
+import { NzSliderModule } from 'ng-zorro-antd/slider';
+import { CommonCategoryTreeComponent } from '../../Shared/common-category-tree/common-category-tree.component';
+import { DebounceInputDirective } from '../../Shared/directives/debounce-input.directive';
+import { BrandFilterDto } from '../../Model/Brand';
 @Component({
   selector: 'app-product-category',
   standalone: true,
@@ -27,6 +30,8 @@ import { CartService } from '../../Shared/Service/cart.service';
     NzSliderModule,
     PaginationComponent,
     TruncatePipe,
+    CommonCategoryTreeComponent,
+    DebounceInputDirective,
   ],
   templateUrl: './product-category.component.html',
   styleUrl: './product-category.component.scss',
@@ -39,12 +44,17 @@ export class ProductCategoryComponent implements OnInit {
   public productList: any[] = [];
 
   public categoryList: any[] = [];
+  public brandList: any[] = [];
   public categoryFromList: any[] = [];
   public subCategoryList: any[] = [];
   public subCategoryFromList: any[] = [];
   public measurementUnitList: any[] = [];
   public packTypeList: any[] = [];
 
+  filteredBrandList: any[] = [];
+  selectedBrandIds: number[] = [];
+
+  public oBrandFilterDto = new BrandFilterDto();
   public oPackTypeFilterDto = new PackTypeFilterDto();
   public oCategoryFilterRequestDto = new CategoryFilterRequestDto();
   public oMeasurementUnitFilterDto = new MeasurementUnitFilterDto();
@@ -72,9 +82,8 @@ export class ProductCategoryComponent implements OnInit {
   trackByMeasurementUnit: TrackByFunction<any> | any;
   trackByMeasurementUnitFrom: TrackByFunction<any> | any;
   trackByProductFrom: TrackByFunction<any> | any;
-
-  value1 = 30;
-  value2 = [20, 50];
+  brandSearchText = '';
+  priceRange = [0, 50000];
 
   constructor(
     public authService: AuthService,
@@ -85,9 +94,14 @@ export class ProductCategoryComponent implements OnInit {
     private datePipe: DatePipe,
   ) {
     this.oCurrentUser = CommonHelper.GetUser();
+    this.priceRange = [
+      this.oProductFilterDto.minPrice || 0,
+      this.oProductFilterDto.maxPrice || 50000,
+    ];
   }
 
   ngOnInit(): void {
+    this.GetAllBrands();
     this.GetAllCategories();
     this.GetAllPackTypes();
     this.GetAllMeasurementUnits();
@@ -104,6 +118,47 @@ export class ProductCategoryComponent implements OnInit {
     this.rowData = [];
   }
 
+  onCategoryNodeClicked(node: any): void {
+    console.log(node);
+    if (node.parentId > 0) {
+      this.oProductFilterDto.subCategoryId = Number(node.id);
+      this.oProductFilterDto.categoryId = Number(node.parentId);
+    } else {
+      this.oProductFilterDto.categoryId = Number(node.id);
+    }
+    this.Filter();
+  }
+
+  onBrandSearch(): void {
+    const search = this.brandSearchText.trim().toLowerCase();
+    if (!search) {
+      this.filteredBrandList = [...this.brandList];
+      return;
+    }
+    this.filteredBrandList = this.brandList.filter((x) =>
+      x.name.toLowerCase().includes(search),
+    );
+  }
+
+  onBrandChecked(item: any): void {
+    item.isChecked = !item.isChecked;
+    this.selectedBrandIds = this.brandList
+      .filter((x) => x.isChecked)
+      .map((x) => x.id);
+    this.oProductFilterDto.brandIds = this.selectedBrandIds.join(',');
+    this.Filter();
+  }
+
+  onPriceRangeChange(value: number[]): void {
+    this.priceRange = value;
+    this.oProductFilterDto.minPrice = value[0] ?? 0;
+    this.oProductFilterDto.maxPrice = value[1] ?? 0;
+    this.Filter();
+  }
+
+  onSearchDebounce(event: any) {
+    this.Filter();
+  }
   detailToGrid(params: any) {
     const eDiv = document.createElement('div');
     eDiv.innerHTML =
@@ -135,6 +190,9 @@ export class ProductCategoryComponent implements OnInit {
     this.oProductFilterDto.isActive = CommonHelper.booleanConvert(
       this.oProductFilterDto.isActive,
     );
+
+    this.oProductFilterDto.minPrice = this.priceRange[0] ?? 0;
+    this.oProductFilterDto.maxPrice = this.priceRange[1] ?? 0;
     // After the hash is generated, proceed with the API call
     this.http
       .Post(
@@ -241,6 +299,27 @@ export class ProductCategoryComponent implements OnInit {
           this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
         },
       );
+  }
+  private GetAllBrands() {
+    this.oPackTypeFilterDto.companyId = Number(CommonHelper.GetComapyId());
+    this.oPackTypeFilterDto.isActive = CommonHelper.booleanConvert(
+      this.oPackTypeFilterDto.isActive,
+    );
+    // After the hash is generated, proceed with the API call
+    this.http.Post(`Brand/GetAllBrands`, this.oPackTypeFilterDto).subscribe(
+      (res: any) => {
+        this.brandList = res.map((x: any) => ({
+          id: x.id,
+          name: x.name,
+          productCount: x.productCount,
+          isChecked: false,
+        }));
+        this.filteredBrandList = [...this.brandList];
+      },
+      (err) => {
+        this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
+      },
+    );
   }
   private GetAllMeasurementUnits() {
     this.oMeasurementUnitFilterDto.companyId = Number(

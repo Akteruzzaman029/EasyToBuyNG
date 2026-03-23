@@ -1,85 +1,3 @@
-<div class="row g-0">
-
-    <div class="col-2 px-1">
-        <div class="mb-2">
-            <input type="text" class="form-control" [(ngModel)]="oProductFilterDto.name" name="name"
-                placeholder="product name ...">
-        </div>
-    </div>
-    <div class="col-2 px-1">
-        <div class="mb-2">
-            <input type="text" class="form-control" [(ngModel)]="oProductFilterDto.modelNo" name="modelNo"
-                placeholder="model name ...">
-        </div>
-    </div>
-    <div class="col-2 px-1">
-        <div class="mb-2">
-            <select class="form-select" [(ngModel)]="oProductFilterDto.categoryId" (change)="onCategoryChange($event)"
-                name="categoryId" aria-label="Default select example">
-                <option value="0">-- select category -- </option>
-                <option *ngFor="let item of categoryList; trackBy: trackByCategoryFrom" [value]="item.id">
-                    {{ item.name }}
-                </option>
-            </select>
-        </div>
-    </div>
-
-    <div class="col-2 px-1">
-        <div class="mb-2">
-            <select class="form-select" [(ngModel)]="oProductFilterDto.subCategoryId" name="subCategoryId"
-                aria-label="Default select example">
-                <option value="0">-- select category -- </option>
-                <option *ngFor="let item of subCategoryList; trackBy: trackBySubCategory" [value]="item.id">
-                    {{ item.name }}
-                </option>
-            </select>
-        </div>
-    </div>
-    <div class="col-2 px-1">
-        <div class="mb-2">
-            <select class="form-select" [(ngModel)]="oProductFilterDto.measurementUnitId" name="measurementUnitId"
-                aria-label="Default select example">
-                <option value="0">-- select measurement unit -- </option>
-                <option *ngFor="let item of measurementUnitList; trackBy: trackByProduct" [value]="item.id">
-                    {{ item.unitName }}
-                </option>
-            </select>
-        </div>
-    </div>
-
-    <div class="col-2 px-1">
-        <div class="mb-2">
-            <select class="form-select" [(ngModel)]="oProductFilterDto.packTypeId" name="packTypeId"
-                aria-label="Default select example">
-                <option value="0">-- select pack type -- </option>
-                <option *ngFor="let item of packTypeList; trackBy: trackByProduct" [value]="item.id">
-                    {{ item.name }}
-                </option>
-            </select>
-        </div>
-    </div>
-
-
-    <div class="col-2 px-1">
-        <div class="mb-2">
-            <select class="form-select" [(ngModel)]="oProductFilterDto.isActive" name="isActive"
-                aria-label="Default select example">
-                <option value="true">Active</option>
-                <option value="false">Inactive</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="col-2 px-1">
-        <div class="mb-2">
-            <button class="btn btn-success" (click)="Filter()">Search</button>
-        </div>
-    </div>
-
-
-</div>
-
-
 <!-- Featured Products -->
 
 <div class="container-fluid py-3">
@@ -88,67 +6,45 @@
         <!-- LEFT SIDEBAR -->
         <aside class="col-12 col-lg-3 col-xl-2">
             <div class="p-3 border rounded-3 bg-white">
-
                 <h6 class="fw-semibold mb-3">Filter by Price</h6>
-
                 <!-- Simple "fake" slider (Bootstrap has no native range slider UI like the screenshot).
              You can use <input type="range"> or a library (noUiSlider) for the real one. -->
-                <input type="range" class="form-range" min="50" max="4500" value="2000" />
+                <nz-slider nzRange [(ngModel)]="priceRange" [nzMin]="1" [nzMax]="50000"
+                    (ngModelChange)="onPriceRangeChange($event)" />
                 <div class="d-flex justify-content-between small text-muted mb-4">
-                    <span>৳ 50</span>
-                    <span>৳ 4500</span>
+                    <span>৳ {{priceRange[0]}}</span>
+                    <span>৳ {{priceRange[1]}}</span>
                 </div>
-                <nz-slider nzRange [(ngModel)]="value2" />
-
                 <h6 class="fw-semibold mb-3">Product Categories</h6>
-
                 <!-- Category list -->
-                <div class="list-group list-group-flush">
-                    <a class="list-group-item d-flex justify-content-between align-items-center px-0">
-                        <span>Free Delivery ⚡</span><span class="badge rounded-pill text-bg-light">2227</span>
-                    </a>
-                    <a class="list-group-item d-flex justify-content-between align-items-center px-0">
-                        <span>Top Selling ⚡</span><span class="badge rounded-pill text-bg-light">3101</span>
-                    </a>
-
-                    <a class="list-group-item d-flex justify-content-between align-items-center px-0">
-                        <span>Skin</span><span class="badge rounded-pill text-bg-light">7210</span>
-                    </a>
-
-                    <a class="list-group-item d-flex justify-content-between align-items-center px-0">
-                        <span>Personal care</span><span class="badge rounded-pill text-bg-light">7054</span>
-                    </a>
-
-                    <a class="list-group-item d-flex justify-content-between align-items-center px-0">
-                        <span>Natural</span><span class="badge rounded-pill text-bg-light">5534</span>
-                    </a>
-
-                    <a class="list-group-item d-flex justify-content-between align-items-center px-0">
-                        <span>Hair</span><span class="badge rounded-pill text-bg-light">2980</span>
-                    </a>
-
-                    <a class="list-group-item d-flex justify-content-between align-items-center px-0">
-                        <span>Men</span><span class="badge rounded-pill text-bg-light">2589</span>
-                    </a>
-
-                    <a
-                        class="list-group-item d-flex justify-content-between align-items-center px-0 fw-semibold text-danger">
-                        <span>Makeup</span><span class="badge rounded-pill text-bg-danger">2113</span>
-                    </a>
-
-                    <div class="ps-3 border-start mt-2">
-                        <a class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <span>Eyes</span><span class="badge rounded-pill text-bg-light">177</span>
-                        </a>
-                        <a
-                            class="list-group-item d-flex justify-content-between align-items-center px-0 fw-semibold text-danger">
-                            <span>Face</span><span class="badge rounded-pill text-bg-danger">2113</span>
-                        </a>
-                    </div>
-                </div>
+                <app-common-category-tree (nodeClicked)="onCategoryNodeClicked($event)"></app-common-category-tree>
 
             </div>
+
+
+            <div class="brand-filter-card px-2 mt-3">
+                <h6 class="fw-semibold mb-3">Filter by Brand</h6>
+
+                <div class="search-box">
+                    <input type="text" [(ngModel)]="brandSearchText" (ngModelChange)="onBrandSearch()"
+                        placeholder="Search here..." class="search-input" />
+                </div>
+
+                <div class="brand-list">
+                    <label class="brand-item" *ngFor="let item of filteredBrandList">
+                        <div class="brand-left">
+                            <input type="checkbox" [checked]="item.isChecked" (change)="onBrandChecked(item)" />
+                            <span class="brand-name">{{ item.name }}</span>
+                        </div>
+
+                        <span class="brand-count">{{ item.productCount }}</span>
+                    </label>
+                </div>
+            </div>
+
+
         </aside>
+
 
         <!-- RIGHT CONTENT -->
         <main class="col-12 col-lg-9 col-xl-10">
@@ -157,16 +53,23 @@
                 <div class="flex-grow-1">
                     <div class="input-group">
                         <span class="input-group-text bg-white">🔍</span>
-                        <input class="form-control" placeholder="Search here..." />
+                        <input class="form-control" [(ngModel)]="oProductFilterDto.name" placeholder="Search here..."
+                            appDebounceInput (debounceValue)="onSearchDebounce($event)" />
                     </div>
                 </div>
 
                 <div style="min-width:220px">
-                    <select class="form-select">
-                        <option>Default sorting</option>
-                        <option>Price: low to high</option>
-                        <option>Price: high to low</option>
-                        <option>Newest</option>
+                    <select class="form-select" (change)="Filter()" [(ngModel)]="oProductFilterDto.sortBy" name=""
+                        sortBy>
+                        <option value="">Default sorting</option>
+                        <option value="price_asc">Price: low to high</option>
+                        <option value="price_desc">Price: high to low</option>
+                        <option value="pid_desc">Newest</option>
+                        <option value="pid_asc">Oldest</option>
+                        <option value="popularity_desc">Most popular</option>
+                        <option value="popularity_asc">Least popular</option>
+                        <option value="product_name_asc">Product name: A to Z</option>
+                        <option value="product_name_desc">Product name: Z to A</option>
                     </select>
                 </div>
             </div>
