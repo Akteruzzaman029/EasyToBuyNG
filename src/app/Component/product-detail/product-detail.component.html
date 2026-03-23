@@ -1,0 +1,136 @@
+<section class="product-details">
+  <div class="product-details__container">
+    <div class="product-details__left">
+      <div class="product-gallery">
+        <div class="product-gallery__main">
+          <img [src]="selectedImage" [alt]="product.name" />
+        </div>
+
+        <div class="product-gallery__thumbs">
+          <button
+            type="button"
+            class="thumb"
+            *ngFor="let image of productImages"
+            [class.active]="selectedImage === image.url"
+            (click)="selectImage(image.url)"
+          >
+            <img [src]="image.url" [alt]="'Thumbnail ' + image.id" />
+          </button>
+        </div>
+
+        <div class="product-gallery__share">
+          <button type="button" class="share-btn">f</button>
+          <button type="button" class="share-btn">x</button>
+          <button type="button" class="share-btn">in</button>
+          <button type="button" class="share-btn">wa</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-details__right">
+      <h1 class="product-title">{{ product.name }}</h1>
+
+      <div class="product-top-meta">
+        <span class="size-text">Size: {{ product.size }}</span>
+
+        <span class="rating-badge">
+          {{ product.rating }} ★ | {{ product.reviewCount }} Reviews
+        </span>
+      </div>
+
+      <div class="price-row">
+        <div class="product-price">৳{{ product.price }}</div>
+        <div class="old-price" *ngIf="product.oldPrice">৳{{ product.oldPrice }}</div>
+      </div>
+
+      <div class="offer-box">
+        <span>Download App for </span>
+        <a href="#">iOS</a>
+        <span> or </span>
+        <a href="#">Android</a>
+      </div>
+
+      <div class="offer-box offer-box--soft">
+        <div class="offer-title">Free Shipping Offers</div>
+        <p>Buy 649 Taka to get free delivery for eligible category.</p>
+      </div>
+
+      <div class="shipping-badge-wrap">
+        <span class="shipping-badge">Free Shipping</span>
+      </div>
+
+      <div class="action-row">
+        <button type="button" class="wishlist-btn" (click)="addToWishlist()">♥</button>
+
+        <div class="qty-box">
+          <button type="button" (click)="decreaseQty()">−</button>
+          <span>{{ quantity }}</span>
+          <button type="button" (click)="increaseQty()">+</button>
+        </div>
+
+        <button type="button" class="add-cart-btn" (click)="addToCart()">
+          ADD TO CART
+        </button>
+      </div>
+
+      <div class="stock-warning">
+        Only <strong>{{ product.stock }}</strong> items left in stock
+      </div>
+
+      <hr class="divider" />
+
+      <div class="description-block">
+        <div class="description-title">Brief Description</div>
+
+        <ul class="description-list">
+          <li *ngFor="let item of product.shortDescription">{{ item }}</li>
+        </ul>
+
+        <a href="#" class="read-more">Read More...</a>
+      </div>
+
+      <div class="meta-list">
+        <div class="meta-item">
+          <div class="meta-label">SKU</div>
+          <div class="meta-value">{{ product.sku }}</div>
+        </div>
+
+        <div class="meta-item">
+          <div class="meta-label">Categories</div>
+          <div class="meta-value">
+            {{ product.categories.join(', ') }}
+          </div>
+        </div>
+
+        <div class="meta-item">
+          <div class="meta-label">Tags</div>
+          <div class="meta-value">
+            {{ product.tags.join(', ') }}
+          </div>
+        </div>
+
+        <div class="meta-item">
+          <div class="meta-label">Brands</div>
+          <div class="meta-value">{{ product.brand }}</div>
+        </div>
+      </div>
+
+      <div class="trust-row">
+        <div class="trust-item">
+          <div class="trust-icon">🛡</div>
+          <div class="trust-text">100% Genuine Products</div>
+        </div>
+
+        <div class="trust-item">
+          <div class="trust-icon">💳</div>
+          <div class="trust-text">100% Secure Payments</div>
+        </div>
+
+        <div class="trust-item">
+          <div class="trust-icon">🎧</div>
+          <div class="trust-text">Help Center</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

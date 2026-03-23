@@ -69,6 +69,7 @@ import { ContractUsComponent } from './General/contract-us/contract-us.component
 import { ProductCategoryComponent } from './General/product-category/product-category.component';
 import { CategoryTreeComponent } from './Component/category-tree/category-tree.component';
 import { CommonCategoryTreeComponent } from './Shared/common-category-tree/common-category-tree.component';
+import { ProductDetailComponent } from './Component/product-detail/product-detail.component';
 
 export const routes: Routes = [
   {
@@ -96,6 +97,14 @@ export const routes: Routes = [
         path: 'product-category',
         component: ProductCategoryComponent,
         title: 'Product Category',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+      {
+        path: 'product-detail/:id',
+        component: ProductDetailComponent,
+        title: 'Product Detail',
         data: {
           roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
         },

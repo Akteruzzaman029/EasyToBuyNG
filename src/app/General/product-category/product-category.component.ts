@@ -363,6 +363,9 @@ export class ProductCategoryComponent implements OnInit {
     return `${this.http.appUrl}UploadedFile/GetImage/${fileId}`;
   }
 
+  public details(product: any) {
+    this.router.navigateByUrl('details/' + product.id);
+  }
   public AddToCart(product: any): void {
     // Logic to add the product to the cart
     this.oCartRequestDto = new CartRequestDto();

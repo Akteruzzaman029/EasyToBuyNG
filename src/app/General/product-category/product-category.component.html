@@ -87,7 +87,7 @@
             <div class="row g-3">
                 <div class="products-grid">
                     <div class="product-card" *ngFor="let product of productList">
-                        <div class="product-image-wrap">
+                        <div  (click)="details(product)"  class="product-image-wrap">
                             <img [src]="GetImageUrl(product.fileId)" class="product-image" [alt]="product.name" />
                             <div class="product-overlay">
                                 <button class="overlay-btn" (click)="AddToCart(product)">
