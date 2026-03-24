@@ -1,0 +1,55 @@
+<div class="relative w-full overflow-hidden shadow-lg">
+  <div class="relative h-[220px] sm:h-[280px] md:h-[380px] lg:h-[450px]">
+    <div
+      *ngFor="let item of items; let i = index"
+      class="absolute inset-0 transition-opacity duration-700"
+      [ngClass]="{
+        'opacity-100 z-10': currentIndex === i,
+        'opacity-0 z-0 pointer-events-none': currentIndex !== i
+      }"
+    >
+      <img
+         [src]="GetImageUrl(item.fileId)"
+        [alt]="item.name || ('Slide ' + (i + 1))"
+        class="h-full w-full object-cover"
+      />
+
+      <div class="absolute inset-0 bg-black/25"></div>
+
+      <div class="absolute left-6 bottom-6 z-20 text-white">
+        <!-- <h2 *ngIf="item.title" class="text-xl md:text-3xl font-bold">
+          {{ item.title }}
+        </h2>
+        <p *ngIf="item.subtitle" class="mt-2 text-sm md:text-base text-white/90">
+          {{ item.subtitle }}
+        </p> -->
+      </div>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    (click)="onPrevClick()"
+    class="absolute left-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 shadow hover:bg-white"
+  >
+    ‹
+  </button>
+
+  <button
+    type="button"
+    (click)="onNextClick()"
+    class="absolute right-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 shadow hover:bg-white"
+  >
+    ›
+  </button>
+
+  <div class="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+    <button
+      *ngFor="let item of items; let i = index"
+      type="button"
+      (click)="goToSlide(i)"
+      class="h-3 w-3 rounded-full transition-all"
+      [ngClass]="currentIndex === i ? 'bg-white w-6' : 'bg-white/50'"
+    ></button>
+  </div>
+</div>

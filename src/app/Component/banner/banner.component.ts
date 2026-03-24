@@ -10,19 +10,21 @@ import { AGGridHelper } from '../../Shared/Service/AGGridHelper';
 import { AuthService } from '../../Shared/Service/auth.service';
 import { CommonHelper } from '../../Shared/Service/common-helper.service';
 import { HttpHelperService } from '../../Shared/Service/http-helper.service';
+import { UserResponseDto } from '../../Model/UserResponseDto';
 
 @Component({
   selector: 'app-banner',
   standalone: true,
   imports: [
-     CommonModule,
+    CommonModule,
     FormsModule,
     RouterModule,
     AgGridAngular,
     PaginationComponent,
   ],
   templateUrl: './banner.component.html',
-  styleUrl: './banner.component.scss',  providers: [DatePipe],
+  styleUrl: './banner.component.scss',
+  providers: [DatePipe],
 })
 export class BannerComponent implements OnInit {
   private BannerGridApi!: any;
@@ -31,7 +33,7 @@ export class BannerComponent implements OnInit {
   public BannerList: any[] = [];
   public oBannerFilterRequestDto = new BannerFilterRequestDto();
   public oBannerRequestDto = new BannerRequestDto();
-
+  private currentUser: UserResponseDto = new UserResponseDto();
   public BannerId = 0;
   // pagination setup
   public pageIndex: number = 1;
@@ -50,10 +52,18 @@ export class BannerComponent implements OnInit {
       checkboxSelection: false,
     },
     { field: 'name', width: 150, headerName: 'Banner Name', filter: true },
+    { field: 'typeTag', width: 150, headerName: 'TypeTag', filter: true },
+    { field: 'title', width: 150, headerName: 'Title', filter: true },
     {
-      field: 'subBannerName',
+      field: 'description',
       width: 150,
-      headerName: 'Sub Banner Name',
+      headerName: 'Description',
+      filter: true,
+    },
+    {
+      field: 'sequenceNo',
+      width: 150,
+      headerName: 'SLNo',
       filter: true,
     },
     { field: 'remarks', headerName: 'Remarks' },
@@ -68,13 +78,17 @@ export class BannerComponent implements OnInit {
     private http: HttpHelperService,
     private router: Router,
     private datePipe: DatePipe,
-  ) {}
+  ) {
+    this.currentUser=CommonHelper.GetUser();
+  }
 
   ngOnInit(): void {
-    this.GetBanners();
     this.GetBanner();
   }
 
+  public GetImageUrl(fileId: number): string {
+    return `${this.http.appUrl}UploadedFile/GetImage/${fileId}`;
+  }
   PageChange(event: any) {
     this.pageIndex = Number(event);
     this.GetBanner();
@@ -100,8 +114,7 @@ export class BannerComponent implements OnInit {
   }
 
   private GetBanner() {
-    let currentUser = CommonHelper.GetUser();
-    this.oBannerFilterRequestDto.companyId = Number(currentUser?.companyId);
+    this.oBannerFilterRequestDto.companyId = Number(this.currentUser?.companyId);
     this.oBannerFilterRequestDto.isActive = CommonHelper.booleanConvert(
       this.oBannerFilterRequestDto.isActive,
     );
@@ -132,25 +145,6 @@ export class BannerComponent implements OnInit {
       );
   }
 
-  private GetBanners() {
-    let currentUser = CommonHelper.GetUser();
-    this.oBannerFilterRequestDto.companyId = Number(currentUser?.companyId);
-    this.oBannerFilterRequestDto.isActive = CommonHelper.booleanConvert(
-      this.oBannerFilterRequestDto.isActive,
-    );
-    // After the hash is generated, proceed with the API call
-    this.http
-      .Post(`Banner/GetAllCategories`, this.oBannerFilterRequestDto)
-      .subscribe(
-        (res: any) => {
-          this.BannerList = res;
-        },
-        (err) => {
-          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
-        },
-      );
-  }
-
   public InsertBanner() {
     if (this.oBannerRequestDto.name == '') {
       this.toast.warning('Please enter name', 'Warning!!', {
@@ -158,49 +152,49 @@ export class BannerComponent implements OnInit {
       });
       return;
     }
-    let currentUser = CommonHelper.GetUser();
-    this.oBannerRequestDto.companyId = Number(currentUser.companyId);
-    this.oBannerRequestDto.parentId = Number(
-      this.oBannerRequestDto.parentId,
+    this.oBannerRequestDto.companyId = Number(this.currentUser?.companyId);
+    this.oBannerRequestDto.fileId = Number(this.oBannerRequestDto.fileId);
+    this.oBannerRequestDto.sequenceNo = Number(
+      this.oBannerRequestDto.sequenceNo,
     );
+    this.oBannerRequestDto.userId = this.currentUser.userId;
     this.oBannerRequestDto.isActive = CommonHelper.booleanConvert(
       this.oBannerRequestDto.isActive,
     );
     // After the hash is generated, proceed with the API call
-    this.http
-      .Post(`Banner/InsertBanner`, this.oBannerRequestDto)
-      .subscribe(
-        (res: any) => {
-          CommonHelper.CommonButtonClick('closeCommonModel');
-          this.GetBanner();
-          this.toast.success('Data Save Successfully!!', 'Success!!', {
-            progressBar: true,
-          });
-        },
-        (err) => {
-          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
-        },
-      );
+    this.http.Post(`Banner/InsertBanner`, this.oBannerRequestDto).subscribe(
+      (res: any) => {
+        CommonHelper.CommonButtonClick('closeCommonModel');
+        this.GetBanner();
+        this.toast.success('Data Save Successfully!!', 'Success!!', {
+          progressBar: true,
+        });
+      },
+      (err) => {
+        this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
+      },
+    );
   }
 
   public UpdateBanner() {
+    debugger
     if (this.oBannerRequestDto.name == '') {
       this.toast.warning('Please enter name', 'Warning!!', {
         progressBar: true,
       });
       return;
     }
-    let currentUser = CommonHelper.GetUser();
-    this.oBannerFilterRequestDto.companyId = Number(currentUser.companyId);
+    this.oBannerRequestDto.companyId = Number(this.currentUser?.companyId);
+    this.oBannerRequestDto.fileId = Number(this.oBannerRequestDto.fileId);
+    this.oBannerRequestDto.sequenceNo = Number(
+      this.oBannerRequestDto.sequenceNo,
+    );
     this.oBannerRequestDto.isActive = CommonHelper.booleanConvert(
       this.oBannerRequestDto.isActive,
     );
     // After the hash is generated, proceed with the API call
     this.http
-      .Post(
-        `Banner/UpdateBanner/${this.BannerId}`,
-        this.oBannerRequestDto,
-      )
+      .Post(`Banner/UpdateBanner/${this.BannerId}`, this.oBannerRequestDto)
       .subscribe(
         (res: any) => {
           CommonHelper.CommonButtonClick('closeCommonModel');
@@ -220,10 +214,7 @@ export class BannerComponent implements OnInit {
     );
     // After the hash is generated, proceed with the API call
     this.http
-      .Post(
-        `Banner/DeleteBanner/${this.BannerId}`,
-        this.oBannerRequestDto,
-      )
+      .Post(`Banner/DeleteBanner/${this.BannerId}`, this.oBannerRequestDto)
       .subscribe(
         (res: any) => {
           CommonHelper.CommonButtonClick('closeCommonDelete');
@@ -250,9 +241,14 @@ export class BannerComponent implements OnInit {
         progressBar: true,
       });
     }
+
     this.BannerId = Number(getSelectedItem.id);
     this.oBannerRequestDto.name = getSelectedItem.name;
-    this.oBannerRequestDto.parentId = Number(getSelectedItem.parentId);
+    this.oBannerRequestDto.title = getSelectedItem.title;
+    this.oBannerRequestDto.description = getSelectedItem.description;
+    this.oBannerRequestDto.typeTag = getSelectedItem.typeTag;
+    this.oBannerRequestDto.userId = this.currentUser.userId;
+    this.oBannerRequestDto.fileId = Number(getSelectedItem.fileId);
     this.oBannerRequestDto.sequenceNo = Number(getSelectedItem.sequenceNo);
     this.oBannerRequestDto.isActive = CommonHelper.booleanConvert(
       getSelectedItem.isActive,
@@ -270,7 +266,7 @@ export class BannerComponent implements OnInit {
     }
     this.BannerId = Number(getSelectedItem.id);
     this.oBannerRequestDto.name = getSelectedItem.name;
-    this.oBannerRequestDto.parentId = Number(getSelectedItem.parentId);
+    this.oBannerRequestDto.userId = getSelectedItem.userId;
     this.oBannerRequestDto.sequenceNo = Number(getSelectedItem.sequenceNo);
     this.oBannerRequestDto.isActive = getSelectedItem.isActive;
     this.oBannerRequestDto.remarks = getSelectedItem.remarks;

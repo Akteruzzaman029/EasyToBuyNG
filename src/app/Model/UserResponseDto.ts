@@ -7,7 +7,7 @@ export class UserResponseDto {
         this.refreshToken = "";
         this.refreshTokenExpires = new Date;
         this.userId = "";
-        this.companyId = "";
+        this.companyId = 0;
         this.type = 0;
     }
     public userName: string;
@@ -16,6 +16,6 @@ export class UserResponseDto {
     public refreshToken: string;
     public refreshTokenExpires: Date;
     public userId: string;
-    public companyId: string;
+    public companyId: number;
     public type: number;
 }

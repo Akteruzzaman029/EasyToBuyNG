@@ -90,6 +90,7 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="col-12 px-1">
                         <div class="mb-2">
                             <label for="name" class="form-label">Name</label>
@@ -97,11 +98,28 @@
                                 placeholder="Please enter name">
                         </div>
                     </div>
+                    
                     <div class="col-12 px-1">
                         <div class="mb-2">
                             <label for="uploadFile" class="form-label">Image</label>
                             <input type="file" class="form-control" id="uploadFile" (change)="onFileChange($event)"
                                 placeholder="Select file to upload">
+                        </div>
+                    </div>
+
+                    <div class="col-12 px-1 my-2">
+                        <div *ngIf="oCategoryRequestDto.fileId>0" class="overflow-hidden">
+                            <img [src]="GetImageUrl(oCategoryRequestDto.fileId)" [alt]=""
+                                class="w-full h-[220px] object-cover" />
+                        </div>
+                    </div>
+
+
+                          <div class="col-12 px-1">
+                        <div class="mb-2">
+                            <label for="sequenceNo" class="form-label">Sequence No</label>
+                            <input type="text" class="form-control" [(ngModel)]="oCategoryRequestDto.sequenceNo"
+                                name="sequenceNo" placeholder="Please enter sequence no">
                         </div>
                     </div>
 

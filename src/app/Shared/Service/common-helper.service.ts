@@ -2,24 +2,23 @@ import { inject, Injectable } from '@angular/core';
 import { UserResponseDto } from '../../Model/UserResponseDto';
 import { HttpHelperService } from './http-helper.service';
 
-
 @Injectable()
-
 export class CommonHelper {
-
   private http = inject(HttpHelperService);
   static http: any;
-  constructor() { }
+  constructor() {}
 
   public static CommonButtonClick(elementId: string) {
     document.getElementById(elementId)?.click();
   }
 
-
+  public static getBannerByType(typeTag: string, bannerList: any[]): any[] {
+    return bannerList.filter((item) => item.typeTag === typeTag);
+  }
   public static GetComapyId(): number {
     let companyId = 0;
     if (typeof window !== 'undefined' && localStorage) {
-      var company = localStorage.getItem("Company");
+      var company = localStorage.getItem('Company');
       if (company != null) {
         companyId = Number(company);
       }
@@ -47,7 +46,7 @@ export class CommonHelper {
     return Math.round(price / Lesson);
   }
 
-  // Pagination Number generated 
+  // Pagination Number generated
   public static generateNumbers(start: number, end: number): number[] {
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
@@ -56,16 +55,14 @@ export class CommonHelper {
     return regex.test(input);
   }
   public static booleanConvert(booleanValue: any): boolean {
-    if (booleanValue == "true") {
-      return true
-    }
-    else if (booleanValue == "false") {
-      return false
+    if (booleanValue == 'true') {
+      return true;
+    } else if (booleanValue == 'false') {
+      return false;
     } else if (booleanValue == true) {
-      return true
-    }
-    else if (booleanValue == false) {
-      return false
+      return true;
+    } else if (booleanValue == false) {
+      return false;
     } else {
       return true;
     }
@@ -74,7 +71,7 @@ export class CommonHelper {
   public static GetUser(): UserResponseDto {
     let oUserResponseDto = new UserResponseDto();
     if (typeof window !== 'undefined' && localStorage) {
-      var user = localStorage.getItem("UserResponseDto");
+      var user = localStorage.getItem('UserResponseDto');
       if (user != null) {
         oUserResponseDto = JSON.parse(user);
       }
@@ -82,8 +79,12 @@ export class CommonHelper {
     return oUserResponseDto;
   }
 
-
-  public static getLessonSlots(startDate: Date, selectedDays: string[], totalLessons: number, slot: any): any[] {
+  public static getLessonSlots(
+    startDate: Date,
+    selectedDays: string[],
+    totalLessons: number,
+    slot: any,
+  ): any[] {
     const result: any[] = [];
 
     let date = startDate;
@@ -95,12 +96,12 @@ export class CommonHelper {
       wednesday: 3,
       thursday: 4,
       friday: 5,
-      saturday: 6
+      saturday: 6,
     };
 
     const targetDayNumbers = selectedDays
-      .map(day => day.toLowerCase().trim())
-      .map(day => dayMap[day]);
+      .map((day) => day.toLowerCase().trim())
+      .map((day) => dayMap[day]);
 
     const formatter = new Intl.DateTimeFormat('en-US', { weekday: 'long' });
 
@@ -111,7 +112,7 @@ export class CommonHelper {
           day: formatter.format(date),
           slotName: slot.name,
           startTime: slot.startTime,
-          endTime: slot.endTime
+          endTime: slot.endTime,
         });
       }
       date.setDate(date.getDate() + 1);
@@ -124,7 +125,6 @@ export class CommonHelper {
     if (!time || time === '') {
       return '00:00:00';
     }
-
 
     // Handle "HH:mm" format
     const parts = time.split(':');
@@ -139,6 +139,4 @@ export class CommonHelper {
     }
     return '00:00:00';
   }
-
-
 }

@@ -19,7 +19,7 @@ export class BannerRequestDto {
     this.description = '';
     this.companyId = 0;
     this.fileId = 0;
-    this.parentId = 0;
+    this.userId = "";
     this.sequenceNo = 0;
     this.isActive = true;
     this.remarks = '';
@@ -31,7 +31,7 @@ export class BannerRequestDto {
   public remarks: string;
   public companyId: number;
   public fileId: number;
-  public parentId: number;
+  public userId: string;
   public sequenceNo: number;
   public isActive: boolean;
 }

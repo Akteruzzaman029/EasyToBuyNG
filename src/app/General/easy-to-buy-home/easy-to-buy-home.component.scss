@@ -33,12 +33,20 @@ $transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(circle at 20% 50%, rgba(255,255,255,0.08) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 40%);
+      radial-gradient(
+        circle at 20% 50%,
+        rgba(255, 255, 255, 0.08) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba(255, 255, 255, 0.06) 0%,
+        transparent 40%
+      );
   }
 }
 
@@ -49,9 +57,9 @@ $transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 
 .hero-badge {
   display: inline-block;
-  background: rgba(255,255,255,0.18);
+  background: rgba(255, 255, 255, 0.18);
   color: $white;
-  border: 1px solid rgba(255,255,255,0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(8px);
   padding: 6px 18px;
   border-radius: 50px;
@@ -80,7 +88,7 @@ $transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 
 .hero-subtitle {
   font-size: 1.05rem;
-  color: rgba(255,255,255,0.82);
+  color: rgba(255, 255, 255, 0.82);
   max-width: 480px;
   margin: 0 auto;
   animation: fadeDown 0.7s ease 0.2s both;
@@ -219,7 +227,7 @@ $transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 700;
   cursor: pointer;
   transition: $transition;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 
   &:hover {
     background: $primary;
@@ -336,12 +344,35 @@ $transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
+//  carousel
+
+// [nz-carousel-content] {
+//   text-align: center;
+//   height: 160px;
+//   line-height: 160px;
+//   background: #364d79;
+//   color: #fff;
+//   overflow: hidden;
+// }
+
+// h3 {
+//   color: #fff;
+//   margin-bottom: 0;
+//   user-select: none;
+// }
+
 // ============================================================
 // ANIMATIONS
 // ============================================================
 @keyframes fadeDown {
-  from { opacity: 0; transform: translateY(-16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 // ============================================================

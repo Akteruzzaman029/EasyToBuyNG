@@ -60,8 +60,9 @@ export class CategoryComponent implements OnInit {
       headerName: 'Sub Category Name',
       filter: true,
     },
-    { field: 'remarks', headerName: 'Remarks' },
+    { field: 'sequenceNo', headerName: 'SLNo' },
     { field: 'isActive', headerName: 'Status' },
+    { field: 'remarks', headerName: 'Remarks' },
   ];
   trackByFn: TrackByFunction<any> | any;
   trackByCategory: TrackByFunction<any> | any;
@@ -168,6 +169,7 @@ export class CategoryComponent implements OnInit {
     }
     let currentUser = CommonHelper.GetUser();
     this.oCategoryRequestDto.companyId = Number(currentUser.companyId);
+    this.oCategoryRequestDto.fileId = Number(this.oCategoryRequestDto.fileId);
     this.oCategoryRequestDto.parentId = Number(
       this.oCategoryRequestDto.parentId,
     );
@@ -199,10 +201,11 @@ export class CategoryComponent implements OnInit {
       return;
     }
     let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.companyId = Number(currentUser.companyId);
-    this.oCategoryFilterRequestDto.parentId = Number(
-      this.oCategoryFilterRequestDto.parentId,
+    this.oCategoryRequestDto.companyId = Number(currentUser.companyId);
+    this.oCategoryRequestDto.parentId = Number(
+      this.oCategoryRequestDto.parentId,
     );
+    this.oCategoryRequestDto.fileId = Number(this.oCategoryRequestDto.fileId);
     this.oCategoryRequestDto.isActive = CommonHelper.booleanConvert(
       this.oCategoryRequestDto.isActive,
     );
@@ -255,6 +258,7 @@ export class CategoryComponent implements OnInit {
   }
 
   edit() {
+    this.oCategoryRequestDto = new CategoryRequestDto();
     let getSelectedItem = AGGridHelper.GetSelectedRow(this.categoryGridApi);
     if (getSelectedItem == null) {
       this.toast.warning('Please select an item', 'Warning!!', {
@@ -282,10 +286,15 @@ export class CategoryComponent implements OnInit {
     this.categoryId = Number(getSelectedItem.id);
     this.oCategoryRequestDto.name = getSelectedItem.name;
     this.oCategoryRequestDto.parentId = Number(getSelectedItem.parentId);
+    this.oCategoryRequestDto.fileId = Number(getSelectedItem.fileId);
     this.oCategoryRequestDto.sequenceNo = Number(getSelectedItem.sequenceNo);
     this.oCategoryRequestDto.isActive = getSelectedItem.isActive;
     this.oCategoryRequestDto.remarks = getSelectedItem.remarks;
     CommonHelper.CommonButtonClick('openCommonDelete');
+  }
+
+  public GetImageUrl(fileId: number): string {
+    return `${this.http.appUrl}UploadedFile/GetImage/${fileId}`;
   }
 
   public onFileChange(event: any): void {

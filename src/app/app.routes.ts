@@ -70,6 +70,7 @@ import { ProductCategoryComponent } from './General/product-category/product-cat
 import { CategoryTreeComponent } from './Component/category-tree/category-tree.component';
 import { CommonCategoryTreeComponent } from './Shared/common-category-tree/common-category-tree.component';
 import { ProductDetailComponent } from './Component/product-detail/product-detail.component';
+import { BannerComponent } from './Component/banner/banner.component';
 
 export const routes: Routes = [
   {
@@ -489,6 +490,12 @@ export const routes: Routes = [
         path: 'web-section',
         component: WebSectionComponent,
         title: 'Web Section List',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
+      {
+        path: 'banner',
+        component: BannerComponent,
+        title: 'Banner List',
         data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
       },
     ],

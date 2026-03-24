@@ -1,5 +1,7 @@
+<app-banner-carousel [items]="homeSliderList" [autoPlayInterval]="4000">
+</app-banner-carousel>
 <!-- Hero Banner -->
-<section class="hero-banner">
+<!-- <section class="hero-banner">
   <div class="hero-content">
     <span class="hero-badge">🛍️ Best Deals Today</span>
     <h1 class="hero-title">Discover Amazing<br><span class="hero-highlight">Products</span></h1>
@@ -10,8 +12,14 @@
       <path d="M0,60 C360,120 1080,0 1440,60 L1440,120 L0,120 Z" fill="#f0f6ff" />
     </svg>
   </div>
-</section>
+</section> -->
 
+
+<!-- Top Banner -->
+<div *ngIf="homeTopList.length>0" class="overflow-hidden my-10 px-10 lg:mb-10 rounded-3xl">
+  <img [src]="GetImageUrl(homeTopList[0].fileId)" [alt]="homeTopList[0].name"
+    class="w-full h-[220px] object-cover rounded-3xl" />
+</div>
 
 <section class="container mx-auto mb-5 hidden px-2.5 lg:mb-10 lg:block lg:px-0 2xl:px-2">
   <div class="flex flex-wrap md:-mx-2 2xl:-mx-2.5">
@@ -86,8 +94,18 @@
   </div>
 </section>
 
+
+
+<!-- Middle Banner -->
+<div *ngIf="homeMiddleList.length>0" class="overflow-hidden my-10 px-10 lg:mb-10 rounded-3xl mt-4">
+  <img [src]="GetImageUrl(homeMiddleList[0].fileId)" [alt]="homeMiddleList[0].name"
+    class="w-full object-cover rounded-3xl" />
+</div>
 <!-- Category Wise Products -->
 <app-category-wise-product></app-category-wise-product>
+
+
+
 
 <!-- Featured Products -->
 <section class="products-section">

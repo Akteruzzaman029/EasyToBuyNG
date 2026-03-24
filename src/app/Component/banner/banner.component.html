@@ -10,10 +10,23 @@
         <div class="mb-2">
             <select class="form-select" [(ngModel)]="oBannerFilterRequestDto.typeTag" name="typeTag"
                 aria-label="Default select example">
-                <option value="0">-- select Banner -- </option>
-                <option *ngFor="let item of BannerList; trackBy: trackByBanner" [value]="item.id">
-                    {{ item.name }}
-                </option>
+                <option value="">-- Select Banner Type --</option>
+                <option value="home_top">Home Top Banner</option>
+                <option value="home_slider">Home Slider Banner</option>
+                <option value="home_middle">Home Middle Banner</option>
+                <option value="home_bottom">Home Bottom Banner</option>
+
+                <option value="category_top">Category Page Top Banner</option>
+                <option value="category_sidebar">Category Sidebar Banner</option>
+
+                <option value="product_top">Product Page Top Banner</option>
+                <option value="product_inline">Product Inline Banner</option>
+
+                <option value="offer_promo">Offer / Promotional Banner</option>
+                <option value="seasonal">Seasonal Campaign Banner</option>
+
+                <option value="popup">Popup Banner</option>
+                <option value="footer">Footer Banner</option>
             </select>
         </div>
     </div>
@@ -80,13 +93,27 @@
 
                     <div class="col-12 px-1">
                         <div class="mb-2">
-                            <label for="parentId" class="form-label">Banner</label>
-                            <select class="form-select" [(ngModel)]="oBannerRequestDto.parentId" name="parentId"
+                            <label for="typeTag" class="form-label">Banner Type</label>
+                            <select class="form-select" [(ngModel)]="oBannerRequestDto.typeTag" name="typeTag"
                                 aria-label="Default select example">
-                                <option value="0">-- select Banner -- </option>
-                                <option *ngFor="let item of BannerList; trackBy: trackByBanner" [value]="item.id">
-                                    {{ item.name }}
-                                </option>
+                                <option value="">-- Select Banner Type --</option>
+                                <option value="home_top">Home Top Banner</option>
+                                <option value="home_slider">Home Slider Banner</option>
+                                <option value="home_middle">Home Middle Banner</option>
+                                <option value="home_bottom">Home Bottom Banner</option>
+
+                                <option value="category_top">Category Page Top Banner</option>
+                                <option value="category_sidebar">Category Sidebar Banner</option>
+
+                                <option value="product_top">Product Page Top Banner</option>
+                                <option value="product_inline">Product Inline Banner</option>
+
+                                <option value="offer_promo">Offer / Promotional Banner</option>
+                                <option value="seasonal">Seasonal Campaign Banner</option>
+
+                                <option value="popup">Popup Banner</option>
+                                <option value="footer">Footer Banner</option>
+
                             </select>
                         </div>
                     </div>
@@ -99,9 +126,39 @@
                     </div>
                     <div class="col-12 px-1">
                         <div class="mb-2">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" [(ngModel)]="oBannerRequestDto.title" name="title"
+                                placeholder="Please enter title">
+                        </div>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" name="description" [(ngModel)]="oBannerRequestDto.description"
+                            id="description" rows="3"></textarea>
+                    </div>
+
+                    <div class="col-12 px-1">
+                        <div class="mb-2">
                             <label for="uploadFile" class="form-label">Image</label>
                             <input type="file" class="form-control" id="uploadFile" (change)="onFileChange($event)"
                                 placeholder="Select file to upload">
+                        </div>
+                    </div>
+
+                    <div class="col-12 px-1 my-2">
+                        <div *ngIf="oBannerRequestDto.fileId>0" class="overflow-hidden">
+                            <img [src]="GetImageUrl(oBannerRequestDto.fileId)" [alt]=""
+                                class="w-full h-[220px] object-cover" />
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 px-1">
+                        <div class="mb-2">
+                            <label for="sequenceNo" class="form-label">Sequence No</label>
+                            <input type="text" class="form-control" [(ngModel)]="oBannerRequestDto.sequenceNo"
+                                name="sequenceNo" placeholder="Please enter sequence no">
                         </div>
                     </div>
 
