@@ -73,141 +73,120 @@
 </div>
 
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" hidden id="openCommonModel" data-bs-toggle="modal"
-    data-bs-target="#exampleModal">
-    Launch demo modal
-</button>
 
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">CustomCategory
-                    @if (customcategoryId==0){Create} @if (customcategoryId>0){Update}
-                </h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeCommonModel"
-                    aria-label="Close"></button>
+<nz-modal [(nzVisible)]="isVisibleModal" [nzTitle]="modalTitle" [nzWidth]="700" [nzClosable]="true"
+    [nzMaskClosable]="false" [nzKeyboard]="false" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()">
+    <ng-container *nzModalContent>
+        <div class="grid grid-cols-12 gap-3">
+            <div class="col-span-12">
+                <label for="parentId" class="mb-1 block text-sm font-medium text-gray-700">
+                    Category Tag
+                </label>
+
+                <select class="form-select" [(ngModel)]="oCustomCategoryRequestDto.typeTag" name="typeTag"
+                    aria-label="Default select example">
+                    <option value="">-- Select category tag--</option>
+                    <option value="product_category">Product Category</option>
+                    <option value="product_sub_category">Product Sub Category</option>
+                    <option value="brand">Brand</option>
+                    <option value="combo_offer">Combo Offer</option>
+                    <option value="featured_category">Featured Category</option>
+                    <option value="home_category">Home Category</option>
+                    <option value="menu_category">Menu Category</option>
+                    <option value="offer_category">Offer Category</option>
+                    <option value="flash_sale_category">Flash Sale Category</option>
+                    <option value="top_category">Top Category</option>
+                    <option value="custom_category">Custom Category</option>
+                </select>
             </div>
-            <div class="modal-body">
-                <div class="row g-0">
+            <div class="col-span-12">
+                <label for="parentId" class="mb-1 block text-sm font-medium text-gray-700">
+                    Category
+                </label>
 
-                    <div class="col-12 px-1">
-                        <div class="mb-2">
-                            <label for="typeTag" class="form-label"> Category Tag</label>
-                            <select class="form-select" [(ngModel)]="oCustomCategoryRequestDto.typeTag" name="typeTag"
-                                aria-label="Default select example">
-                                <option value="">-- Select category tag--</option>
-                                <option value="product_category">Product Category</option>
-                                <option value="product_sub_category">Product Sub Category</option>
-                                <option value="brand">Brand</option>
-                                <option value="combo_offer">Combo Offer</option>
-                                <option value="featured_category">Featured Category</option>
-                                <option value="home_category">Home Category</option>
-                                <option value="menu_category">Menu Category</option>
-                                <option value="offer_category">Offer Category</option>
-                                <option value="flash_sale_category">Flash Sale Category</option>
-                                <option value="top_category">Top Category</option>
-                                <option value="custom_category">Custom Category</option>
-                            </select>
-                        </div>
-                    </div>
+                <nz-tree-select class="w-full" [nzNodes]="nodes" [(ngModel)]="oCustomCategoryRequestDto.categoryId"
+                    nzShowSearch nzPlaceHolder="Please select category" nzVirtualHeight="300px" [nzHideUnMatched]="true"
+                    [nzDropdownStyle]="{
+            'max-height': '300px',
+            'overflow': 'auto',
+            'z-index': 2050
+          }">
+                </nz-tree-select>
+            </div>
 
-                    <div class="col-12 px-1">
-                        <div class="mb-2">
-                            <label for="categoryId" class="form-label"> Category</label>
-                            <nz-tree-select class="w-100" [nzNodes]="nodes"
-                                [(ngModel)]="oCustomCategoryRequestDto.categoryId" nzShowSearch
-                                nzPlaceHolder="Please select category" nzVirtualHeight="300px" [nzHideUnMatched]="true">
-                            </nz-tree-select>
-                        </div>
-                    </div>
+            <div class="col-span-12">
+                <label for="name" class="mb-1 block text-sm font-medium text-gray-700">
+                    Name
+                </label>
+                <input id="name" type="text"
+                    class="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
+                    [(ngModel)]="oCustomCategoryRequestDto.name" name="name" placeholder="Please enter name" />
+            </div>
 
-                    <div class="col-12 px-1">
-                        <div class="mb-2">
-                            <label for="typeTag" class="form-label"> Category Tag</label>
-                            <select class="form-select" [(ngModel)]="oCustomCategoryRequestDto.typeTag" name="typeTag"
-                                aria-label="Default select example">
-                                <option value="">-- Select category tag--</option>
-                                <option value="product_category">Product Category</option>
-                                <option value="product_sub_category">Product Sub Category</option>
-                                <option value="brand">Brand</option>
-                                <option value="combo_offer">Combo Offer</option>
-                                <option value="featured_category">Featured Category</option>
-                                <option value="home_category">Home Category</option>
-                                <option value="menu_category">Menu Category</option>
-                                <option value="offer_category">Offer Category</option>
-                                <option value="flash_sale_category">Flash Sale Category</option>
-                                <option value="top_category">Top Category</option>
-                                <option value="custom_category">Custom Category</option>
-                            </select>
-                        </div>
-                    </div>
+            <div class="col-span-12">
+                <label for="uploadFile" class="mb-1 block text-sm font-medium text-gray-700">
+                    Image
+                </label>
+                <input id="uploadFile" type="file" class="block w-full rounded-md border border-gray-300 px-3 py-2"
+                    (change)="onFileChange($event)" />
+            </div>
 
-                    <div class="col-12 px-1">
-                        <div class="mb-2">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" [(ngModel)]="oCustomCategoryRequestDto.name"
-                                name="name" placeholder="Please enter name">
-                        </div>
-                    </div>
-
-                    <div class="col-12 px-1">
-                        <div class="mb-2">
-                            <label for="uploadFile" class="form-label">Image</label>
-                            <input type="file" class="form-control" id="uploadFile" (change)="onFileChange($event)"
-                                placeholder="Select file to upload">
-                        </div>
-                    </div>
-
-                    <div class="col-12 px-1 my-2">
-                        <div *ngIf="oCustomCategoryRequestDto.fileId>0" class="overflow-hidden">
-                            <img [src]="GetImageUrl(oCustomCategoryRequestDto.fileId)" [alt]=""
-                                class="w-full h-[220px] object-cover" />
-                        </div>
-                    </div>
-
-
-                    <div class="col-12 px-1">
-                        <div class="mb-2">
-                            <label for="sequenceNo" class="form-label">Sequence No</label>
-                            <input type="text" class="form-control" [(ngModel)]="oCustomCategoryRequestDto.sequenceNo"
-                                name="sequenceNo" placeholder="Please enter sequence no">
-                        </div>
-                    </div>
-
-                    <div class="col-12 px-1">
-                        <div class="mb-2">
-                            <label for="isActive" class="form-label">Status</label>
-                            <select class="form-select" [(ngModel)]="oCustomCategoryRequestDto.isActive" name="isActive"
-                                aria-label="Default select example">
-                                <option value="true">Active</option>
-                                <option value="false">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <label for="remarks" class="form-label">Remarks</label>
-                        <textarea class="form-control" name="remarks" [(ngModel)]="oCustomCategoryRequestDto.remarks"
-                            id="remarks" rows="3"></textarea>
-                    </div>
+            <div class="col-span-12" *ngIf="oCustomCategoryRequestDto.fileId > 0">
+                <div class="overflow-hidden rounded-md border border-gray-200">
+                    <img [src]="GetImageUrl(oCustomCategoryRequestDto.fileId)" alt="category-image"
+                        class="h-[220px] w-full object-cover" />
                 </div>
             </div>
-            <div class="modal-footer">
-                @if (customcategoryId==0){
-                <button type="button" class="btn btn-primary" (click)="InsertCustomCategory()">Save</button>
-                }
-                @if (customcategoryId>0){
-                <button type="button" class="btn btn-primary" (click)="UpdateCustomCategory()">Update</button>
-                }
+
+            <div class="col-span-12">
+                <label for="sequenceNo" class="mb-1 block text-sm font-medium text-gray-700">
+                    Sequence No
+                </label>
+                <input id="sequenceNo" type="number"
+                    class="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
+                    [(ngModel)]="oCustomCategoryRequestDto.sequenceNo" name="sequenceNo"
+                    placeholder="Please enter sequence no" />
+            </div>
+
+            <div class="col-span-12">
+                <label for="isActive" class="mb-1 block text-sm font-medium text-gray-700">
+                    Status
+                </label>
+                <select id="isActive"
+                    class="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
+                    [(ngModel)]="oCustomCategoryRequestDto.isActive" name="isActive">
+                    <option [ngValue]="true">Active</option>
+                    <option [ngValue]="false">Inactive</option>
+                </select>
+            </div>
+
+            <div class="col-span-12">
+                <label for="remarks" class="mb-1 block text-sm font-medium text-gray-700">
+                    Remarks
+                </label>
+                <textarea id="remarks" rows="3"
+                    class="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
+                    name="remarks" [(ngModel)]="oCustomCategoryRequestDto.remarks">
+        </textarea>
             </div>
         </div>
-    </div>
-</div>
+    </ng-container>
 
+    <ng-template #modalFooter>
+        <div class="flex justify-end gap-2">
+            <button nz-button (click)="handleCancel()">Cancel</button>
+
+            <button *ngIf="customcategoryId === 0" nz-button nzType="primary" (click)="InsertCustomCategory()">
+                Save
+            </button>
+
+            <button *ngIf="customcategoryId > 0" nz-button nzType="primary" (click)="UpdateCustomCategory()">
+                Update
+            </button>
+        </div>
+    </ng-template>
+</nz-modal>
 
 
 <button type="button" class="btn btn-primary" hidden data-bs-toggle="modal" id="openCommonDelete"

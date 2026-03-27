@@ -35,7 +35,8 @@ export class CommonHelper {
       data.forEach((x) => {
         lookup[x.id] = {
           title: x.name,
-          key: x.id.toString(),
+          key: x.id,
+          value: x.id,
           isLeaf: !x.hasChild,
           expanded: true,
           origin: x,
