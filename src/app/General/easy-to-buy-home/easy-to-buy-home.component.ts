@@ -17,6 +17,8 @@ import { CategoryGroupComponent } from '../category-group/category-group.compone
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { BannerCarouselComponent } from '../banner-carousel/banner-carousel.component';
 import { BannerFilterRequestDto } from '../../Model/Banner';
+import { CategoryFilterRequestDto } from '../../Model/Category';
+import { CustomCategoryFilterDto } from '../../Model/CustomCategory';
 @Component({
   selector: 'app-easy-to-buy-home',
   standalone: true,
@@ -38,12 +40,17 @@ export class EasyToBuyHomeComponent implements OnInit {
   public oProductFilterDto = new ProductFilterDto();
   public oCartRequestDto = new CartRequestDto();
   public oCurrentUser = new UserResponseDto();
+
+  public oCustomCategoryFilterDto = new CustomCategoryFilterDto();
   public productList: any[] = [];
 
   public oBannerFilterRequestDto = new BannerFilterRequestDto();
   public homeSliderList: any[] = [];
   public homeTopList: any[] = [];
   public homeMiddleList: any[] = [];
+
+  groupedCategories: any[] = [];
+
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -57,8 +64,43 @@ export class EasyToBuyHomeComponent implements OnInit {
 
   ngOnInit(): void {
     // Initialization logic can go here
+    this.GetAllCustomCategories();
     this.GetProduct();
     this.GetAllBanners();
+  }
+
+  private getGroupTitle(typeTag: string): string {
+    switch (typeTag) {
+      case 'product_category':
+        return 'Shop by Category';
+      case 'product_sub_category':
+        return 'Shop by Concern';
+      case 'brand':
+        return 'Shop by Brand';
+      case 'offer_category':
+        return 'Offers';
+      default:
+        return typeTag;
+    }
+  }
+
+  groupByTypeTag(data: any[]): any[] {
+    const groupedMap = new Map<string, any[]>();
+    data
+      .filter((x) => x.isActive)
+      .sort((a, b) => a.sequenceNo - b.sequenceNo)
+      .forEach((item) => {
+        if (!groupedMap.has(item.typeTag)) {
+          groupedMap.set(item.typeTag, []);
+        }
+        groupedMap.get(item.typeTag)!.push(item);
+      });
+
+    return Array.from(groupedMap.entries()).map(([typeTag, items]) => ({
+      typeTag,
+      title: this.getGroupTitle(typeTag),
+      items,
+    }));
   }
 
   private GetProduct() {
@@ -104,6 +146,30 @@ export class EasyToBuyHomeComponent implements OnInit {
         this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
       },
     );
+  }
+
+  private GetAllCustomCategories() {
+    this.oCustomCategoryFilterDto.companyId = Number(
+      CommonHelper.GetComapyId(),
+    );
+    this.oCustomCategoryFilterDto.categoryId = Number(-1);
+    this.oCustomCategoryFilterDto.isActive = CommonHelper.booleanConvert(
+      this.oCustomCategoryFilterDto.isActive,
+    );
+    // After the hash is generated, proceed with the API call
+    this.http
+      .Post(
+        `CustomCategory/GetAllCustomCategories`,
+        this.oCustomCategoryFilterDto,
+      )
+      .subscribe(
+        (res: any) => {
+          this.groupedCategories = this.groupByTypeTag(res);
+        },
+        (err) => {
+          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
+        },
+      );
   }
 
   public GetImageUrl(fileId: number): string {
