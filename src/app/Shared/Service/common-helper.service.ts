@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { UserResponseDto } from '../../Model/UserResponseDto';
 import { HttpHelperService } from './http-helper.service';
+import { NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
 @Injectable()
 export class CommonHelper {
@@ -26,6 +27,32 @@ export class CommonHelper {
     return companyId;
   }
 
+
+  public static  mapFlatToTreeNodes(data: any[]): NzTreeNodeOptions[] {
+      const lookup: { [key: number]: NzTreeNodeOptions } = {};
+      const rootNodes: NzTreeNodeOptions[] = [];
+  
+      data.forEach((x) => {
+        lookup[x.id] = {
+          title: x.name,
+          key: x.id.toString(),
+          isLeaf: !x.hasChild,
+          expanded: true,
+          origin: x,
+          children: [],
+        };
+      });
+  
+      data.forEach((x) => {
+        if (x.parentId && x.parentId !== 0) {
+          lookup[x.parentId]?.children?.push(lookup[x.id]);
+        } else {
+          rootNodes.push(lookup[x.id]);
+        }
+      });
+  
+      return rootNodes;
+    }
   public static resetFileInput(elementId: string) {
     const fileInput = document.getElementById(elementId) as HTMLInputElement;
     if (fileInput) {

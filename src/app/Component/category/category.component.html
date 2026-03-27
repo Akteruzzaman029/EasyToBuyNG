@@ -8,13 +8,9 @@
     </div>
     <div class="col-2 px-1">
         <div class="mb-2">
-            <select class="form-select" [(ngModel)]="oCategoryFilterRequestDto.parentId" name="parentId"
-                aria-label="Default select example">
-                <option value="0">-- select category -- </option>
-                <option *ngFor="let item of categoryList; trackBy: trackByCategory" [value]="item.id">
-                    {{ item.name }}
-                </option>
-            </select>
+            <nz-tree-select class="w-100" [nzNodes]="nodes" [(ngModel)]="oCategoryFilterRequestDto.parentId"
+                nzShowSearch nzPlaceHolder="Please select category" nzVirtualHeight="300px" [nzHideUnMatched]="true">
+            </nz-tree-select>
         </div>
     </div>
     <div class="col-2 px-1">
@@ -81,13 +77,11 @@
                     <div class="col-12 px-1">
                         <div class="mb-2">
                             <label for="parentId" class="form-label">Category</label>
-                            <select class="form-select" [(ngModel)]="oCategoryRequestDto.parentId" name="parentId"
-                                aria-label="Default select example">
-                                <option value="0">-- select category -- </option>
-                                <option *ngFor="let item of categoryList; trackBy: trackByCategory" [value]="item.id">
-                                    {{ item.name }}
-                                </option>
-                            </select>
+                            <nz-tree-select class="w-100" [nzNodes]="nodes" [(ngModel)]="oCategoryRequestDto.parentId"
+                                nzShowSearch nzPlaceHolder="Please select category" nzVirtualHeight="300px"
+                                 [nzDropdownStyle]="{ 'max-height': '300px', 'overflow': 'auto', 'z-index': 2050 }"
+                                [nzHideUnMatched]="true">
+                            </nz-tree-select>
                         </div>
                     </div>
 
@@ -98,7 +92,7 @@
                                 placeholder="Please enter name">
                         </div>
                     </div>
-                    
+
                     <div class="col-12 px-1">
                         <div class="mb-2">
                             <label for="uploadFile" class="form-label">Image</label>
@@ -115,7 +109,7 @@
                     </div>
 
 
-                          <div class="col-12 px-1">
+                    <div class="col-12 px-1">
                         <div class="mb-2">
                             <label for="sequenceNo" class="form-label">Sequence No</label>
                             <input type="text" class="form-control" [(ngModel)]="oCategoryRequestDto.sequenceNo"
@@ -183,3 +177,18 @@
         </div>
     </div>
 </div>
+
+
+<button nz-button [nzType]="'primary'" (click)="showModal()"><span>Show Modal</span></button>
+    <nz-modal [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+      <ng-container *nzModalContent>
+        <p>Content one</p>
+        <p>Content two</p>
+        <p>Content three</p>
+         <nz-tree-select class="w-100" [nzNodes]="nodes" [(ngModel)]="oCategoryRequestDto.parentId"
+                                nzShowSearch nzPlaceHolder="Please select category" nzVirtualHeight="300px"
+                                 [nzDropdownStyle]="{ 'max-height': '300px', 'overflow': 'auto', 'z-index': 2050 }"
+                                [nzHideUnMatched]="true">
+                            </nz-tree-select>
+      </ng-container>
+    </nz-modal>

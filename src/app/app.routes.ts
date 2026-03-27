@@ -71,6 +71,7 @@ import { CategoryTreeComponent } from './Component/category-tree/category-tree.c
 import { CommonCategoryTreeComponent } from './Shared/common-category-tree/common-category-tree.component';
 import { ProductDetailComponent } from './Component/product-detail/product-detail.component';
 import { BannerComponent } from './Component/banner/banner.component';
+import { CustomCategoryComponent } from './Component/custom-category/custom-category.component';
 
 export const routes: Routes = [
   {
@@ -452,6 +453,12 @@ export const routes: Routes = [
         path: 'category',
         component: CategoryComponent,
         title: 'Category List',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
+      {
+        path: 'custom-category',
+        component: CustomCategoryComponent,
+        title: 'Custom Category List',
         data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
       },
       {

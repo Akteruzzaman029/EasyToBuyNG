@@ -5,9 +5,9 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import {
-  CategoryFilterRequestDto,
-  CategoryRequestDto,
-} from '../../Model/Category';
+  CustomCategoryFilterDto,
+  CustomCategoryRequestDto,
+} from '../../Model/CustomCategory';
 import { AGGridHelper } from '../../Shared/Service/AGGridHelper';
 import { AuthService } from '../../Shared/Service/auth.service';
 import { CommonHelper } from '../../Shared/Service/common-helper.service';
@@ -15,10 +15,33 @@ import { HttpHelperService } from '../../Shared/Service/http-helper.service';
 import { PaginationComponent } from '../../Shared/pagination/pagination.component';
 import { NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzModalModule } from 'ng-zorro-antd/modal';
+import { CategoryFilterRequestDto } from '../../Model/Category';
+
+function dig(path = '0', level = 3): NzTreeNodeOptions[] {
+  const list: NzTreeNodeOptions[] = [];
+  for (let i = 0; i < 10; i += 1) {
+    const key = `${path}-${i}`;
+    const treeNode: NzTreeNodeOptions = {
+      title: key,
+      key,
+      expanded: true,
+      children: [],
+      isLeaf: false,
+    };
+
+    if (level > 0) {
+      treeNode.children = dig(key, level - 1);
+    } else {
+      treeNode.isLeaf = true;
+    }
+
+    list.push(treeNode);
+  }
+  return list;
+}
+
 @Component({
-  selector: 'app-category',
+  selector: 'app-custom-customcategory',
   standalone: true,
   imports: [
     CommonModule,
@@ -27,21 +50,19 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     AgGridAngular,
     PaginationComponent,
     NzTreeSelectModule,
-    NzButtonModule, NzModalModule
   ],
-  templateUrl: './category.component.html',
-  styleUrl: './category.component.scss',
-  providers: [DatePipe],
+  templateUrl: './custom-category.component.html',
+  styleUrl: './custom-category.component.scss',
 })
-export class CategoryComponent implements OnInit {
-  private categoryGridApi!: any;
+export class CustomCategoryComponent implements OnInit {
+  private customcategoryGridApi!: any;
   public DeafultCol = AGGridHelper.DeafultCol;
   public rowData!: any[];
-  public categoryList: any[] = [];
+  public customcategoryList: any[] = [];
+  public oCustomCategoryFilterDto = new CustomCategoryFilterDto();
+  public oCustomCategoryRequestDto = new CustomCategoryRequestDto();
   public oCategoryFilterRequestDto = new CategoryFilterRequestDto();
-  public oCategoryRequestDto = new CategoryRequestDto();
-
-  public categoryId = 0;
+  public customcategoryId = 0;
   // pagination setup
   public pageIndex: number = 1;
   public totalRecords: number = 0;
@@ -58,11 +79,16 @@ export class CategoryComponent implements OnInit {
       editable: false,
       checkboxSelection: false,
     },
-    { field: 'name', width: 150, headerName: 'Category Name', filter: true },
     {
-      field: 'subCategoryName',
+      field: 'name',
       width: 150,
-      headerName: 'Sub Category Name',
+      headerName: 'CustomCategory Name',
+      filter: true,
+    },
+    {
+      field: 'subCustomCategoryName',
+      width: 150,
+      headerName: 'Sub CustomCategory Name',
       filter: true,
     },
     { field: 'sequenceNo', headerName: 'SLNo' },
@@ -70,10 +96,12 @@ export class CategoryComponent implements OnInit {
     { field: 'remarks', headerName: 'Remarks' },
   ];
   trackByFn: TrackByFunction<any> | any;
-  trackByCategory: TrackByFunction<any> | any;
-  trackByCategoryFrom: TrackByFunction<any> | any;
+  trackByCustomCategory: TrackByFunction<any> | any;
+  trackByCustomCategoryFrom: TrackByFunction<any> | any;
 
   nodes: NzTreeNodeOptions[] = [];
+  selectedCategoryId: any;
+
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -82,36 +110,18 @@ export class CategoryComponent implements OnInit {
     private datePipe: DatePipe,
   ) {}
 
-
-   isVisible = false;
-
-  showModal(): void {
-    this.isVisible = true;
-  }
-
-  handleOk(): void {
-    console.log('Button ok clicked!');
-    this.isVisible = false;
-  }
-
-  handleCancel(): void {
-    console.log('Button cancel clicked!');
-    this.isVisible = false;
-  }
-
-  
   ngOnInit(): void {
     this.GetCategoryTree();
-    this.GetCategory();
+    this.GetCustomCategory();
   }
 
   PageChange(event: any) {
     this.pageIndex = Number(event);
-    this.GetCategory();
+    this.GetCustomCategory();
   }
 
   onGridReadyTransection(params: any) {
-    this.categoryGridApi = params.api;
+    this.customcategoryGridApi = params.api;
     this.rowData = [];
   }
 
@@ -126,23 +136,23 @@ export class CategoryComponent implements OnInit {
   }
 
   Filter() {
-    this.GetCategory();
+    this.GetCustomCategory();
   }
 
-  private GetCategory() {
+  private GetCustomCategory() {
     let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.companyId = Number(currentUser?.companyId);
-    this.oCategoryFilterRequestDto.parentId = Number(
-      this.oCategoryFilterRequestDto.parentId,
+    this.oCustomCategoryFilterDto.companyId = Number(currentUser?.companyId);
+    this.oCustomCategoryFilterDto.categoryId = Number(
+      this.oCustomCategoryFilterDto.categoryId,
     );
-    this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
-      this.oCategoryFilterRequestDto.isActive,
+    this.oCustomCategoryFilterDto.isActive = CommonHelper.booleanConvert(
+      this.oCustomCategoryFilterDto.isActive,
     );
     // After the hash is generated, proceed with the API call
     this.http
       .Post(
-        `Category/GetCategory?pageNumber=${this.pageIndex}`,
-        this.oCategoryFilterRequestDto,
+        `CustomCategory/GetCustomCategory?pageNumber=${this.pageIndex}`,
+        this.oCustomCategoryFilterDto,
       )
       .subscribe(
         (res: any) => {
@@ -157,7 +167,7 @@ export class CategoryComponent implements OnInit {
             this.pageIndex,
             this.totalPages,
           );
-          this.categoryGridApi.sizeColumnsToFit();
+          this.customcategoryGridApi.sizeColumnsToFit();
         },
         (err) => {
           this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
@@ -177,6 +187,7 @@ export class CategoryComponent implements OnInit {
       .Post(`Category/GetCategoryTree`, this.oCategoryFilterRequestDto)
       .subscribe(
         (res: any) => {
+          console.log(res);
           this.nodes = CommonHelper.mapFlatToTreeNodes(res);
         },
         (err) => {
@@ -185,29 +196,35 @@ export class CategoryComponent implements OnInit {
       );
   }
 
-  public InsertCategory() {
-    if (this.oCategoryRequestDto.name == '') {
+
+  public InsertCustomCategory() {
+    if (this.oCustomCategoryRequestDto.name == '') {
       this.toast.warning('Please enter name', 'Warning!!', {
         progressBar: true,
       });
       return;
     }
     let currentUser = CommonHelper.GetUser();
-    this.oCategoryRequestDto.companyId = Number(currentUser.companyId);
-    this.oCategoryRequestDto.fileId = Number(this.oCategoryRequestDto.fileId);
-    this.oCategoryRequestDto.parentId = Number(
-      this.oCategoryRequestDto.parentId,
+    this.oCustomCategoryRequestDto.companyId = Number(currentUser.companyId);
+    this.oCustomCategoryRequestDto.fileId = Number(
+      this.oCustomCategoryRequestDto.fileId,
     );
-    this.oCategoryRequestDto.isActive = CommonHelper.booleanConvert(
-      this.oCategoryRequestDto.isActive,
+    this.oCustomCategoryRequestDto.categoryId = Number(
+      this.oCustomCategoryRequestDto.categoryId,
+    );
+    this.oCustomCategoryRequestDto.isActive = CommonHelper.booleanConvert(
+      this.oCustomCategoryRequestDto.isActive,
     );
     // After the hash is generated, proceed with the API call
     this.http
-      .Post(`Category/InsertCategory`, this.oCategoryRequestDto)
+      .Post(
+        `CustomCategory/InsertCustomCategory`,
+        this.oCustomCategoryRequestDto,
+      )
       .subscribe(
         (res: any) => {
           CommonHelper.CommonButtonClick('closeCommonModel');
-          this.GetCategory();
+          this.GetCustomCategory();
           this.toast.success('Data Save Successfully!!', 'Success!!', {
             progressBar: true,
           });
@@ -218,32 +235,34 @@ export class CategoryComponent implements OnInit {
       );
   }
 
-  public UpdateCategory() {
-    if (this.oCategoryRequestDto.name == '') {
+  public UpdateCustomCategory() {
+    if (this.oCustomCategoryRequestDto.name == '') {
       this.toast.warning('Please enter name', 'Warning!!', {
         progressBar: true,
       });
       return;
     }
     let currentUser = CommonHelper.GetUser();
-    this.oCategoryRequestDto.companyId = Number(currentUser.companyId);
-    this.oCategoryRequestDto.parentId = Number(
-      this.oCategoryRequestDto.parentId,
+    this.oCustomCategoryRequestDto.companyId = Number(currentUser.companyId);
+    this.oCustomCategoryRequestDto.categoryId = Number(
+      this.oCustomCategoryRequestDto.categoryId,
     );
-    this.oCategoryRequestDto.fileId = Number(this.oCategoryRequestDto.fileId);
-    this.oCategoryRequestDto.isActive = CommonHelper.booleanConvert(
-      this.oCategoryRequestDto.isActive,
+    this.oCustomCategoryRequestDto.fileId = Number(
+      this.oCustomCategoryRequestDto.fileId,
+    );
+    this.oCustomCategoryRequestDto.isActive = CommonHelper.booleanConvert(
+      this.oCustomCategoryRequestDto.isActive,
     );
     // After the hash is generated, proceed with the API call
     this.http
       .Post(
-        `Category/UpdateCategory/${this.categoryId}`,
-        this.oCategoryRequestDto,
+        `CustomCategory/UpdateCustomCategory/${this.customcategoryId}`,
+        this.oCustomCategoryRequestDto,
       )
       .subscribe(
         (res: any) => {
           CommonHelper.CommonButtonClick('closeCommonModel');
-          this.GetCategory();
+          this.GetCustomCategory();
           this.toast.success('Data Update Successfully!!', 'Success!!', {
             progressBar: true,
           });
@@ -253,20 +272,20 @@ export class CategoryComponent implements OnInit {
         },
       );
   }
-  public DeleteCategory() {
-    this.oCategoryRequestDto.isActive = CommonHelper.booleanConvert(
-      this.oCategoryRequestDto.isActive,
+  public DeleteCustomCategory() {
+    this.oCustomCategoryRequestDto.isActive = CommonHelper.booleanConvert(
+      this.oCustomCategoryRequestDto.isActive,
     );
     // After the hash is generated, proceed with the API call
     this.http
       .Post(
-        `Category/DeleteCategory/${this.categoryId}`,
-        this.oCategoryRequestDto,
+        `CustomCategory/DeleteCustomCategory/${this.customcategoryId}`,
+        this.oCustomCategoryRequestDto,
       )
       .subscribe(
         (res: any) => {
           CommonHelper.CommonButtonClick('closeCommonDelete');
-          this.GetCategory();
+          this.GetCustomCategory();
           this.toast.success('Data Delete Successfully!!', 'Success!!', {
             progressBar: true,
           });
@@ -278,43 +297,55 @@ export class CategoryComponent implements OnInit {
   }
   add() {
     CommonHelper.CommonButtonClick('openCommonModel');
-    this.oCategoryRequestDto = new CategoryRequestDto();
-    this.categoryId = 0;
+    this.oCustomCategoryRequestDto = new CustomCategoryRequestDto();
+    this.customcategoryId = 0;
   }
 
   edit() {
-    this.oCategoryRequestDto = new CategoryRequestDto();
-    let getSelectedItem = AGGridHelper.GetSelectedRow(this.categoryGridApi);
+    this.oCustomCategoryRequestDto = new CustomCategoryRequestDto();
+    let getSelectedItem = AGGridHelper.GetSelectedRow(
+      this.customcategoryGridApi,
+    );
     if (getSelectedItem == null) {
       this.toast.warning('Please select an item', 'Warning!!', {
         progressBar: true,
       });
     }
-    this.categoryId = Number(getSelectedItem.id);
-    this.oCategoryRequestDto.name = getSelectedItem.name;
-    this.oCategoryRequestDto.parentId = Number(getSelectedItem.parentId);
-    this.oCategoryRequestDto.sequenceNo = Number(getSelectedItem.sequenceNo);
-    this.oCategoryRequestDto.isActive = CommonHelper.booleanConvert(
+    this.customcategoryId = Number(getSelectedItem.id);
+    this.oCustomCategoryRequestDto.name = getSelectedItem.name;
+    this.oCustomCategoryRequestDto.categoryId = Number(
+      getSelectedItem.categoryId,
+    );
+    this.oCustomCategoryRequestDto.sequenceNo = Number(
+      getSelectedItem.sequenceNo,
+    );
+    this.oCustomCategoryRequestDto.isActive = CommonHelper.booleanConvert(
       getSelectedItem.isActive,
     );
-    this.oCategoryRequestDto.remarks = getSelectedItem.remarks;
+    this.oCustomCategoryRequestDto.remarks = getSelectedItem.remarks;
     CommonHelper.CommonButtonClick('openCommonModel');
   }
 
   delete() {
-    let getSelectedItem = AGGridHelper.GetSelectedRow(this.categoryGridApi);
+    let getSelectedItem = AGGridHelper.GetSelectedRow(
+      this.customcategoryGridApi,
+    );
     if (getSelectedItem == null) {
       this.toast.warning('Please select an item', 'Warning!!', {
         progressBar: true,
       });
     }
-    this.categoryId = Number(getSelectedItem.id);
-    this.oCategoryRequestDto.name = getSelectedItem.name;
-    this.oCategoryRequestDto.parentId = Number(getSelectedItem.parentId);
-    this.oCategoryRequestDto.fileId = Number(getSelectedItem.fileId);
-    this.oCategoryRequestDto.sequenceNo = Number(getSelectedItem.sequenceNo);
-    this.oCategoryRequestDto.isActive = getSelectedItem.isActive;
-    this.oCategoryRequestDto.remarks = getSelectedItem.remarks;
+    this.customcategoryId = Number(getSelectedItem.id);
+    this.oCustomCategoryRequestDto.name = getSelectedItem.name;
+    this.oCustomCategoryRequestDto.categoryId = Number(
+      getSelectedItem.categoryId,
+    );
+    this.oCustomCategoryRequestDto.fileId = Number(getSelectedItem.fileId);
+    this.oCustomCategoryRequestDto.sequenceNo = Number(
+      getSelectedItem.sequenceNo,
+    );
+    this.oCustomCategoryRequestDto.isActive = getSelectedItem.isActive;
+    this.oCustomCategoryRequestDto.remarks = getSelectedItem.remarks;
     CommonHelper.CommonButtonClick('openCommonDelete');
   }
 
@@ -328,7 +359,7 @@ export class CategoryComponent implements OnInit {
       const file = input.files[0];
       this.http.UploadFile(`UploadedFile/Upload`, file).subscribe(
         (res: any) => {
-          this.oCategoryRequestDto.fileId = res.id;
+          this.oCustomCategoryRequestDto.fileId = res.id;
         },
         (err) => {
           console.log(err.ErrorMessage);
@@ -340,21 +371,21 @@ export class CategoryComponent implements OnInit {
   public onPreviousPage(): void {
     if (this.hasPreviousPage) {
       this.pageIndex--;
-      this.GetCategory();
+      this.GetCustomCategory();
     }
   }
 
   public onPage(pageNumber: number): void {
     if (this.hasNextPage) {
       this.pageIndex = pageNumber;
-      this.GetCategory();
+      this.GetCustomCategory();
     }
   }
 
   public onNextPage(): void {
     if (this.hasNextPage) {
       this.pageIndex++;
-      this.GetCategory();
+      this.GetCustomCategory();
     }
   }
 }

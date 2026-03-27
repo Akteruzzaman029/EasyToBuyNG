@@ -67,3 +67,16 @@
   right: 20px;
   z-index: 1050;
 }
+
+::ng-deep .cdk-overlay-container {
+  z-index: 2055 !important;
+}
+
+::ng-deep .cdk-overlay-pane {
+  z-index: 2055 !important;
+}
+
+::ng-deep .ant-select-dropdown,
+::ng-deep .ant-select-tree-dropdown {
+  z-index: 2055 !important;
+}
