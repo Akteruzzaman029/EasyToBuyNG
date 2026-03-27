@@ -77,6 +77,8 @@ import { LoayalityProgramComponent } from './General/loayality-program/loayality
 import { EVouchersComponent } from './General/evouchers/evouchers.component';
 import { MyOrderComponent } from './General/my-order/my-order.component';
 import { AccountDetailComponent } from './General/account-detail/account-detail.component';
+import { MyAccountHomeComponent } from './General/my-account-home/my-account-home.component';
+import { MyAddressComponent } from './General/my-address/my-address.component';
 
 export const routes: Routes = [
   {
@@ -202,7 +204,7 @@ export const routes: Routes = [
       { path: 'login', component: GeneralLoginComponent, title: 'Login' },
       {
         path: 'account',
-        component: MyDashboardComponent,
+        component: MyAccountHomeComponent,
         title: 'My Account',
         data: {
           roles: [UserRole.GENERALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
@@ -236,6 +238,30 @@ export const routes: Routes = [
             path: 'e-vouchers',
             component: EVouchersComponent,
             title: 'E-Vouchers',
+            data: {
+              roles: [
+                UserRole.NORMALUSER,
+                UserRole.ADMIN,
+                UserRole.SYSTEMADMIN,
+              ],
+            },
+          },
+          {
+            path: 'orders',
+            component: MyOrderComponent,
+            title: 'My Orders',
+            data: {
+              roles: [
+                UserRole.NORMALUSER,
+                UserRole.ADMIN,
+                UserRole.SYSTEMADMIN,
+              ],
+            },
+          },
+          {
+            path: 'address',
+            component: MyAddressComponent,
+            title: 'My Address',
             data: {
               roles: [
                 UserRole.NORMALUSER,
