@@ -79,7 +79,7 @@
                             <label for="parentId" class="form-label">Category</label>
                             <nz-tree-select class="w-100" [nzNodes]="nodes" [(ngModel)]="oCategoryRequestDto.parentId"
                                 nzShowSearch nzPlaceHolder="Please select category" nzVirtualHeight="300px"
-                                 [nzDropdownStyle]="{ 'max-height': '300px', 'overflow': 'auto', 'z-index': 2050 }"
+                                [nzDropdownStyle]="{ 'max-height': '300px', 'overflow': 'auto', 'z-index': 2050 }"
                                 [nzHideUnMatched]="true">
                             </nz-tree-select>
                         </div>
@@ -179,16 +179,133 @@
 </div>
 
 
-<button nz-button [nzType]="'primary'" (click)="showModal()"><span>Show Modal</span></button>
-    <nz-modal [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
-      <ng-container *nzModalContent>
-        <p>Content one</p>
-        <p>Content two</p>
-        <p>Content three</p>
-         <nz-tree-select class="w-100" [nzNodes]="nodes" [(ngModel)]="oCategoryRequestDto.parentId"
-                                nzShowSearch nzPlaceHolder="Please select category" nzVirtualHeight="300px"
-                                 [nzDropdownStyle]="{ 'max-height': '300px', 'overflow': 'auto', 'z-index': 2050 }"
-                                [nzHideUnMatched]="true">
-                            </nz-tree-select>
-      </ng-container>
-    </nz-modal>
+<nz-modal
+  [(nzVisible)]="isVisibleModal"
+  [nzTitle]="modalTitle"
+  [nzWidth]="700"
+  [nzClosable]="true"
+  [nzMaskClosable]="false"
+  [nzKeyboard]="false"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-container *nzModalContent>
+    <div class="grid grid-cols-12 gap-3">
+      <div class="col-span-12">
+        <label for="parentId" class="mb-1 block text-sm font-medium text-gray-700">
+          Category
+        </label>
+
+        <nz-tree-select
+          class="w-full"
+          [nzNodes]="nodes"
+          [(ngModel)]="oCategoryRequestDto.parentId"
+          nzShowSearch
+          nzPlaceHolder="Please select category"
+          nzVirtualHeight="300px"
+          [nzHideUnMatched]="true"
+          [nzDropdownStyle]="{
+            'max-height': '300px',
+            'overflow': 'auto',
+            'z-index': 2050
+          }">
+        </nz-tree-select>
+      </div>
+
+      <div class="col-span-12">
+        <label for="name" class="mb-1 block text-sm font-medium text-gray-700">
+          Name
+        </label>
+        <input
+          id="name"
+          type="text"
+          class="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
+          [(ngModel)]="oCategoryRequestDto.name"
+          name="name"
+          placeholder="Please enter name" />
+      </div>
+
+      <div class="col-span-12">
+        <label for="uploadFile" class="mb-1 block text-sm font-medium text-gray-700">
+          Image
+        </label>
+        <input
+          id="uploadFile"
+          type="file"
+          class="block w-full rounded-md border border-gray-300 px-3 py-2"
+          (change)="onFileChange($event)" />
+      </div>
+
+      <div class="col-span-12" *ngIf="oCategoryRequestDto.fileId > 0">
+        <div class="overflow-hidden rounded-md border border-gray-200">
+          <img
+            [src]="GetImageUrl(oCategoryRequestDto.fileId)"
+            alt="category-image"
+            class="h-[220px] w-full object-cover" />
+        </div>
+      </div>
+
+      <div class="col-span-12">
+        <label for="sequenceNo" class="mb-1 block text-sm font-medium text-gray-700">
+          Sequence No
+        </label>
+        <input
+          id="sequenceNo"
+          type="number"
+          class="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
+          [(ngModel)]="oCategoryRequestDto.sequenceNo"
+          name="sequenceNo"
+          placeholder="Please enter sequence no" />
+      </div>
+
+      <div class="col-span-12">
+        <label for="isActive" class="mb-1 block text-sm font-medium text-gray-700">
+          Status
+        </label>
+        <select
+          id="isActive"
+          class="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
+          [(ngModel)]="oCategoryRequestDto.isActive"
+          name="isActive">
+          <option [ngValue]="true">Active</option>
+          <option [ngValue]="false">Inactive</option>
+        </select>
+      </div>
+
+      <div class="col-span-12">
+        <label for="remarks" class="mb-1 block text-sm font-medium text-gray-700">
+          Remarks
+        </label>
+        <textarea
+          id="remarks"
+          rows="3"
+          class="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
+          name="remarks"
+          [(ngModel)]="oCategoryRequestDto.remarks">
+        </textarea>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #modalFooter>
+    <div class="flex justify-end gap-2">
+      <button nz-button (click)="handleCancel()">Cancel</button>
+
+      <button
+        *ngIf="categoryId === 0"
+        nz-button
+        nzType="primary"
+        (click)="InsertCategory()">
+        Save
+      </button>
+
+      <button
+        *ngIf="categoryId > 0"
+        nz-button
+        nzType="primary"
+        (click)="UpdateCategory()">
+        Update
+      </button>
+    </div>
+  </ng-template>
+</nz-modal>

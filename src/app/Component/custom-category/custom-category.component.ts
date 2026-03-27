@@ -13,9 +13,11 @@ import { AuthService } from '../../Shared/Service/auth.service';
 import { CommonHelper } from '../../Shared/Service/common-helper.service';
 import { HttpHelperService } from '../../Shared/Service/http-helper.service';
 import { PaginationComponent } from '../../Shared/pagination/pagination.component';
+import { CategoryFilterRequestDto } from '../../Model/Category';
 import { NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
-import { CategoryFilterRequestDto } from '../../Model/Category';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 function dig(path = '0', level = 3): NzTreeNodeOptions[] {
   const list: NzTreeNodeOptions[] = [];
@@ -50,6 +52,8 @@ function dig(path = '0', level = 3): NzTreeNodeOptions[] {
     AgGridAngular,
     PaginationComponent,
     NzTreeSelectModule,
+    NzButtonModule,
+    NzModalModule,
   ],
   templateUrl: './custom-category.component.html',
   styleUrl: './custom-category.component.scss',
@@ -82,13 +86,19 @@ export class CustomCategoryComponent implements OnInit {
     {
       field: 'name',
       width: 150,
-      headerName: 'CustomCategory Name',
+      headerName: 'Custom Category Name',
       filter: true,
     },
     {
-      field: 'subCustomCategoryName',
+      field: 'typeTag',
       width: 150,
-      headerName: 'Sub CustomCategory Name',
+      headerName: 'Type Tag',
+      filter: true,
+    },
+    {
+      field: 'categoryName',
+      width: 150,
+      headerName: 'Category Name',
       filter: true,
     },
     { field: 'sequenceNo', headerName: 'SLNo' },
@@ -100,8 +110,7 @@ export class CustomCategoryComponent implements OnInit {
   trackByCustomCategoryFrom: TrackByFunction<any> | any;
 
   nodes: NzTreeNodeOptions[] = [];
-  selectedCategoryId: any;
-
+  isVisibleModal = false;
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -113,6 +122,14 @@ export class CustomCategoryComponent implements OnInit {
   ngOnInit(): void {
     this.GetCategoryTree();
     this.GetCustomCategory();
+  }
+
+  get modalTitle(): string {
+    return ` Custom Category ${this.customcategoryId === 0 ? 'Create' : 'Update'}`;
+  }
+
+  handleCancel(): void {
+    this.isVisibleModal = false;
   }
 
   PageChange(event: any) {
@@ -196,7 +213,6 @@ export class CustomCategoryComponent implements OnInit {
       );
   }
 
-
   public InsertCustomCategory() {
     if (this.oCustomCategoryRequestDto.name == '') {
       this.toast.warning('Please enter name', 'Warning!!', {
@@ -223,7 +239,7 @@ export class CustomCategoryComponent implements OnInit {
       )
       .subscribe(
         (res: any) => {
-          CommonHelper.CommonButtonClick('closeCommonModel');
+          this.isVisibleModal = false;
           this.GetCustomCategory();
           this.toast.success('Data Save Successfully!!', 'Success!!', {
             progressBar: true,
@@ -261,7 +277,7 @@ export class CustomCategoryComponent implements OnInit {
       )
       .subscribe(
         (res: any) => {
-          CommonHelper.CommonButtonClick('closeCommonModel');
+          this.isVisibleModal = false;
           this.GetCustomCategory();
           this.toast.success('Data Update Successfully!!', 'Success!!', {
             progressBar: true,
@@ -296,9 +312,9 @@ export class CustomCategoryComponent implements OnInit {
       );
   }
   add() {
-    CommonHelper.CommonButtonClick('openCommonModel');
     this.oCustomCategoryRequestDto = new CustomCategoryRequestDto();
     this.customcategoryId = 0;
+    this.isVisibleModal = true;
   }
 
   edit() {
@@ -313,6 +329,8 @@ export class CustomCategoryComponent implements OnInit {
     }
     this.customcategoryId = Number(getSelectedItem.id);
     this.oCustomCategoryRequestDto.name = getSelectedItem.name;
+    this.oCustomCategoryRequestDto.typeTag = getSelectedItem.typeTag;
+    this.oCustomCategoryRequestDto.fileId = Number(getSelectedItem.fileId);
     this.oCustomCategoryRequestDto.categoryId = Number(
       getSelectedItem.categoryId,
     );
@@ -323,7 +341,7 @@ export class CustomCategoryComponent implements OnInit {
       getSelectedItem.isActive,
     );
     this.oCustomCategoryRequestDto.remarks = getSelectedItem.remarks;
-    CommonHelper.CommonButtonClick('openCommonModel');
+    this.isVisibleModal = true;
   }
 
   delete() {

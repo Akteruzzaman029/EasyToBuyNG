@@ -27,7 +27,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     AgGridAngular,
     PaginationComponent,
     NzTreeSelectModule,
-    NzButtonModule, NzModalModule
+    NzButtonModule,
+    NzModalModule,
   ],
   templateUrl: './category.component.html',
   styleUrl: './category.component.scss',
@@ -74,6 +75,7 @@ export class CategoryComponent implements OnInit {
   trackByCategoryFrom: TrackByFunction<any> | any;
 
   nodes: NzTreeNodeOptions[] = [];
+  isVisibleModal = false;
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -82,27 +84,17 @@ export class CategoryComponent implements OnInit {
     private datePipe: DatePipe,
   ) {}
 
-
-   isVisible = false;
-
-  showModal(): void {
-    this.isVisible = true;
-  }
-
-  handleOk(): void {
-    console.log('Button ok clicked!');
-    this.isVisible = false;
-  }
-
-  handleCancel(): void {
-    console.log('Button cancel clicked!');
-    this.isVisible = false;
-  }
-
-  
   ngOnInit(): void {
     this.GetCategoryTree();
     this.GetCategory();
+  }
+
+  get modalTitle(): string {
+    return `Category ${this.categoryId === 0 ? 'Create' : 'Update'}`;
+  }
+
+  handleCancel(): void {
+    this.isVisibleModal = false;
   }
 
   PageChange(event: any) {
@@ -133,7 +125,9 @@ export class CategoryComponent implements OnInit {
     let currentUser = CommonHelper.GetUser();
     this.oCategoryFilterRequestDto.companyId = Number(currentUser?.companyId);
     this.oCategoryFilterRequestDto.parentId = Number(
-      this.oCategoryFilterRequestDto.parentId,
+      this.oCategoryFilterRequestDto.parentId < 0
+        ? 0
+        : this.oCategoryFilterRequestDto.parentId,
     );
     this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
       this.oCategoryFilterRequestDto.isActive,
@@ -206,7 +200,7 @@ export class CategoryComponent implements OnInit {
       .Post(`Category/InsertCategory`, this.oCategoryRequestDto)
       .subscribe(
         (res: any) => {
-          CommonHelper.CommonButtonClick('closeCommonModel');
+          this.isVisibleModal = false;
           this.GetCategory();
           this.toast.success('Data Save Successfully!!', 'Success!!', {
             progressBar: true,
@@ -242,7 +236,7 @@ export class CategoryComponent implements OnInit {
       )
       .subscribe(
         (res: any) => {
-          CommonHelper.CommonButtonClick('closeCommonModel');
+          this.isVisibleModal = false;
           this.GetCategory();
           this.toast.success('Data Update Successfully!!', 'Success!!', {
             progressBar: true,
@@ -277,7 +271,7 @@ export class CategoryComponent implements OnInit {
       );
   }
   add() {
-    CommonHelper.CommonButtonClick('openCommonModel');
+    this.isVisibleModal = true;
     this.oCategoryRequestDto = new CategoryRequestDto();
     this.categoryId = 0;
   }
@@ -298,7 +292,7 @@ export class CategoryComponent implements OnInit {
       getSelectedItem.isActive,
     );
     this.oCategoryRequestDto.remarks = getSelectedItem.remarks;
-    CommonHelper.CommonButtonClick('openCommonModel');
+    this.isVisibleModal = true;
   }
 
   delete() {
