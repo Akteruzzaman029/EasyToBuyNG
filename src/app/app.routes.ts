@@ -200,63 +200,68 @@ export const routes: Routes = [
         },
       },
       { path: 'login', component: GeneralLoginComponent, title: 'Login' },
-    ],
-  },
-  {
-    path: 'account',
-    component: MyDashboardComponent,
-    title: 'My Account',
-    data: {
-      roles: [
-        UserRole.GENERALUSER,
-        UserRole.ADMIN,
-        UserRole.SYSTEMADMIN,
-      ],
-    },
-    children: [
       {
-        path: '',
+        path: 'account',
         component: MyDashboardComponent,
-        title: 'My Dashboard',
+        title: 'My Account',
         data: {
-          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+          roles: [UserRole.GENERALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
         },
+        children: [
+          {
+            path: '',
+            component: MyDashboardComponent,
+            title: 'My Dashboard',
+            data: {
+              roles: [
+                UserRole.NORMALUSER,
+                UserRole.ADMIN,
+                UserRole.SYSTEMADMIN,
+              ],
+            },
+          },
+          {
+            path: 'loyality-program',
+            component: LoayalityProgramComponent,
+            title: 'Loayality Program',
+            data: {
+              roles: [
+                UserRole.NORMALUSER,
+                UserRole.ADMIN,
+                UserRole.SYSTEMADMIN,
+              ],
+            },
+          },
+          {
+            path: 'e-vouchers',
+            component: EVouchersComponent,
+            title: 'E-Vouchers',
+            data: {
+              roles: [
+                UserRole.NORMALUSER,
+                UserRole.ADMIN,
+                UserRole.SYSTEMADMIN,
+              ],
+            },
+          },
+          {
+            path: 'detail',
+            component: AccountDetailComponent,
+            title: 'Account Detail',
+            data: {
+              roles: [
+                UserRole.NORMALUSER,
+                UserRole.ADMIN,
+                UserRole.SYSTEMADMIN,
+              ],
+            },
+          },
+          
+        ],
       },
-      {
-        path: '',
-        component: LoayalityProgramComponent,
-        title: 'Loayality Program',
-        data: {
-          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
-        },
-      },
-      {
-        path: '',
-        component: EVouchersComponent,
-        title: 'E-Vouchers',
-        data: {
-          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
-        },
-      },
-      {
-        path: '',
-        component: AccountDetailComponent,
-        title: 'Account Detail',
-        data: {
-          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
-        },
-      },
-      {
-        path: '',
-        component: EasyToBuyHomeComponent,
-        title: 'Rongtuli Cosmetics Home',
-        data: {
-          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
-        },
-      },
-     
     ],
   },
+
   {
     path: 'admin',
     canActivate: [authGuard],
