@@ -1,0 +1,29 @@
+.orders-page-wrapper {
+  // The light pinkish-grey background from your image
+  background-color: #fdf7f8; 
+  padding: 60px 40px;
+  border-radius: 8px;
+  min-height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+
+  .empty-orders-box {
+    background-color: #ffffff; // The white center card
+    padding: 25px 60px;
+    border-radius: 6px;
+    // Very subtle shadow to match the UI
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); 
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+
+    .empty-message {
+      color: #4b5563; // Soft grey color
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin: 0;
+    }
+  }
+}

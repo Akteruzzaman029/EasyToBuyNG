@@ -1,0 +1,86 @@
+.loyalty-container {
+  padding: 20px;
+  background-color: transparent; 
+  display: flex;
+  justify-content: flex-start;
+}
+
+.loyalty-card {
+  width: 100%;
+  max-width: 850px;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Poppins', sans-serif;  
+
+  .header-section {
+    background-color: #0d111d;  
+    padding: 40px 20px;
+    text-align: center;
+
+    .title {
+      color: #dbe4f7; 
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin: 0;
+    }
+
+    .subtitle {
+      color: #dbe4f7; // Lighter muted text
+      font-size: 0.9rem;
+      margin: 8px 0 20px 0;
+    }
+
+    .points-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .coin-icon {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 12px;
+      }
+
+      .points-text {
+        color: #ffffff; // MUST BE WHITE
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin: 0;
+      }
+    }
+  }
+
+  .content-section {
+    background-color: #d8d2d2; 
+    padding: 40px;
+    text-align: left;
+
+    .instruction-title {
+      color: #1a1a1a;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .instruction-text {
+      color: #4b5563;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      max-width: 700px;
+    }
+
+    .purchase-btn {
+      background-color: #FF3D71;  
+      color: #ffffff;
+      border: none;
+      padding: 6px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s; 
+    }
+  }
+}

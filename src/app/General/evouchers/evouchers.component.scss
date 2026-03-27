@@ -1,0 +1,97 @@
+.evoucher-container {
+    width: 100%;
+    max-width: 850px;
+    border-radius: 4px;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    .header-section {
+        background-color: #0d111d; // Dark Navy
+        padding: 35px 20px;
+        text-align: center;
+        color: #ffffff;
+
+        .title {
+            color: #dbe4f7;
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        .subtitle {
+            color: #dbe4f7;
+            font-size: 0.85rem;
+            margin: 5px 0 15px 0;
+        }
+
+        .points-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .coin-icon {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 12px;
+            }
+
+            .points-text {
+                color: #ffffff; // MUST BE WHITE
+                font-size: 1.8rem;
+                font-weight: 700;
+                margin: 0;
+            }
+        }
+    }
+
+    .voucher-list {
+        background-color: #fdf7f8; // Match the light dashboard background
+        padding: 40px;
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+
+        .voucher-card {
+            background-color: #fce1ed; // Light pink voucher background
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+            padding: 30px 20px;
+            border-radius: 4px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .discount-title {
+                color: #1a1a1a;
+                font-size: 1.1rem;
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+
+            .points-cost {
+                color: #6b7280;
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+            }
+
+            .redeem-btn {
+                background-color: #f33e5b; // Accent pinkish-red
+                color: #ffffff;
+                border: none;
+                padding: 8px 25px;
+                border-radius: 4px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.2s;
+
+                &:hover {
+                    background-color: #e03550;
+                    transform: scale(1.05);
+                }
+            }
+        }
+    }
+}

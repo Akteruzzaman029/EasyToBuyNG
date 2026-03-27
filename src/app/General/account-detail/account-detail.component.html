@@ -1,1 +1,49 @@
-<p>account-detail works!</p>
+<div class="account-details-container">
+  <form [formGroup]="accountForm" (ngSubmit)="onSave()">
+    
+    <div class="form-row">
+      <div class="form-group">
+        <input type="text" formControlName="firstName" placeholder="First Name" class="form-input" 
+               [class.error-border]="submitted && accountForm.get('firstName')?.errors">
+        <span class="error-msg" *ngIf="submitted && accountForm.get('firstName')?.hasError('required')">
+          First name is required.
+        </span>
+      </div>
+      
+      <div class="form-group">
+        <input type="text" formControlName="lastName" placeholder="Last Name" class="form-input"
+               [class.error-border]="submitted && accountForm.get('lastName')?.errors">
+        <span class="error-msg" *ngIf="submitted && accountForm.get('lastName')?.hasError('required')">
+          Last name is required.
+        </span>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group full-width">
+        <input type="text" formControlName="phone" class="form-input disabled-field">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <select formControlName="gender" class="form-select">
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <select formControlName="birthYear" class="form-select">
+          <option value="">Select birth year</option>
+          <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-save">Save Changes</button>
+    </div>
+  </form>
+</div>

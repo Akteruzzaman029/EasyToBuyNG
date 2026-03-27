@@ -1,1 +1,40 @@
-<p>my-address works!</p>
+<div class="address-container">
+  <div class="header-row">
+    <h3 class="title">Addresses</h3>
+    <a href="javascript:void(0)" class="add-link" (click)="onAddAddressClick()">+ Add Address</a>
+  </div>
+
+  <div class="content-box">
+    
+    <div class="empty-state" *ngIf="!showAddressForm">
+      <div class="message-card">
+        No Address Set. Click Add Address button to set address.
+      </div>
+    </div>
+
+    <div class="address-form" *ngIf="showAddressForm">
+      <div class="input-group">
+        <input type="text" placeholder="Name: Home, Office" class="custom-input">
+      </div>
+
+      <div class="input-row">
+        <select class="custom-select">
+          <option>Select City</option>
+        </select>
+        <select class="custom-select">
+          <option>Select Area</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <input type="text" placeholder="Address" class="custom-input">
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-clos" (click)="onCloseForm()">Close</button>
+        <button class="btn-save">Save</button>
+      </div>
+    </div>
+
+  </div>
+</div>
