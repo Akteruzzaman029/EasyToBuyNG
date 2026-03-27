@@ -72,6 +72,11 @@ import { CommonCategoryTreeComponent } from './Shared/common-category-tree/commo
 import { ProductDetailComponent } from './Component/product-detail/product-detail.component';
 import { BannerComponent } from './Component/banner/banner.component';
 import { CustomCategoryComponent } from './Component/custom-category/custom-category.component';
+import { MyDashboardComponent } from './General/my-dashboard/my-dashboard.component';
+import { LoayalityProgramComponent } from './General/loayality-program/loayality-program.component';
+import { EVouchersComponent } from './General/evouchers/evouchers.component';
+import { MyOrderComponent } from './General/my-order/my-order.component';
+import { AccountDetailComponent } from './General/account-detail/account-detail.component';
 
 export const routes: Routes = [
   {
@@ -195,6 +200,61 @@ export const routes: Routes = [
         },
       },
       { path: 'login', component: GeneralLoginComponent, title: 'Login' },
+    ],
+  },
+  {
+    path: 'account',
+    component: MyDashboardComponent,
+    title: 'My Account',
+    data: {
+      roles: [
+        UserRole.GENERALUSER,
+        UserRole.ADMIN,
+        UserRole.SYSTEMADMIN,
+      ],
+    },
+    children: [
+      {
+        path: '',
+        component: MyDashboardComponent,
+        title: 'My Dashboard',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+      {
+        path: '',
+        component: LoayalityProgramComponent,
+        title: 'Loayality Program',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+      {
+        path: '',
+        component: EVouchersComponent,
+        title: 'E-Vouchers',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+      {
+        path: '',
+        component: AccountDetailComponent,
+        title: 'Account Detail',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+      {
+        path: '',
+        component: EasyToBuyHomeComponent,
+        title: 'Rongtuli Cosmetics Home',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+     
     ],
   },
   {
