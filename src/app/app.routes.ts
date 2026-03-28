@@ -79,6 +79,7 @@ import { MyOrderComponent } from './General/my-order/my-order.component';
 import { AccountDetailComponent } from './General/account-detail/account-detail.component';
 import { MyAccountHomeComponent } from './General/my-account-home/my-account-home.component';
 import { MyAddressComponent } from './General/my-address/my-address.component';
+import { CustomCategoryConfigComponent } from './Component/custom-category-config/custom-category-config.component';
 
 export const routes: Routes = [
   {
@@ -550,6 +551,12 @@ export const routes: Routes = [
         path: 'custom-category',
         component: CustomCategoryComponent,
         title: 'Custom Category List',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
+      {
+        path: 'custom-category-config',
+        component: CustomCategoryConfigComponent,
+        title: 'Custom Category Config List',
         data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
       },
       {

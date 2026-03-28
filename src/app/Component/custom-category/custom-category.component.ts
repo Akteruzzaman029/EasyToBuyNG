@@ -18,6 +18,7 @@ import { NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { CustomCategoryConfigFilterDto } from '../../Model/CustomCategoryConfig';
 
 function dig(path = '0', level = 3): NzTreeNodeOptions[] {
   const list: NzTreeNodeOptions[] = [];
@@ -62,10 +63,11 @@ export class CustomCategoryComponent implements OnInit {
   private customcategoryGridApi!: any;
   public DeafultCol = AGGridHelper.DeafultCol;
   public rowData!: any[];
-  public customcategoryList: any[] = [];
+  public customCategoryConfigList: any[] = [];
   public oCustomCategoryFilterDto = new CustomCategoryFilterDto();
   public oCustomCategoryRequestDto = new CustomCategoryRequestDto();
   public oCategoryFilterRequestDto = new CategoryFilterRequestDto();
+  public oCustomCategoryConfigFilterDto = new CustomCategoryConfigFilterDto();
   public customcategoryId = 0;
   // pagination setup
   public pageIndex: number = 1;
@@ -107,7 +109,7 @@ export class CustomCategoryComponent implements OnInit {
   ];
   trackByFn: TrackByFunction<any> | any;
   trackByCustomCategory: TrackByFunction<any> | any;
-  trackByCustomCategoryFrom: TrackByFunction<any> | any;
+  trackByCustomCategoryConfigFrom: TrackByFunction<any> | any;
 
   nodes: NzTreeNodeOptions[] = [];
   isVisibleModal = false;
@@ -120,6 +122,7 @@ export class CustomCategoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.GetAllCustomCategoryConfigs();
     this.GetCategoryTree();
     this.GetCustomCategory();
   }
@@ -161,6 +164,9 @@ export class CustomCategoryComponent implements OnInit {
     this.oCustomCategoryFilterDto.companyId = Number(currentUser?.companyId);
     this.oCustomCategoryFilterDto.categoryId = Number(
       this.oCustomCategoryFilterDto.categoryId,
+    );
+    this.oCustomCategoryFilterDto.customCategoryConfigId = Number(
+      this.oCustomCategoryFilterDto.customCategoryConfigId,
     );
     this.oCustomCategoryFilterDto.isActive = CommonHelper.booleanConvert(
       this.oCustomCategoryFilterDto.isActive,
@@ -206,6 +212,29 @@ export class CustomCategoryComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.nodes = CommonHelper.mapFlatToTreeNodes(res);
+        },
+        (err) => {
+          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
+        },
+      );
+  }
+  private GetAllCustomCategoryConfigs() {
+    let currentUser = CommonHelper.GetUser();
+    this.oCustomCategoryConfigFilterDto.companyId = Number(
+      currentUser?.companyId,
+    );
+    this.oCustomCategoryConfigFilterDto.isActive = CommonHelper.booleanConvert(
+      this.oCustomCategoryConfigFilterDto.isActive,
+    );
+    // After the hash is generated, proceed with the API call
+    this.http
+      .Post(
+        `CustomCategoryConfig/GetAllCustomCategoryConfigs`,
+        this.oCategoryFilterRequestDto,
+      )
+      .subscribe(
+        (res: any) => {
+          this.customCategoryConfigList = res;
         },
         (err) => {
           this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
@@ -329,7 +358,9 @@ export class CustomCategoryComponent implements OnInit {
     }
     this.customcategoryId = Number(getSelectedItem.id);
     this.oCustomCategoryRequestDto.name = getSelectedItem.name;
-    this.oCustomCategoryRequestDto.typeTag = getSelectedItem.typeTag;
+    this.oCustomCategoryRequestDto.customCategoryConfigId = Number(
+      getSelectedItem.customCategoryConfigId,
+    );
     this.oCustomCategoryRequestDto.fileId = Number(getSelectedItem.fileId);
     this.oCustomCategoryRequestDto.categoryId = Number(
       getSelectedItem.categoryId,

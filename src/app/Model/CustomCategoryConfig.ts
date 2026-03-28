@@ -1,37 +1,29 @@
-export class CustomCategoryFilterDto {
+export class CustomCategoryConfigFilterDto {
 
     constructor() {
         this.name = '';
-        this.customCategoryConfigId = 0;
         this.companyId = 0;
-        this.categoryId = 0;
         this.isActive = true;
     }
     public name: string;
-    public customCategoryConfigId: number;
     public companyId: number;
-    public categoryId: number;
     public isActive: boolean;
 }
 
-export class CustomCategoryRequestDto {
+export class CustomCategoryConfigRequestDto {
 
     constructor() {
         this.name = '';
-        this.customCategoryConfigId = 0;
+        this.class = '';
         this.companyId = 0;
-        this.fileId = 0;
-        this.categoryId = 0;
         this.sequenceNo = 0;
         this.isActive = true;
         this.remarks = "";
     }
     public name: string;
-    public customCategoryConfigId: number;
+    public class: string;
     public remarks: string;
     public companyId: number;
-    public fileId: number;
-    public categoryId: number;
     public sequenceNo: number;
     public isActive: boolean;
 }

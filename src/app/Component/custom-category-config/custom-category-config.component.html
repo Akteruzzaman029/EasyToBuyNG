@@ -2,33 +2,14 @@
 
     <div class="col-2 px-1">
         <div class="mb-2">
-            <input type="text" class="form-control" [(ngModel)]="oCustomCategoryFilterDto.name" name="name"
+            <input type="text" class="form-control" [(ngModel)]="oCustomCategoryConfigFilterDto.name" name="name"
                 placeholder="type here ...">
         </div>
     </div>
-    <div class="col-2 px-1">
-        <div class="mb-2">
-            <select class="form-select" [(ngModel)]="oCustomCategoryFilterDto.customCategoryConfigId"
-                name="customCategoryConfigId" aria-label="Default select example">
-                <option *ngFor="let item of customCategoryConfigList; trackBy: trackByCustomCategoryConfigFrom"
-                    [value]="item.id">
-                    {{ item.name }}
-                </option>
-            </select>
-        </div>
-    </div>
 
     <div class="col-2 px-1">
         <div class="mb-2">
-            <nz-tree-select class="w-100" [nzNodes]="nodes" [(ngModel)]="oCustomCategoryFilterDto.categoryId"
-                nzShowSearch nzPlaceHolder="Please select category" nzVirtualHeight="300px" [nzHideUnMatched]="true">
-            </nz-tree-select>
-        </div>
-    </div>
-
-    <div class="col-2 px-1">
-        <div class="mb-2">
-            <select class="form-select" [(ngModel)]="oCustomCategoryFilterDto.isActive" name="isActive"
+            <select class="form-select" [(ngModel)]="oCustomCategoryConfigFilterDto.isActive" name="isActive"
                 aria-label="Default select example">
                 <option value="true">Active</option>
                 <option value="false">Inactive</option>
@@ -65,37 +46,13 @@
 </div>
 
 
+
+
 <nz-modal [(nzVisible)]="isVisibleModal" [nzTitle]="modalTitle" [nzWidth]="700" [nzClosable]="true"
     [nzMaskClosable]="false" [nzKeyboard]="false" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()">
     <ng-container *nzModalContent>
         <div class="grid grid-cols-12 gap-3">
-            <div class="col-span-12">
-                <label for="parentId" class="mb-1 block text-sm font-medium text-gray-700">
-                    Category Tag
-                </label>
-
-                <select class="form-select" [(ngModel)]="oCustomCategoryRequestDto.customCategoryConfigId"
-                    name="customCategoryConfigId" aria-label="Default select example">
-                    <option *ngFor="let item of customCategoryConfigList; trackBy: trackByCustomCategoryConfigFrom"
-                        [value]="item.id">
-                        {{ item.name }}
-                    </option>
-                </select>
-            </div>
-            <div class="col-span-12">
-                <label for="parentId" class="mb-1 block text-sm font-medium text-gray-700">
-                    Category
-                </label>
-
-                <nz-tree-select class="w-full" [nzNodes]="nodes" [(ngModel)]="oCustomCategoryRequestDto.categoryId"
-                    nzShowSearch nzPlaceHolder="Please select category" nzVirtualHeight="300px" [nzHideUnMatched]="true"
-                    [nzDropdownStyle]="{
-            'max-height': '300px',
-            'overflow': 'auto',
-            'z-index': 2050
-          }">
-                </nz-tree-select>
-            </div>
+            
 
             <div class="col-span-12">
                 <label for="name" class="mb-1 block text-sm font-medium text-gray-700">
@@ -103,23 +60,17 @@
                 </label>
                 <input id="name" type="text"
                     class="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
-                    [(ngModel)]="oCustomCategoryRequestDto.name" name="name" placeholder="Please enter name" />
+                    [(ngModel)]="oCustomCategoryConfigRequestDto.name" name="name" placeholder="Please enter name" />
             </div>
-
             <div class="col-span-12">
-                <label for="uploadFile" class="mb-1 block text-sm font-medium text-gray-700">
-                    Image
+                <label for="class" class="mb-1 block text-sm font-medium text-gray-700">
+                    Name
                 </label>
-                <input id="uploadFile" type="file" class="block w-full rounded-md border border-gray-300 px-3 py-2"
-                    (change)="onFileChange($event)" />
+                <input id="name" type="text"
+                    class="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
+                    [(ngModel)]="oCustomCategoryConfigRequestDto.class" name="class" placeholder="Please enter class" />
             </div>
 
-            <div class="col-span-12" *ngIf="oCustomCategoryRequestDto.fileId > 0">
-                <div class="overflow-hidden rounded-md border border-gray-200">
-                    <img [src]="GetImageUrl(oCustomCategoryRequestDto.fileId)" alt="category-image"
-                        class="h-[220px] w-full object-cover" />
-                </div>
-            </div>
 
             <div class="col-span-12">
                 <label for="sequenceNo" class="mb-1 block text-sm font-medium text-gray-700">
@@ -127,7 +78,7 @@
                 </label>
                 <input id="sequenceNo" type="number"
                     class="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
-                    [(ngModel)]="oCustomCategoryRequestDto.sequenceNo" name="sequenceNo"
+                    [(ngModel)]="oCustomCategoryConfigRequestDto.sequenceNo" name="sequenceNo"
                     placeholder="Please enter sequence no" />
             </div>
 
@@ -137,7 +88,7 @@
                 </label>
                 <select id="isActive"
                     class="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
-                    [(ngModel)]="oCustomCategoryRequestDto.isActive" name="isActive">
+                    [(ngModel)]="oCustomCategoryConfigRequestDto.isActive" name="isActive">
                     <option [ngValue]="true">Active</option>
                     <option [ngValue]="false">Inactive</option>
                 </select>
@@ -149,7 +100,7 @@
                 </label>
                 <textarea id="remarks" rows="3"
                     class="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
-                    name="remarks" [(ngModel)]="oCustomCategoryRequestDto.remarks">
+                    name="remarks" [(ngModel)]="oCustomCategoryConfigRequestDto.remarks">
         </textarea>
             </div>
         </div>
@@ -159,11 +110,11 @@
         <div class="flex justify-end gap-2">
             <button nz-button (click)="handleCancel()">Cancel</button>
 
-            <button *ngIf="customcategoryId === 0" nz-button nzType="primary" (click)="InsertCustomCategory()">
+            <button *ngIf="customcategoryconfigId === 0" nz-button nzType="primary" (click)="InsertCustomCategoryConfig()">
                 Save
             </button>
 
-            <button *ngIf="customcategoryId > 0" nz-button nzType="primary" (click)="UpdateCustomCategory()">
+            <button *ngIf="customcategoryconfigId > 0" nz-button nzType="primary" (click)="UpdateCustomCategoryConfig()">
                 Update
             </button>
         </div>
@@ -182,7 +133,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">CustomCategory Delete</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">CustomCategoryConfig Delete</h1>
                 <button type="button" class="btn-close" id="closeCommonDelete" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -195,7 +146,7 @@
             </div>
             <div class="modal-footer text-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Close </button>
-                <button type="button" class="btn btn-primary" (click)="DeleteCustomCategory()"> Confirm </button>
+                <button type="button" class="btn btn-primary" (click)="DeleteCustomCategoryConfig()"> Confirm </button>
             </div>
         </div>
     </div>
