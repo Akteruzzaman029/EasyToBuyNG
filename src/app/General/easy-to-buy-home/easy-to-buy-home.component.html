@@ -112,7 +112,7 @@
       <h2 class="text-xl md:text-2xl font-semibold text-gray-900">
         {{ group.title }}
       </h2>
-      <a href="#" class="text-sm font-medium text-pink-600 hover:underline">
+      <a routerLink="/product-category" class="text-sm font-medium text-pink-600 hover:underline">
         View All
       </a>
     </div>
@@ -121,7 +121,7 @@
       @for (item of group.items; track item.id) {
       <div
         class="group cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-        <div class="aspect-square overflow-hidden bg-gray-50">
+        <div   routerLink="/product-category"  class="aspect-square overflow-hidden bg-gray-50">
           <img [src]="GetImageUrl(item.fileId)" [alt]="item.name"
             class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
         </div>
