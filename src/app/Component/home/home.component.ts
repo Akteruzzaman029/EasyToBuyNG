@@ -90,7 +90,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private GetCategoryTree() {
     let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.companyId = Number(currentUser?.companyId);
+    this.oCategoryFilterRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oCategoryFilterRequestDto.parentId = -1;
     this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
       this.oCategoryFilterRequestDto.isActive,

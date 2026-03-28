@@ -119,7 +119,7 @@ export class CustomCategoryConfigComponent implements OnInit {
 
   private GetCustomCategoryConfig() {
     let currentUser = CommonHelper.GetUser();
-    this.oCustomCategoryConfigFilterDto.companyId = Number(currentUser?.companyId);
+    this.oCustomCategoryConfigFilterDto.companyId = Number(CommonHelper.GetComapyId());
     this.oCustomCategoryConfigFilterDto.isActive = CommonHelper.booleanConvert(
       this.oCustomCategoryConfigFilterDto.isActive,
     );

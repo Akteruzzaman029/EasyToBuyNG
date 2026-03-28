@@ -156,7 +156,7 @@ export class CategoryTreeComponent implements OnInit {
 
   private GetCategory() {
     let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.companyId = Number(currentUser?.companyId);
+    this.oCategoryFilterRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oCategoryFilterRequestDto.parentId = Number(
       this.oCategoryFilterRequestDto.parentId,
     );
@@ -192,7 +192,7 @@ export class CategoryTreeComponent implements OnInit {
 
   private GetCategoryTree() {
     let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.companyId = Number(currentUser?.companyId);
+    this.oCategoryFilterRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oCategoryFilterRequestDto.parentId = 0;
     this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
       this.oCategoryFilterRequestDto.isActive,
@@ -221,7 +221,7 @@ export class CategoryTreeComponent implements OnInit {
 
   private GetCategorys() {
     let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.companyId = Number(currentUser?.companyId);
+    this.oCategoryFilterRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oCategoryFilterRequestDto.parentId = 0;
     this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
       this.oCategoryFilterRequestDto.isActive,

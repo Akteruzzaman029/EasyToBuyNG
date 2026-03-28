@@ -76,7 +76,7 @@ export class PackTypeComponent implements OnInit {
 
   private GetPackType() {
 
-    this.oPackTypeFilterDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oPackTypeFilterDto.companyId = Number(CommonHelper.GetComapyId());
     this.oPackTypeFilterDto.isActive = CommonHelper.booleanConvert(this.oPackTypeFilterDto.isActive);
     // After the hash is generated, proceed with the API call
     this.http.Post(`PackType/GetPackType?pageNumber=${this.pageIndex}`, this.oPackTypeFilterDto).subscribe(
@@ -102,7 +102,7 @@ export class PackTypeComponent implements OnInit {
       return;
     }
 
-    this.oPackTypeRequestDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oPackTypeRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oPackTypeRequestDto.isActive = CommonHelper.booleanConvert(this.oPackTypeRequestDto.isActive);
     // After the hash is generated, proceed with the API call
     this.http.Post(`PackType/InsertPackType`, this.oPackTypeRequestDto).subscribe(
@@ -125,7 +125,7 @@ export class PackTypeComponent implements OnInit {
       return;
     }
 
-    this.oPackTypeRequestDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oPackTypeRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oPackTypeRequestDto.isActive = CommonHelper.booleanConvert(this.oPackTypeRequestDto.isActive);
     // After the hash is generated, proceed with the API call
     this.http.Post(`PackType/UpdatePackType/${this.packtypeId}`, this.oPackTypeRequestDto).subscribe(

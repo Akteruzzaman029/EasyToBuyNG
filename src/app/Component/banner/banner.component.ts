@@ -114,7 +114,7 @@ export class BannerComponent implements OnInit {
   }
 
   private GetBanner() {
-    this.oBannerFilterRequestDto.companyId = Number(this.currentUser?.companyId);
+    this.oBannerFilterRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oBannerFilterRequestDto.isActive = CommonHelper.booleanConvert(
       this.oBannerFilterRequestDto.isActive,
     );
@@ -152,7 +152,7 @@ export class BannerComponent implements OnInit {
       });
       return;
     }
-    this.oBannerRequestDto.companyId = Number(this.currentUser?.companyId);
+    this.oBannerRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oBannerRequestDto.fileId = Number(this.oBannerRequestDto.fileId);
     this.oBannerRequestDto.sequenceNo = Number(
       this.oBannerRequestDto.sequenceNo,
@@ -184,7 +184,7 @@ export class BannerComponent implements OnInit {
       });
       return;
     }
-    this.oBannerRequestDto.companyId = Number(this.currentUser?.companyId);
+    this.oBannerRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oBannerRequestDto.fileId = Number(this.oBannerRequestDto.fileId);
     this.oBannerRequestDto.sequenceNo = Number(
       this.oBannerRequestDto.sequenceNo,

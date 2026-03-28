@@ -80,7 +80,7 @@ export class MeasurementUnitComponent implements OnInit {
 
   private GetMeasurementUnit() {
 
-    this.oMeasurementUnitFilterDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oMeasurementUnitFilterDto.companyId = Number(CommonHelper.GetComapyId());
     this.oMeasurementUnitFilterDto.isActive = CommonHelper.booleanConvert(this.oMeasurementUnitFilterDto.isActive);
     // After the hash is generated, proceed with the API call
     this.http.Post(`MeasurementUnit/GetMeasurementUnit?pageNumber=${this.pageIndex}`, this.oMeasurementUnitFilterDto).subscribe(
@@ -106,7 +106,7 @@ export class MeasurementUnitComponent implements OnInit {
       return;
     }
 
-    this.oMeasurementUnitRequestDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oMeasurementUnitRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oMeasurementUnitRequestDto.unitType = Number(this.oMeasurementUnitRequestDto.unitType);
     this.oMeasurementUnitRequestDto.isRound = CommonHelper.booleanConvert(this.oMeasurementUnitRequestDto.isRound);
     this.oMeasurementUnitRequestDto.isSmallUnit = CommonHelper.booleanConvert(this.oMeasurementUnitRequestDto.isSmallUnit);
@@ -132,7 +132,7 @@ export class MeasurementUnitComponent implements OnInit {
       return;
     }
 
-    this.oMeasurementUnitRequestDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oMeasurementUnitRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oMeasurementUnitRequestDto.unitType = Number(this.oMeasurementUnitRequestDto.unitType);
     this.oMeasurementUnitRequestDto.isRound = CommonHelper.booleanConvert(this.oMeasurementUnitRequestDto.isRound);
     this.oMeasurementUnitRequestDto.isSmallUnit = CommonHelper.booleanConvert(this.oMeasurementUnitRequestDto.isSmallUnit);

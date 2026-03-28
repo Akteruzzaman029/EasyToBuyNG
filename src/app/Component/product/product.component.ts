@@ -126,7 +126,7 @@ export class ProductComponent implements OnInit {
   }
 
   private GetProduct() {
-    this.oProductFilterDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oProductFilterDto.companyId = Number(CommonHelper.GetComapyId());
     this.oProductFilterDto.categoryId = Number(this.oProductFilterDto.categoryId);
     this.oProductFilterDto.subCategoryId = Number(this.oProductFilterDto.subCategoryId);
     this.oProductFilterDto.measurementUnitId = Number(this.oProductFilterDto.measurementUnitId);
@@ -163,7 +163,7 @@ export class ProductComponent implements OnInit {
 
   private GetAllCategories() {
     this.oCategoryFilterRequestDto.parentId = 0;
-    this.oCategoryFilterRequestDto.companyId = Number(this.oCurrentUser?.companyId) || 0;
+    this.oCategoryFilterRequestDto.companyId = Number(CommonHelper.GetComapyId()) || 0;
     this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(this.oCategoryFilterRequestDto.isActive);
     // After the hash is generated, proceed with the API call
     this.http.Post(`Category/GetAllCategories`, this.oCategoryFilterRequestDto).subscribe(
@@ -179,7 +179,7 @@ export class ProductComponent implements OnInit {
   }
   private GetAllSubCategories() {
     this.oCategoryFilterRequestDto.parentId = Number(this.oProductFilterDto.categoryId) || 0;
-    this.oCategoryFilterRequestDto.companyId = Number(this.oCurrentUser?.companyId) || 0;
+    this.oCategoryFilterRequestDto.companyId = Number(CommonHelper.GetComapyId()) || 0;
     this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(this.oCategoryFilterRequestDto.isActive);
     // After the hash is generated, proceed with the API call
     this.http.Post(`Category/GetAllCategories`, this.oCategoryFilterRequestDto).subscribe(
@@ -194,7 +194,7 @@ export class ProductComponent implements OnInit {
   }
   private GetAllSubCategoriesFrom() {
     this.oCategoryFilterRequestDto.parentId = Number(this.oProductRequestDto.categoryId) || 0;
-    this.oCategoryFilterRequestDto.companyId = Number(this.oCurrentUser?.companyId) || 0;
+    this.oCategoryFilterRequestDto.companyId = Number(CommonHelper.GetComapyId()) || 0;
     this.oCategoryFilterRequestDto.isActive = true;
     // After the hash is generated, proceed with the API call
     this.http.Post(`Category/GetAllCategories`, this.oCategoryFilterRequestDto).subscribe(
@@ -209,7 +209,7 @@ export class ProductComponent implements OnInit {
   }
 
   private GetAllPackTypes() {
-    this.oPackTypeFilterDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oPackTypeFilterDto.companyId = Number(CommonHelper.GetComapyId());
     this.oPackTypeFilterDto.isActive = CommonHelper.booleanConvert(this.oPackTypeFilterDto.isActive);
     // After the hash is generated, proceed with the API call
     this.http.Post(`PackType/GetAllPackTypes`, this.oPackTypeFilterDto).subscribe(
@@ -223,7 +223,7 @@ export class ProductComponent implements OnInit {
 
   }
   private GetAllMeasurementUnits() {
-    this.oMeasurementUnitFilterDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oMeasurementUnitFilterDto.companyId = Number(CommonHelper.GetComapyId());
     this.oMeasurementUnitFilterDto.isActive = CommonHelper.booleanConvert(this.oMeasurementUnitFilterDto.isActive);
     // After the hash is generated, proceed with the API call
     this.http.Post(`MeasurementUnit/GetAllMeasurementUnits`, this.oMeasurementUnitFilterDto).subscribe(
@@ -261,7 +261,7 @@ export class ProductComponent implements OnInit {
       return;
     }
 
-    this.oProductRequestDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oProductRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oProductRequestDto.categoryId = Number(this.oProductRequestDto.categoryId);
     this.oProductRequestDto.subCategoryId = Number(this.oProductRequestDto.subCategoryId);
     this.oProductRequestDto.measurementUnitId = Number(this.oProductRequestDto.measurementUnitId);
@@ -296,7 +296,7 @@ export class ProductComponent implements OnInit {
       return;
     }
 
-    this.oProductRequestDto.companyId = Number(this.oCurrentUser?.companyId);
+    this.oProductRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oProductRequestDto.categoryId = Number(this.oProductRequestDto.categoryId);
     this.oProductRequestDto.subCategoryId = Number(this.oProductRequestDto.subCategoryId);
     this.oProductRequestDto.measurementUnitId = Number(this.oProductRequestDto.measurementUnitId);

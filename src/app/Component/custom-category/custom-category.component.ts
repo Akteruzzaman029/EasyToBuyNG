@@ -161,7 +161,7 @@ export class CustomCategoryComponent implements OnInit {
 
   private GetCustomCategory() {
     let currentUser = CommonHelper.GetUser();
-    this.oCustomCategoryFilterDto.companyId = Number(currentUser?.companyId);
+    this.oCustomCategoryFilterDto.companyId = Number(CommonHelper.GetComapyId());
     this.oCustomCategoryFilterDto.categoryId = Number(
       this.oCustomCategoryFilterDto.categoryId,
     );
@@ -200,7 +200,7 @@ export class CustomCategoryComponent implements OnInit {
 
   private GetCategoryTree() {
     let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.companyId = Number(currentUser?.companyId);
+    this.oCategoryFilterRequestDto.companyId = Number(CommonHelper.GetComapyId());
     this.oCategoryFilterRequestDto.parentId = -1;
     this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
       this.oCategoryFilterRequestDto.isActive,
@@ -219,9 +219,8 @@ export class CustomCategoryComponent implements OnInit {
       );
   }
   private GetAllCustomCategoryConfigs() {
-    let currentUser = CommonHelper.GetUser();
     this.oCustomCategoryConfigFilterDto.companyId = Number(
-      currentUser?.companyId,
+      CommonHelper.GetComapyId()
     );
     this.oCustomCategoryConfigFilterDto.isActive = CommonHelper.booleanConvert(
       this.oCustomCategoryConfigFilterDto.isActive,
@@ -230,7 +229,7 @@ export class CustomCategoryComponent implements OnInit {
     this.http
       .Post(
         `CustomCategoryConfig/GetAllCustomCategoryConfigs`,
-        this.oCategoryFilterRequestDto,
+        this.oCustomCategoryConfigFilterDto,
       )
       .subscribe(
         (res: any) => {
