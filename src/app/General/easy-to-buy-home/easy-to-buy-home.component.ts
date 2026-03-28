@@ -19,6 +19,9 @@ import { BannerCarouselComponent } from '../banner-carousel/banner-carousel.comp
 import { BannerFilterRequestDto } from '../../Model/Banner';
 import { CategoryFilterRequestDto } from '../../Model/Category';
 import { CustomCategoryFilterDto } from '../../Model/CustomCategory';
+import { CategoryNavbarComponent } from '../category-navbar/category-navbar.component';
+import { NzTreeNodeOptions } from 'ng-zorro-antd/tree';
+import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 @Component({
   selector: 'app-easy-to-buy-home',
   standalone: true,
@@ -31,6 +34,7 @@ import { CustomCategoryFilterDto } from '../../Model/CustomCategory';
     CategoryWiseProductComponent,
     CategoryGroupComponent,
     BannerCarouselComponent,
+    CategoryNavbarComponent,
   ],
   templateUrl: './easy-to-buy-home.component.html',
   styleUrl: './easy-to-buy-home.component.scss',
@@ -50,7 +54,9 @@ export class EasyToBuyHomeComponent implements OnInit {
   public homeMiddleList: any[] = [];
 
   groupedCategories: any[] = [];
+  public oCategoryFilterRequestDto = new CategoryFilterRequestDto();
 
+  nodes: any[] = [];
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -67,6 +73,28 @@ export class EasyToBuyHomeComponent implements OnInit {
     this.GetAllCustomCategories();
     this.GetProduct();
     this.GetAllBanners();
+    this.GetCategoryTree();
+  }
+
+  private GetCategoryTree() {
+    let currentUser = CommonHelper.GetUser();
+    this.oCategoryFilterRequestDto.companyId = Number(currentUser?.companyId);
+    this.oCategoryFilterRequestDto.parentId = -1;
+    this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
+      this.oCategoryFilterRequestDto.isActive,
+    );
+    // After the hash is generated, proceed with the API call
+    this.http
+      .Post(`Category/GetCategoryTree`, this.oCategoryFilterRequestDto)
+      .subscribe(
+        (res: any) => {
+          this.nodes = CommonHelper.buildMenu(res);
+          console.log(this.nodes);
+        },
+        (err) => {
+          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
+        },
+      );
   }
 
   private getGroupTitle(typeTag: string): string {

@@ -1,0 +1,61 @@
+<div class="menu-wrapper">
+
+  <!-- TOP MENU -->
+  <ul nz-menu nzMode="horizontal" class="top-menu">
+    <li
+      nz-menu-item
+      *ngFor="let menu of megaMenus"
+      (mouseenter)="openMenu(menu)"
+      (mouseleave)="scheduleClose()"
+    >
+      <a
+        [routerLink]="['/product-category']"
+        [queryParams]="{ categoryId: menu.id }"
+        class="menu-link"
+      >
+        {{ menu.title }}
+      </a>
+    </li>
+  </ul>
+
+  <!-- MEGA DROPDOWN -->
+  <div
+    class="mega-dropdown"
+    *ngIf="activeMegaMenu"
+    (mouseenter)="cancelClose()"
+    (mouseleave)="closeMenu()"
+  >
+    <div class="mega-grid">
+
+      <!-- COLUMN -->
+      <div class="column" *ngFor="let col of activeMegaMenu.columns">
+
+        <h4 class="column-title">
+          {{ col.title }}
+        </h4>
+
+        <ul class="submenu-list">
+          <li
+            *ngFor="let item of col.items"
+            class="submenu-item"
+          >
+            <a
+              [routerLink]="['/product-category']"
+              [queryParams]="{
+                categoryId: item.parentId,
+                subCategoryId: item.id
+              }"
+              (click)="closeMenu()"
+              class="submenu-link"
+            >
+              {{ item.name }}
+            </a>
+          </li>
+        </ul>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

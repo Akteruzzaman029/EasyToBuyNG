@@ -27,33 +27,72 @@ export class CommonHelper {
     return companyId;
   }
 
+ public static buildMenu(data: any[]): any[] {
+    const active = data.filter((x) => x.isActive);
 
-  public static  mapFlatToTreeNodes(data: any[]): NzTreeNodeOptions[] {
-      const lookup: { [key: number]: NzTreeNodeOptions } = {};
-      const rootNodes: NzTreeNodeOptions[] = [];
-  
-      data.forEach((x) => {
-        lookup[x.id] = {
-          title: x.name,
-          key: x.id,
-          value: x.id,
-          isLeaf: !x.hasChild,
-          expanded: true,
-          origin: x,
-          children: [],
-        };
+    const parents = active
+      .filter((x) => x.parentId === 0)
+      .sort((a, b) => a.sequenceNo - b.sequenceNo);
+
+    const children = active.filter((x) => x.parentId !== 0);
+
+    return parents.map((parent) => {
+      const childList = children
+        .filter((x) => x.parentId === parent.id)
+        .sort((a, b) => a.sequenceNo - b.sequenceNo);
+
+      return {
+        id: parent.id,
+        parentId: parent.parentId,
+        title: parent.name,
+        columns: this.makeColumns(childList),
+      };
+    });
+  }
+
+  // 🔥 Split into columns
+ private static  makeColumns(children: any[]): any[] {
+    const groupSize = 6;
+    const columns: any[] = [];
+
+    for (let i = 0; i < children.length; i += groupSize) {
+      const group = children.slice(i, i + groupSize);
+
+      columns.push({
+        title: group[0]?.subCategoryName || 'Category',
+        items: group,
       });
-  
-      data.forEach((x) => {
-        if (x.parentId && x.parentId !== 0) {
-          lookup[x.parentId]?.children?.push(lookup[x.id]);
-        } else {
-          rootNodes.push(lookup[x.id]);
-        }
-      });
-  
-      return rootNodes;
     }
+
+    return columns;
+  }
+
+  public static mapFlatToTreeNodes(data: any[]): NzTreeNodeOptions[] {
+    const lookup: { [key: number]: NzTreeNodeOptions } = {};
+    const rootNodes: NzTreeNodeOptions[] = [];
+
+    data.forEach((x) => {
+      lookup[x.id] = {
+        title: x.name,
+        key: x.id,
+        value: x.id,
+        isLeaf: !x.hasChild,
+        expanded: true,
+        origin: x,
+        children: [],
+      };
+    });
+
+    data.forEach((x) => {
+      if (x.parentId && x.parentId !== 0) {
+        lookup[x.parentId]?.children?.push(lookup[x.id]);
+      } else {
+        rootNodes.push(lookup[x.id]);
+      }
+    });
+
+    return rootNodes;
+  }
   public static resetFileInput(elementId: string) {
     const fileInput = document.getElementById(elementId) as HTMLInputElement;
     if (fileInput) {

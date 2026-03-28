@@ -1,79 +1,86 @@
 <!-- Header Component -->
 <header class="p-3" style="background-color: rgb(211, 97, 0) !important;">
-    <div class="container">
-        <div class="row align-items-center">
-            <!-- Left Side: Logo -->
-            <div class=" col col-md-auto d-flex align-items-center mb-3 mb-md-0">
-                <img src="logo.png" alt="Logo" routerLink="/" class="h-8">
-                <span *ngIf="this.authService.isMobile()==false" class="text-white fs-4 fw-bold ms-2">Rongtuli Cosmetics</span>
-            </div>
+  <div class="container">
+    <div class="row align-items-center">
+      <!-- Left Side: Logo -->
+      <div class=" col col-md-auto d-flex align-items-center mb-md-0">
 
-            <!-- Center: Location and Search -->
-            <div class="col col-md-auto d-flex align-items-center justify-content-center justify-content-md-start ">
-                <!-- Delivery Location Button -->
-                <button *ngIf="this.authService.isMobile()==false"  class="btn btn-light text-danger me-3  ">
-                    Select your delivery location
-                </button>
-                <button *ngIf="this.authService.isMobile()==true"  class="btn btn-light text-danger me-3">
-                    <i class="bi bi-geo-alt"></i>
-                </button>
+        <button (click)="open()" *ngIf="this.authService.isMobile()==true" class="btn btn-light text-danger me-3">
+          <i class="bi bi-list"></i>
+        </button>
+        <img *ngIf="this.authService.isMobile()==false" src="logo.png" alt="Logo" routerLink="/" class="h-8">
+        <span *ngIf="this.authService.isMobile()==false" class="text-white fs-4 fw-bold ms-2">Rongtuli Cosmetics</span>
+      </div>
 
-                <!-- Search Bar -->
-                <div class="position-relative">
-                    <input type="text" placeholder="Search your products" class="form-control rounded-pill ps-4 pe-5 "
-                        style="width: 250px;" [ngStyle]="getInputStyles()">
-                    <span class="position-absolute top-50 end-0 translate-middle-y me-3 text-muted">
-                        <i class="bi bi-search"></i> <!-- Bootstrap icon search -->
-                    </span>
-                </div>
-            </div>
+      <!-- Center: Location and Search -->
+      <div class="col col-md-auto d-flex align-items-center justify-content-center justify-content-md-start ">
+        <!-- Delivery Location Button -->
+        <button *ngIf="this.authService.isMobile()==false" class="btn btn-light text-danger me-3  ">
+          Select your delivery location
+        </button>
+        <button *ngIf="this.authService.isMobile()==true" class="btn btn-light text-danger me-3">
+          <i class="bi bi-geo-alt"></i>
+        </button>
 
-            <!-- Right Side: App Download, Language, Sign In/Sign Up -->
-            <div class=" col col-md-auto d-flex align-items-center justify-content-center justify-content-md-end ">
-                <!-- <button class="btn btn-warning text-white me-3">
+        <!-- Search Bar -->
+        <div class="position-relative">
+          <input type="text" placeholder="Search your products" class="form-control rounded-pill ps-4 pe-5 "
+            style="width: 250px;" [ngStyle]="getInputStyles()">
+          <span class="position-absolute top-50 end-0 translate-middle-y me-3 text-muted">
+            <i class="bi bi-search"></i> <!-- Bootstrap icon search -->
+          </span>
+        </div>
+      </div>
+
+      <!-- Right Side: App Download, Language, Sign In/Sign Up -->
+      <div class=" col col-md-auto d-flex align-items-center justify-content-center justify-content-md-end ">
+        <!-- <button class="btn btn-warning text-white me-3">
                     Download App Now
                 </button>
                 <button class="btn btn-light me-3 text-black">বাংলা</button> -->
-                <button routerLink="/login" *ngIf="this.authService.isMobile()==false" class="btn btn-light text-white">
-                    <span class="fw-semibold text-black">Sign in / Sign up</span>
-                </button>
-                <button *ngIf="this.authService.isMobile()==true" routerLink="/login" class="btn btn-light text-white">
-                    <span class="fw-semibold text-black"><i class="bi bi-person-plus-fill"></i></span>
-                </button>
-            </div>
-        </div>
+        <button routerLink="/login" *ngIf="this.authService.isLogin()==false" class="btn btn-light text-white">
+          <span class="fw-semibold text-black">Sign in / Sign up</span>
+        </button>
+        <button routerLink="/account" *ngIf="this.authService.isLogin()==true && this.authService.isMobile()==false"
+          class="btn btn-light text-white">
+          <span class="fw-semibold text-black">My Account</span>
+        </button>
+      </div>
     </div>
+  </div>
 </header>
 
 <div class="row g-0">
-    <div class="col-12" style="min-height:50vh;">
-        <router-outlet></router-outlet>
+  <div class="col-12" style="min-height:50vh;">
+    <div class="" *ngIf="this.authService.isMobile()==false">
+      <app-category-navbar></app-category-navbar>
     </div>
+    <router-outlet></router-outlet>
+  </div>
 </div>
 
 <div class="floating-compare" (click)="offcanvasButton()"
-    style="position: fixed; bottom: 20px; right: 20px; z-index: 1050;">
-    <a class="btn btn-outline-primary position-relative">
-        <i class="bi bi-cart3 fs-4"></i> <!-- Bootstrap cart icon -->
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {{ cartItemCount }}
-            <span class="visually-hidden">cart items</span>
-        </span>
-    </a>
+  style="position: fixed; bottom: 20px; right: 20px; z-index: 1050;">
+  <a class="btn btn-outline-primary position-relative">
+    <i class="bi bi-cart3 fs-4"></i> <!-- Bootstrap cart icon -->
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+      {{ cartItemCount }}
+      <span class="visually-hidden">cart items</span>
+    </span>
+  </a>
 </div>
 
 <button class="btn btn-primary" hidden id="offcanvasButton" type="button" data-bs-toggle="offcanvas"
-    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Toggle right offcanvas</button>
+  data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Toggle right offcanvas</button>
 
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasRightLabel">Cart Items</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" id="offcanvasClose"
-            aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        <app-add-to-cart-item></app-add-to-cart-item>
-    </div>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasRightLabel">Cart Items</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" id="offcanvasClose" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <app-add-to-cart-item></app-add-to-cart-item>
+  </div>
 </div>
 
 <!-- Footer Component -->
@@ -93,7 +100,7 @@
       <div class="col-md-2 mb-4 mb-md-0">
         <h5>Information</h5>
         <ul class="list-unstyled">
-          <li><a routerLink="/office-address" >Office Address</a></li>
+          <li><a routerLink="/office-address">Office Address</a></li>
           <li><a routerLink="/shipping-returns">Shipping & Returns</a></li>
           <li><a routerLink="/about-us">About Us</a></li>
           <li><a routerLink="/terms-and-conditions">Terms & Condition</a></li>
@@ -147,3 +154,82 @@
     </div>
   </div>
 </footer>
+
+<nz-drawer [nzVisible]="visible" nzPlacement="left" [nzTitle]="drawerTitle" [nzExtra]="extra" (nzOnClose)="close()">
+  <ng-container *nzDrawerContent>
+    <div class="flex h-full flex-col bg-white">
+
+      <!-- Account section -->
+      <div class="border-b border-gray-20 px-2 pb-3">
+        <a routerLink="/account" (click)="close()" class="flex items-center gap-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-full bg-pink-500 text-white">
+            <span class="text-2xl">👤</span>
+          </div>
+          <span class="text-[16px] font-medium text-gray-900">My Account</span>
+        </a>
+      </div>
+
+      <!-- Menu list -->
+      <div class="flex-1 overflow-y-auto py-2">
+        <div *ngFor="let menu of megaMenus" class="border-b border-gray-100 last:border-b-0">
+          <!-- Parent -->
+          <div class="flex items-center justify-between px-2 py-2">
+            <a [routerLink]="['/product-category']" [queryParams]="{ categoryId: menu.id }" (click)="close()"
+              class="flex-1 text-[16px] font-medium text-gray-900 hover:text-pink-500">
+              {{ menu.title }}
+            </a>
+
+            <button *ngIf="menu.columns.length > 0" type="button" class="ml-2 text-[24px] leading-none text-gray-900"
+              (click)="toggleParent(menu.id)">
+              {{ expandedParentId === menu.id ? '−' : '+' }}
+            </button>
+          </div>
+
+          <!-- Child menu -->
+          <div *ngIf="expandedParentId === menu.id" class="pb-2">
+            <ng-container *ngFor="let col of menu.columns">
+              <div *ngFor="let item of col.items">
+                <div class="flex items-center justify-between px-2 py-2">
+                  <a [routerLink]="['/product-category']" [queryParams]="{
+                      categoryId: item.parentId,
+                      subCategoryId: item.id
+                    }" (click)="close()" class="text-[14px] text-slate-500 hover:text-pink-500">
+                    {{ item.name }}
+                  </a>
+
+                  <button *ngIf="item.children && item.children.length > 0" type="button"
+                    class="ml-2 text-[22px] leading-none text-gray-900" (click)="toggleChild(item.id)">
+                    {{ expandedChildId === item.id ? '−' : '+' }}
+                  </button>
+                </div>
+
+                <!-- Third level -->
+                <div *ngIf="expandedChildId === item.id && item.children?.length" class="pb-2">
+                  <div *ngFor="let child of item.children" class="px-3 py-2">
+                    <a [routerLink]="['/product-category']" [queryParams]="{
+                        categoryId: item.parentId,
+                        subCategoryId: child.id
+                      }" (click)="close()" class="text-[13px] text-slate-400 hover:text-pink-500">
+                      {{ child.name }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </ng-container>
+</nz-drawer>
+
+<ng-template #drawerTitle>
+  <div class="text-center text-lg font-medium text-gray-900">Menu</div>
+</ng-template>
+
+<ng-template #extra>
+  <button nz-button nzType="text" class="!text-pink-500" (click)="close()">
+    ✕
+  </button>
+</ng-template>
