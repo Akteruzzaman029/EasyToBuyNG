@@ -92,9 +92,15 @@ export class CustomCategoryComponent implements OnInit {
       filter: true,
     },
     {
-      field: 'typeTag',
+      field: 'customCategoryConfigName',
       width: 150,
-      headerName: 'Type Tag',
+      headerName: 'Config Name ',
+      filter: true,
+    },
+    {
+      field: 'class',
+      width: 150,
+      headerName: 'Config Class ',
       filter: true,
     },
     {
