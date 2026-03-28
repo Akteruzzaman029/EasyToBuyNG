@@ -1,4 +1,3 @@
-
 <app-banner-carousel [items]="homeSliderList" [autoPlayInterval]="4000">
 </app-banner-carousel>
 <!-- Hero Banner -->
@@ -16,11 +15,7 @@
 </section> -->
 
 
-<!-- Top Banner -->
-<div *ngIf="homeTopList.length>0" class="overflow-hidden my-10 px-10 lg:mb-10 rounded-3xl">
-  <img [src]="GetImageUrl(homeTopList[0].fileId)" [alt]="homeTopList[0].name"
-    class="w-full h-[220px] object-cover rounded-3xl" />
-</div>
+
 
 <section class="container mx-auto mb-5 hidden px-2.5 lg:mb-10 lg:block lg:px-0 2xl:px-2">
   <div class="flex flex-wrap md:-mx-2 2xl:-mx-2.5">
@@ -97,53 +92,53 @@
 
 
 
-<!-- Middle Banner -->
-<div *ngIf="homeMiddleList.length>0" class="overflow-hidden my-10 px-10 lg:mb-10 rounded-3xl mt-4">
-  <img [src]="GetImageUrl(homeMiddleList[0].fileId)" [alt]="homeMiddleList[0].name"
-    class="w-full object-cover rounded-3xl" />
-</div>
+<section class="container mx-auto mb-5 block px-2.5 lg:mb-10 lg:px-0 2xl:px-2">
+  <div class="space-y-10">
+    @for (section of groupedCategories; track section.key) {
+    <section class="w-full">
 
-<!-- Custom Category Start -->
-
-<div class="space-y-10">
-  @for (group of groupedCategories; track group.typeTag) {
-  <section>
-    <div class="mb-4 flex items-center justify-between">
-      <h2 class="text-xl md:text-2xl font-semibold text-gray-900">
-        {{ group.title }}
-      </h2>
-      <a routerLink="/product-category" class="text-sm font-medium text-pink-600 hover:underline">
-        View All
-      </a>
-    </div>
-
-    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-      @for (item of group.items; track item.id) {
-      <div
-        class="group cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-        <div   routerLink="/product-category"  class="aspect-square overflow-hidden bg-gray-50">
-          <img [src]="GetImageUrl(item.fileId)" [alt]="item.name"
-            class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
-        </div>
-
-        <div class="p-3 text-center">
-          <h3 class="line-clamp-2 text-sm font-medium text-gray-800">
-            {{ item.name }}
-          </h3>
-        </div>
+      @if (!isBannerSection(section)) {
+      <div class="mb-4 text-center">
+        <h2 class="text-lg font-bold uppercase tracking-wide text-gray-900 md:text-2xl">
+          {{ section.title }}
+        </h2>
       </div>
       }
-    </div>
-  </section>
-  }
-</div>
-<!-- Custom Category End -->
+
+      @if (isBannerSection(section)) {
+      <div class="space-y-4">
+        @for (item of section.items; track item.id) {
+        <a [routerLink]="getCategoryLink(item)" [queryParams]="getCategoryQueryParams(item)"
+          class="block overflow-hidden rounded-2xl">
+          <img [src]="GetImageUrl(item.fileId)" [alt]="item.name" class="w-full rounded-2xl object-cover" />
+        </a>
+        }
+      </div>
+      } @else {
+      <div [ngClass]="getGridClass(section.columns)">
+        @for (item of section.items; track item.id) {
+        <a [routerLink]="getCategoryLink(item)" [queryParams]="getCategoryQueryParams(item)"
+          class="group block overflow-hidden rounded-2xl bg-white transition hover:-translate-y-1">
+          <div class="overflow-hidden rounded-2xl">
+            <img [src]="GetImageUrl(item.fileId)" [alt]="item.name"
+              class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+          </div>
+        </a>
+        }
+      </div>
+      }
+
+    </section>
+    }
+  </div>
+</section>
+
 
 <!-- Category Wise Products -->
-<app-category-wise-product></app-category-wise-product>
+<!-- <app-category-wise-product></app-category-wise-product> -->
 
 
 
 
 
-<app-category-group></app-category-group>
+<!-- <app-category-group></app-category-group> -->
