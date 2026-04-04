@@ -78,7 +78,9 @@ export class EasyToBuyHomeComponent implements OnInit {
 
   private GetCategoryTree() {
     let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.companyId = Number(CommonHelper.GetComapyId());
+    this.oCategoryFilterRequestDto.companyId = Number(
+      CommonHelper.GetComapyId(),
+    );
     this.oCategoryFilterRequestDto.parentId = -1;
     this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
       this.oCategoryFilterRequestDto.isActive,
@@ -95,40 +97,6 @@ export class EasyToBuyHomeComponent implements OnInit {
           this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
         },
       );
-  }
-
-  private getGroupTitle(typeTag: string): string {
-    switch (typeTag) {
-      case 'product_category':
-        return 'Shop by Category';
-      case 'product_sub_category':
-        return 'Shop by Concern';
-      case 'brand':
-        return 'Shop by Brand';
-      case 'offer_category':
-        return 'Offers';
-      default:
-        return typeTag;
-    }
-  }
-
-  groupByTypeTag(data: any[]): any[] {
-    const groupedMap = new Map<string, any[]>();
-    data
-      .filter((x) => x.isActive)
-      .sort((a, b) => a.sequenceNo - b.sequenceNo)
-      .forEach((item) => {
-        if (!groupedMap.has(item.typeTag)) {
-          groupedMap.set(item.typeTag, []);
-        }
-        groupedMap.get(item.typeTag)!.push(item);
-      });
-
-    return Array.from(groupedMap.entries()).map(([typeTag, items]) => ({
-      typeTag,
-      title: this.getGroupTitle(typeTag),
-      items,
-    }));
   }
 
   private GetProduct() {
@@ -192,7 +160,7 @@ export class EasyToBuyHomeComponent implements OnInit {
       )
       .subscribe(
         (res: any) => {
-          this.groupedCategories = this.groupByTypeTag(res);
+          this.groupedCategories = this.groupByCustomConfig(res);
         },
         (err) => {
           this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
@@ -200,6 +168,106 @@ export class EasyToBuyHomeComponent implements OnInit {
       );
   }
 
+  groupByCustomConfig(data: any[]): any[] {
+    const groupedMap = new Map<string, any[]>();
+
+    data
+      .filter((x) => x.isActive)
+      .sort((a, b) => {
+        const configSort = (a.configSLNo ?? 0) - (b.configSLNo ?? 0);
+        if (configSort !== 0) return configSort;
+
+        return (a.sequenceNo ?? 0) - (b.sequenceNo ?? 0);
+      })
+      .forEach((item) => {
+        const key = `${item.customCategoryConfigId}_${item.customCategoryConfigName}`;
+
+        if (!groupedMap.has(key)) {
+          groupedMap.set(key, []);
+        }
+
+        groupedMap.get(key)!.push(item);
+      });
+
+    return Array.from(groupedMap.entries()).map(([key, items]) => {
+      const firstItem = items[0];
+
+      return {
+        key,
+        title: firstItem.customCategoryConfigName,
+        class: String(firstItem.class),
+        columns: String(this.getSectionColumnsFromClass(firstItem.class)),
+        configId: firstItem.customCategoryConfigId,
+        configSLNo: firstItem.configSLNo,
+        items: items.sort((a, b) => (a.sequenceNo ?? 0) - (b.sequenceNo ?? 0)),
+      };
+    });
+  }
+
+  isBannerSection(section: any): boolean {
+    return String(section.class) === '12';
+  }
+
+  getSectionColumnsFromClass(classValue: string | number): number {
+    const value = classValue;
+
+    switch (value) {
+      case "12":
+        return 1;
+      case "2":
+        return 6;
+      case "3":
+        return 4;
+      case "4":
+        return 3;
+      case "5":
+        return 5;
+      case "6":
+        return 6;
+      case "7":
+        return 7;
+      default:
+        return 4;
+    }
+  }
+
+  getGridClass(columns: string | number): string {
+    const col = Number(columns);
+
+    switch (col) {
+      case 3:
+        return 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3';
+
+      case 4:
+        return 'grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4';
+
+      case 5:
+        return 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5';
+
+      case 6:
+        return 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6';
+
+      case 7:
+        return 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-7';
+
+      default:
+        return 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4';
+    }
+  }
+
+  getCategoryLink(item: any): any[] {
+    return ['/product-category'];
+  }
+
+  getCategoryQueryParams(item: any): any {
+    const params: any = {};
+
+    if (item.categoryId && item.categoryId > 0) {
+      params.categoryId = item.categoryId;
+    }
+
+    return params;
+  }
   public GetImageUrl(fileId: number): string {
     return `${this.http.appUrl}UploadedFile/GetImage/${fileId}`;
   }
