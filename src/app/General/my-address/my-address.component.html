@@ -5,34 +5,61 @@
   </div>
 
   <div class="content-box">
-    
-    <div class="empty-state" *ngIf="!showAddressForm">
-      <div class="message-card">
-        No Address Set. Click Add Address button to set address.
+
+    <div class="content-box">
+
+      <div class="empty-state" *ngIf="!showAddressForm && addressList.length === 0">
+        <div class="message-card">
+          No Address Set. Click Add Address button to set address.
+        </div>
       </div>
+
+      <div class="saved-addresses" *ngIf="!showAddressForm && addressList.length > 0">
+        <div class="address-card" *ngFor="let addr of addressList">
+          <div class="address-header">
+            <span class="type-badge">{{ addr.pickerName || addr.userName }}</span>
+            <span class="default-badge" *ngIf="addr.isDefault">Default</span>
+          </div>
+
+          <div class="address-body">
+            <p class="street">Street: {{ addr.streetAddress }}</p>
+            <p class="location">City: {{ addr.state }}, {{ addr.city }}</p>
+          </div>
+
+          <div class="address-footer">
+            <button class="btn-edit">Edit</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="address-form" *ngIf="showAddressForm">
+      </div>
+
     </div>
 
-    <div class="address-form" *ngIf="showAddressForm">
+    <div class="address-form" *ngIf="showAddressForm  && addressList.length === 0">
       <div class="input-group">
         <input type="text" placeholder="Name: Home, Office" class="custom-input">
       </div>
 
       <div class="input-row">
-        <select class="custom-select">
-          <option>Select City</option>
-        </select>
-        <select class="custom-select">
-          <option>Select Area</option>
-        </select>
+        <div class="input-group flex-1">
+          <input type="text" [(ngModel)]="selectedDistrictName" placeholder="Enter City / District"
+            class="custom-input">
+        </div>
+
+        <div class="input-group flex-1">
+          <input type="text" [(ngModel)]="selectedAreaName" placeholder="Enter Area / Area Name" class="custom-input">
+        </div>
       </div>
 
       <div class="input-group">
-        <input type="text" placeholder="Address" class="custom-input">
+        <input type="text" [(ngModel)]="streetAddress" placeholder="Address" class="custom-input">
       </div>
 
       <div class="form-actions">
         <button class="btn-clos" (click)="onCloseForm()">Close</button>
-        <button class="btn-save">Save</button>
+        <button class="btn-save" (click)="onSaveAddress()">Save</button>
       </div>
     </div>
 
