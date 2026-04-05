@@ -1,0 +1,207 @@
+<div class="card border-0 mb-2">
+    <div class="card-header border-0 p-3 bg-theme">Manage Order Flow Stages</div>
+</div>
+<div class="row g-0">
+    <div class="col-2 px-1">
+        <select class="form-select" [(ngModel)]="oOrderFlowStageTransitionFilterDto.flowId" name="flowId"
+            aria-label="Default select example">
+            <option value="0">-- select flow -- </option>
+            <option *ngFor="let item of orderFlowList; trackBy: trackByOrderFlow" [value]="item.id">
+                {{ item.name }}
+            </option>
+        </select>
+    </div>
+
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <select class="form-select" [(ngModel)]="oOrderFlowStageTransitionFilterDto.fromStageId" name="fromStageId"
+                aria-label="Default select example">
+                <option value="0">-- select from stage -- </option>
+                <option *ngFor="let item of orderFlowStageList; trackBy: trackByOrderFlowFrom" [value]="item.id">
+                    {{ item.name }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <select class="form-select" [(ngModel)]="oOrderFlowStageTransitionFilterDto.toStageId" name="toStageId"
+                aria-label="Default select example">
+                <option value="0">-- select to stage -- </option>
+                <option *ngFor="let item of orderFlowStageList; trackBy: trackByOrderFlowTo" [value]="item.id">
+                    {{ item.name }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <select class="form-select" [(ngModel)]="oOrderFlowStageTransitionFilterDto.isAllowed" name="isAllowed"
+                aria-label="Default select example">
+                <option value="true">Allowed</option>
+                <option value="false">Not Allowed</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-2 px-1">
+        <div class="mb-2">
+            <button class="btn btn-success" (click)="Filter()">Search</button>
+        </div>
+    </div>
+    <div class="col text-end">
+        <button class="btn btn-success mx-1" (click)="add()"> <i class="bi bi-plus"></i> Add</button>
+        <button class="btn btn-success mx-1" (click)="edit()"><i class="bi bi-pencil-square"></i> Edit</button>
+        <button class="btn btn-danger mx-1" (click)="delete()"><i class="bi bi-trash3"></i> Delete</button>
+    </div>
+
+
+    <div class="col-md-12">
+        <ag-grid-angular class="ag-theme-alpine" style="height: 70vh;width: 100%;" [columnDefs]="colDefsTransection"
+            [rowData]="rowData" [rowSelection]="'single'" (gridReady)="onGridReadyTransection($event)"
+            [defaultColDef]="DeafultCol">
+        </ag-grid-angular>
+    </div>
+
+
+    <div class="col-md-12">
+        <app-pagination [pageSize]="10" [currentPage]="pageIndex" [totalItems]="totalRecords"
+            (pageChange)="PageChange($event)"></app-pagination>
+    </div>
+
+
+</div>
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" hidden id="openCommonModel" data-bs-toggle="modal"
+    data-bs-target="#exampleModal">
+    Launch demo modal
+</button>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Order Flow Stage
+                    @if (orderflowstagetransitionId==0){Create} @if (orderflowstagetransitionId>0){Update}
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeCommonModel"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-0">
+
+
+                    <div class="col-12 px-1">
+                        <div class="mb-2">
+                            <label for="flowId" class="form-label">Order Flow</label>
+                            <select class="form-select" [(ngModel)]="oOrderFlowStageTransitionRequestDto.flowId"
+                                name="flowId" aria-label="Default select example">
+                                <option value="0">-- select order flow -- </option>
+                                <option *ngFor="let item of orderFlowList; trackBy: trackByOrderFlowFrom"
+                                    [value]="item.id">
+                                    {{ item.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12 px-1">
+                        <div class="mb-2">
+                            <label for="fromStageId" class="form-label">From Stage</label>
+                            <select class="form-select" [(ngModel)]="oOrderFlowStageTransitionRequestDto.fromStageId"
+                                name="fromStageId" aria-label="Default select example">
+                                <option value="0">-- select from stage -- </option>
+                                <option *ngFor="let item of orderFlowStageList; trackBy: trackByFnFromOrderFlowStage"
+                                    [value]="item.id">
+                                    {{ item.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12 px-1">
+                        <div class="mb-2">
+                            <label for="toStageId" class="form-label">To Stage</label>
+                            <select class="form-select" [(ngModel)]="oOrderFlowStageTransitionRequestDto.toStageId"
+                                name="toStageId" aria-label="Default select example">
+                                <option value="0">-- select to stage -- </option>
+                                <option *ngFor="let item of orderFlowStageList; trackBy: trackByFnToOrderFlowStage"
+                                    [value]="item.id">
+                                    {{ item.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-12 px-1">
+                        <div class="mb-2">
+                            <label for="isInitialStage" class="form-label">Is Allowed</label>
+                            <select class="form-select" [(ngModel)]="oOrderFlowStageTransitionRequestDto.isAllowed"
+                                name="isAllowed" aria-label="Default select example">
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="remarks" class="form-label">Remarks</label>
+                        <textarea class="form-control" name="remarks"
+                            [(ngModel)]="oOrderFlowStageTransitionRequestDto.remarks" id="remarks" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @if (orderflowstagetransitionId==0){
+                <button type="button" class="btn btn-primary" (click)="InsertOrderFlowStageTransition()">Save</button>
+                }
+                @if (orderflowstagetransitionId>0){
+                <button type="button" class="btn btn-primary" (click)="UpdateOrderFlowStageTransition()">Update</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<button type="button" class="btn btn-primary" hidden data-bs-toggle="modal" id="openCommonDelete"
+    data-bs-target="#staticCommonBackdrop">
+    Launch static backdrop modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticCommonBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Order Flow Stage Delete</h1>
+                <button type="button" class="btn-close" id="closeCommonDelete" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-0">
+                    <div class="col-md-6 h2 text-center">
+                        are you confirm delete?
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Close </button>
+                <button type="button" class="btn btn-primary" (click)="DeleteOrderFlowStageTransition()"> Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

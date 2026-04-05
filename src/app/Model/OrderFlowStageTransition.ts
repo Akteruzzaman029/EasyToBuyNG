@@ -1,10 +1,10 @@
-export class OrderFlowStageTransitionFilterRequestDto {
+export class OrderFlowStageTransitionFilterDto {
   public flowId: number = 0;
   public fromStageId: number = 0;
   public toStageId: number = 0;
   public isAllowed: boolean = true;
 
-  constructor(init?: Partial<OrderFlowStageTransitionFilterRequestDto>) {
+  constructor(init?: Partial<OrderFlowStageTransitionFilterDto>) {
     Object.assign(this, init);
   }
 }

@@ -1,9 +1,9 @@
-export class OrderDeliveryChargeDetailFilterRequestDto {
+export class OrderDeliveryChargeDetailFilterDto {
   public companyId: number = 0;
   public salesOrderId: number = 0;
   public deliveryChargeRuleId: number = 0;
 
-  constructor(init?: Partial<OrderDeliveryChargeDetailFilterRequestDto>) {
+  constructor(init?: Partial<OrderDeliveryChargeDetailFilterDto>) {
     Object.assign(this, init);
   }
 }

@@ -1,8 +1,8 @@
-export class OrderChargeAdjustmentFilterRequestDto {
+export class OrderChargeAdjustmentFilterDto {
   public salesOrderId: number = 0;
   public chargeHead: string = '';
 
-  constructor(init?: Partial<OrderChargeAdjustmentFilterRequestDto>) {
+  constructor(init?: Partial<OrderChargeAdjustmentFilterDto>) {
     Object.assign(this, init);
   }
 }

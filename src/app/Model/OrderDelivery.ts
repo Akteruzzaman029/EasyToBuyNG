@@ -1,10 +1,10 @@
-export class OrderDeliveryFilterRequestDto {
+export class OrderDeliveryFilterDto {
   public companyId: number = 0;
   public salesOrderId: number = 0;
   public deliveryProviderId: number = 0;
   public isActive: boolean = true;
 
-  constructor(init?: Partial<OrderDeliveryFilterRequestDto>) {
+  constructor(init?: Partial<OrderDeliveryFilterDto>) {
     Object.assign(this, init);
   }
 }

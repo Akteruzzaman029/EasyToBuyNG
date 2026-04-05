@@ -1,10 +1,10 @@
-export class OrderTypeFilterRequestDto {
+export class OrderTypeFilterDto {
   public name: string = '';
   public code: string = '';
   public companyId: number = 0;
   public isActive: boolean = true;
 
-  constructor(init?: Partial<OrderTypeFilterRequestDto>) {
+  constructor(init?: Partial<OrderTypeFilterDto>) {
     Object.assign(this, init);
   }
 }
