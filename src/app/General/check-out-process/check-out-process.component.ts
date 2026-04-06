@@ -13,9 +13,14 @@ import { CommonHelper } from '../../Shared/Service/common-helper.service';
 import { HttpHelperService } from '../../Shared/Service/http-helper.service';
 import { OrderRequestDto } from '../../Model/Order';
 import { OrderItemRequestDto } from '../../Model/OrderItem';
-import { AddressFilterDto, AddressRequestDto } from '../../Model/Address';
+import { AddressFilterDto } from '../../Model/Address';
 import { DeliveryAddressComponent } from '../delivery-address/delivery-address.component';
 import { LoginRequestDto } from '../../Model/LoginRequestDto';
+import {
+  LocationService,
+  UserLocation,
+} from '../../Shared/Service/location.service';
+import { MapPickerComponent } from "../map-picker/map-picker.component";
 
 @Component({
   selector: 'app-check-out-process',
@@ -26,7 +31,8 @@ import { LoginRequestDto } from '../../Model/LoginRequestDto';
     RouterModule,
     TruncatePipe,
     DeliveryAddressComponent,
-  ],
+    MapPickerComponent
+],
   templateUrl: './check-out-process.component.html',
   styleUrl: './check-out-process.component.scss',
   providers: [DatePipe, { provide: LOCALE_ID, useValue: 'en-US' }],
@@ -46,6 +52,9 @@ export class CheckOutProcessComponent implements OnInit, OnDestroy {
 
   public oLoginRequestDto = new LoginRequestDto();
 
+  fullAddress = '';
+  placeName = '';
+
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -53,16 +62,51 @@ export class CheckOutProcessComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private route: Router,
     private datePipe: DatePipe,
+    private locationService: LocationService,
   ) {
     this.oCurrentUser = CommonHelper.GetUser();
   }
 
   ngOnInit(): void {
+    this.loadLocation();
     if (this.oCurrentUser.userId == '') {
       this.route.navigateByUrl('login');
     }
     this.subscription = this.cartService.onCartUpdated().subscribe(() => {
       this.loadCart();
+    });
+  }
+
+  loadLocation(): void {
+    this.locationService.getCurrentLocation().subscribe({
+      next: (location: UserLocation) => {
+        console.log('Latitude:', location.latitude);
+        console.log('Longitude:', location.longitude);
+        console.log('Accuracy:', location.accuracy);
+        debugger;
+        this.locationService
+          .reverseGeocode(location.latitude, location.longitude)
+          .subscribe({
+            next: (res) => {
+              debugger;
+              this.fullAddress = res.display_name || '';
+              this.placeName =
+                res.address?.road ||
+                res.address?.suburb ||
+                res.address?.city ||
+                res.address?.town ||
+                res.address?.village ||
+                'Unknown place';
+              this.oOrderRequestDto.latitude = location.latitude;
+              this.oOrderRequestDto.longitude = location.longitude;
+              this.oOrderRequestDto.locationName = this.fullAddress;
+            },
+            error: () => {},
+          });
+      },
+      error: (err) => {
+        console.error('Location error:', err);
+      },
     });
   }
 
@@ -197,7 +241,9 @@ export class CheckOutProcessComponent implements OnInit, OnDestroy {
       let oOrderItemRequestDto = new OrderItemRequestDto();
       oOrderItemRequestDto.orderId = 0;
       oOrderItemRequestDto.cartId = Number(element.id);
+      oOrderItemRequestDto.productName = element.productName;
       oOrderItemRequestDto.productId = Number(element.productId);
+      oOrderItemRequestDto.vat = Number(element.vat);
       oOrderItemRequestDto.quantity = Number(element.quantity);
       oOrderItemRequestDto.unitPrice = Number(element.unitPriceAfterDiscount);
       oOrderItemRequestDto.discount = Number(element.discount);

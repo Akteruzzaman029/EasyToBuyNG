@@ -1,0 +1,27 @@
+<div class="map-picker-wrapper">
+  <div class="toolbar">
+    <button type="button" (click)="useCurrentLocation()">Use Current Location</button>
+  </div>
+
+  <div #mapContainer class="map-container"></div>
+
+  <div class="details-card">
+    <div *ngIf="loading">Loading location...</div>
+
+    <ng-container *ngIf="!loading">
+      <!-- <p><strong>Latitude:</strong> {{ latitude }}</p>
+      <p><strong>Longitude:</strong> {{ longitude }}</p> -->
+      <p><strong>Full Address:</strong> {{ formattedAddress }}</p>
+      <p><strong>Road:</strong> {{ road }}</p>
+      <p><strong>Area:</strong> {{ area }}</p>
+      <p><strong>City:</strong> {{ city }}</p>
+      <p><strong>District:</strong> {{ district }}</p>
+      <p><strong>Postal Code:</strong> {{ postalCode }}</p>
+      <p><strong>Country:</strong> {{ country }}</p>
+    </ng-container>
+
+    <div *ngIf="errorMessage" class="error-text">
+      {{ errorMessage }}
+    </div>
+  </div>
+</div>
