@@ -80,6 +80,16 @@ import { AccountDetailComponent } from './General/account-detail/account-detail.
 import { MyAccountHomeComponent } from './General/my-account-home/my-account-home.component';
 import { MyAddressComponent } from './General/my-address/my-address.component';
 import { CustomCategoryConfigComponent } from './Component/custom-category-config/custom-category-config.component';
+import { OrderTypeComponent } from './Component/OrderProcess/order-type/order-type.component';
+import { OrderFlowComponent } from './Component/OrderProcess/order-flow/order-flow.component';
+import { OrderFlowStageComponent } from './Component/OrderProcess/order-flow-stage/order-flow-stage.component';
+import { OrderFlowStageTransitionComponent } from './Component/OrderProcess/order-flow-stage-transition/order-flow-stage-transition.component';
+import { OrderTrackingComponent } from './Component/OrderProcess/order-tracking/order-tracking.component';
+import { OrderDeliveryChargeDetailComponent } from './Component/OrderProcess/order-delivery-charge-detail/order-delivery-charge-detail.component';
+import { OrderChargeAdjustmentComponent } from './Component/OrderProcess/order-charge-adjustment/order-charge-adjustment.component';
+import { OrderDeliveryComponent } from './Component/OrderProcess/order-delivery/order-delivery.component';
+import { SalesOrderComponent } from './Component/OrderProcess/sales-order/sales-order.component';
+import { SalesOrderItemComponent } from './Component/OrderProcess/sales-order-item/sales-order-item.component';
 
 export const routes: Routes = [
   {
@@ -321,6 +331,71 @@ export const routes: Routes = [
         title: 'Dashboard',
         data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
       },
+
+      {
+        path: 'order-type',
+        component: OrderTypeComponent,
+        title: 'Order Type',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
+      {
+        path: 'order-flow',
+        component: OrderFlowComponent,
+        title: 'Order Flow',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
+      {
+        path: 'order-flow-stage',
+        component: OrderFlowStageComponent,
+        title: 'Order Flow Stage',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
+      {
+        path: 'order-flow-stage-transition',
+        component: OrderFlowStageTransitionComponent,
+        title: 'Order Flow Stage Transition',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
+      {
+        path: 'order-tracking',
+        component: OrderTrackingComponent,
+        title: 'Order Tracking',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
+      {
+        path: 'order-delivery-charge-detail',
+        component: OrderDeliveryChargeDetailComponent,
+        title: 'Order Delivery Charge Detail',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
+      {
+        path: 'order-charge-adjustment',
+        component: OrderChargeAdjustmentComponent,
+        title: 'Order Charge Adjustment',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
+      {
+        path: 'order-delivery',
+        component: OrderDeliveryComponent,
+        title: 'Order Delivery',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
+      {
+        path: 'sales-order`',
+        component: SalesOrderComponent,
+        title: 'Sales Order',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
+      {
+        path: 'sales-order-item',
+        component: SalesOrderItemComponent,
+        title: 'Sales Order Item',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
+
+
+
+
       {
         path: 'appointment',
         component: AppointmentComponent,
