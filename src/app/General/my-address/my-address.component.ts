@@ -20,6 +20,8 @@ export class MyAddressComponent {
   public userName: string = '';
   public streetAddress: string = '';
   public addressList: any[] = [];
+  public isEditMode: boolean = false;
+  public selectedAddressId: number | null = null;
 
   constructor(
     public authService: AuthService,
@@ -35,38 +37,50 @@ export class MyAddressComponent {
   }
 
   onSaveAddress() {
-    debugger;
+    debugger
     if (!this.selectedDistrictName || !this.selectedAreaName || !this.streetAddress) {
       this.toast.error('Fill all required fields');
       return;
     }
+
     const userJson = localStorage.getItem("UserResponseDto");
     const user = userJson ? JSON.parse(userJson) : null;
 
     const payload = {
+      id: this.isEditMode ? this.selectedAddressId : 0,  
       userId: user ? user.userId : null,
       pickerName: this.userName,
-      pickerNumber: "",
       streetAddress: this.streetAddress,
-      building: "",
       city: this.selectedDistrictName,
       state: this.selectedAreaName,
-      zipCode: "",
       isDefault: true,
-      remarks: "manual_entry",
       isActive: true
     };
 
-    this.http.Post(`Address/InsertAddress`, payload).subscribe({
+    const url = this.isEditMode ? `Address/UpdateAddress/${this.selectedAddressId}` : `Address/InsertAddress`;
+
+    this.http.Post(url, payload).subscribe({
       next: (res: any) => {
-        this.toast.success('Address saved successfully');
+        this.toast.success(this.isEditMode ? 'Updated successfully' : 'Saved successfully');
+        this.getAddressList();  
         this.onCloseForm();
       },
       error: (err) => {
         this.toast.error('Error saving address');
-        console.error(err);
       }
     });
+  }
+
+  onEditAddress(addr: any) {
+    debugger
+    this.isEditMode = true;
+    this.showAddressForm = true;
+    this.selectedAddressId = addr.id;
+
+    this.userName = addr.userName;
+    this.streetAddress = addr.streetAddress;
+    this.selectedDistrictName = addr.city;
+    this.selectedAreaName = addr.state;
   }
 
   getAddressList(page: number = 1) {
@@ -91,7 +105,7 @@ export class MyAddressComponent {
           this.addressList = res.items.map((item: any) => {
             return {
               ...item,
-              userName: userName  
+              userName: userName
             };
           });
         } else {

@@ -27,3 +27,109 @@
     }
   }
 }
+
+
+.address-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+
+  .header-row {
+    margin-bottom: 20px;
+    .title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #333;
+    }
+  }
+
+  .content-box {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+
+    .order-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border: 1px solid #eee;
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px dashed #ddd;
+        padding-bottom: 10px;
+        margin-bottom: 12px;
+
+        .order-no {
+          font-weight: 600;
+          color: #e91e63; // আপনার থিম কালার অনুযায়ী পরিবর্তন করতে পারেন
+          font-size: 14px;
+        }
+
+        .status-badge {
+          background: #e3f2fd;
+          color: #1976d2;
+          padding: 4px 10px;
+          border-radius: 20px;
+          font-size: 11px;
+          text-transform: uppercase;
+          font-weight: bold;
+        }
+      }
+
+      .order-body {
+        .info-row {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 8px;
+
+          .label {
+            color: #777;
+            font-size: 13px;
+          }
+
+          .value {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+          }
+
+          &.total {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #f0f0f0;
+            .value {
+              font-size: 18px;
+              color: #2ecc71;
+            }
+          }
+        }
+      }
+
+      .order-footer {
+        margin-top: 15px;
+        .btn-view {
+          width: 100%;
+          background: #f8f9fa;
+          border: 1px solid #ddd;
+          padding: 8px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 13px;
+          color: #555;
+          &:hover {
+            background: #eee;
+          }
+        }
+      }
+    }
+  }
+}
