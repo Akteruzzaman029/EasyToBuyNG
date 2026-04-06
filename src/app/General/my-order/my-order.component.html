@@ -1,5 +1,36 @@
-<div class="orders-page-wrapper">
-  <div class="empty-orders-box">
-    <p class="empty-message">You don't have any previous orders.</p>
+<div class="address-container">
+  <div class="header-row">
+    <h3 class="title">My Orders</h3>
+  </div>
+
+  <div class="content-box">
+    <div class="order-card" *ngFor="let order of orderList()">
+      <div class="order-header">
+        <span class="order-no"># {{ order.orderNo }}</span>
+        <span class="status-badge">Completed</span> </div>
+
+      <div class="order-body">
+        <div class="info-row">
+          <span class="label">Date:</span>
+          <span class="value">{{ order.createdDate | date:'mediumDate' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Discount:</span>
+          <span class="value text-danger">- ৳{{ order.totalDiscount }}</span>
+        </div>
+        <div class="info-row total">
+          <span class="label">Total Amount:</span>
+          <span class="value">৳{{ order.totalAmount }}</span>
+        </div>
+      </div>
+
+      <!-- <div class="order-footer">
+        <button class="btn-view">View Details</button>
+      </div> -->
+    </div>
+
+    <div class="empty-state" *ngIf="orderList().length === 0">
+      <div class="message-card">No Orders Found.</div>
+    </div>
   </div>
 </div>
