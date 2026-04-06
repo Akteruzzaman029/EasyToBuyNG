@@ -55,19 +55,19 @@ export class OrderFlowStageTransitionComponent implements OnInit {
       checkboxSelection: false,
     },
     {
-      field: 'orderFlowName',
+      field: 'flowName',
       width: 150,
-      headerName: 'Order Flow Name',
+      headerName: 'Flow Name',
       filter: true,
     },
-    { field: 'name', width: 150, headerName: 'Name', filter: true },
-    { field: 'code', width: 150, headerName: 'Code', filter: true },
-    { field: 'icon', width: 150, headerName: 'Icon', filter: true },
-    { field: 'colorCode', width: 150, headerName: 'Color', filter: true },
-    { field: 'sequenceNo', headerName: 'Sequence No' },
-    { field: 'isInitialStage', headerName: 'Is Initial Stage' },
-    { field: 'isFinalStage', headerName: 'Is Final Stage' },
-    { field: 'customerVisible', headerName: 'Customer Visible' },
+    {
+      field: 'fromStageName',
+      width: 150,
+      headerName: 'From Stage',
+      filter: true,
+    },
+    { field: 'toStageName', width: 150, headerName: 'To Stage', filter: true },
+    { field: 'isAllowed', headerName: 'Is Allowed' },
     { field: 'remarks', headerName: 'Remarks' },
     { field: 'isActive', headerName: 'Status' },
   ];
@@ -135,7 +135,7 @@ export class OrderFlowStageTransitionComponent implements OnInit {
   }
 
   private GetAllOrderFlowStages() {
-        this.oOrderFlowStageFilterDto.orderFlowId =
+    this.oOrderFlowStageFilterDto.orderFlowId =
       Number(this.oOrderFlowStageFilterDto.orderFlowId) || 0;
     this.oOrderFlowStageFilterDto.sequenceNo =
       Number(this.oOrderFlowStageFilterDto.sequenceNo) || 0;
