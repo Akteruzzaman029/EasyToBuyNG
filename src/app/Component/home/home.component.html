@@ -15,7 +15,7 @@
       <!-- Center: Location and Search -->
       <div class="col col-md-auto d-flex align-items-center justify-content-center justify-content-md-start ">
         <!-- Delivery Location Button -->
-        <button *ngIf="this.authService.isMobile()==false" class="btn btn-light text-danger me-3  ">
+        <button *ngIf="this.authService.isMobile()==false" class="btn btn-light text-danger me-3" routerLink="/select-location">
           Select your delivery location
         </button>
         <button *ngIf="this.authService.isMobile()==true" class="btn btn-light text-danger me-3">
