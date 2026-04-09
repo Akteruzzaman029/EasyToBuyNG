@@ -91,6 +91,7 @@ import { OrderDeliveryComponent } from './Component/OrderProcess/order-delivery/
 import { SalesOrderComponent } from './Component/OrderProcess/sales-order/sales-order.component';
 import { SalesOrderItemComponent } from './Component/OrderProcess/sales-order-item/sales-order-item.component';
 import { CounterComponent } from './store/Counter/counter/counter.component';
+import { LocationPickerComponent } from './Component/admin/location-picker/location-picker.component';
 
 export const routes: Routes = [
   {
@@ -685,6 +686,12 @@ export const routes: Routes = [
         path: 'banner',
         component: BannerComponent,
         title: 'Banner List',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      },
+      {
+        path: 'select-location',
+        component: LocationPickerComponent,
+        title: 'Location Selection',
         data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
       },
     ],
