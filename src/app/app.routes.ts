@@ -90,6 +90,7 @@ import { OrderChargeAdjustmentComponent } from './Component/OrderProcess/order-c
 import { OrderDeliveryComponent } from './Component/OrderProcess/order-delivery/order-delivery.component';
 import { SalesOrderComponent } from './Component/OrderProcess/sales-order/sales-order.component';
 import { SalesOrderItemComponent } from './Component/OrderProcess/sales-order-item/sales-order-item.component';
+import { CounterComponent } from './store/Counter/counter/counter.component';
 
 export const routes: Routes = [
   {
@@ -117,6 +118,14 @@ export const routes: Routes = [
         path: 'product-category',
         component: ProductCategoryComponent,
         title: 'Product Category',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+      {
+        path: 'counter',
+        component: CounterComponent,
+        title: 'Counter',
         data: {
           roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
         },
