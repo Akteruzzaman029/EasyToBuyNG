@@ -1,0 +1,27 @@
+<h2 class="me-3">Counter: {{ counter$ | async }}</h2>
+
+<button class=" m-3 btn btn-success" (click)="increment()">Increment</button>
+<button class=" m-3 btn btn-danger" (click)="decrement()">Decrement</button>
+<button class=" m-3 btn btn-warning" (click)="reset()">Reset</button>
+
+
+
+<h2>NgRx with from </h2>
+<h3>Name: {{ (from$ | async)?.name }}</h3>
+<h3>Email: {{ (from$ | async)?.email }}</h3>
+
+
+<h4>Preview </h4>
+{{ (from$ | async) | json }}
+
+
+@if (from$ | async; as form) {
+
+<input type="text" class="form-control m-2 mb-4" placeholder="Name" [value]="form.name"
+    (input)="updateFromField('name', $event)" />
+<input type="email" class="form-control m-2 mb-4" placeholder="Email" [value]="form.email"
+    (input)="updateFromField('email',  $event)" />
+
+
+<button class=" m-3 btn btn-warning" (click)="resetFrom()">Reset Form</button>
+}

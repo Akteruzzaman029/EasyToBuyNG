@@ -8,6 +8,9 @@ import {
   withComponentInputBinding,
   withHashLocation,
 } from '@angular/router';
+import { provideState, provideStore } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 import { routes } from './app.routes';
 import { provideToastr } from 'ngx-toastr';
@@ -20,6 +23,8 @@ import {
   MinusSquareOutline,
   PlusSquareOutline
 } from '@ant-design/icons-angular/icons';
+import { counterFeature } from './store/Counter/counter.feature';
+import { fromFeature } from './store/from/from.feature';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -45,5 +50,16 @@ export const appConfig: ApplicationConfig = {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }), // Provides Toastr for showing notifications
+    provideStore(), // Registers the counter reducer with the store
+    provideState(counterFeature), // Registers the counter feature with the store
+    provideState(fromFeature), // Registers the counter feature with the store
+    provideEffects(),
+    provideStoreDevtools({
+      maxAge: 25,
+      logOnly: !isDevMode(),
+      autoPause: true,
+      trace: false,
+      connectInZone: true
+    })
   ],
 };
