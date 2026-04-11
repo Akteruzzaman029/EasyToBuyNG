@@ -2,20 +2,17 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit, TrackByFunction, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { AgGridAngular } from 'ag-grid-angular';
 import { ToastrService } from 'ngx-toastr';
 import {
   CategoryFilterRequestDto,
   CategoryRequestDto,
 } from '../../Model/Category';
-import { PaginationComponent } from '../../Shared/pagination/pagination.component';
 import { AGGridHelper } from '../../Shared/Service/AGGridHelper';
 import { AuthService } from '../../Shared/Service/auth.service';
 import { CommonHelper } from '../../Shared/Service/common-helper.service';
 import { HttpHelperService } from '../../Shared/Service/http-helper.service';
 import {
   NzFormatEmitEvent,
-  NzTreeComponent,
   NzTreeModule,
   NzTreeNode,
   NzTreeNodeOptions,
