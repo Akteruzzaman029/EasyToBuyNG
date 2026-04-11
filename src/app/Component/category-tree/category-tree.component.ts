@@ -202,6 +202,7 @@ export class CategoryTreeComponent implements OnInit {
       .Post(`Category/GetCategoryTree`, this.oCategoryFilterRequestDto)
       .subscribe(
         (res: any) => {
+             console.log("category tree component:", res);
           this.nodes = this.mapToTreeNodes(res);
         },
         (err) => {

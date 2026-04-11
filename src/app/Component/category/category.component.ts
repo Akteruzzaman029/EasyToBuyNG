@@ -171,6 +171,7 @@ export class CategoryComponent implements OnInit {
       .Post(`Category/GetCategoryTree`, this.oCategoryFilterRequestDto)
       .subscribe(
         (res: any) => {
+          console.log("category component:", res);
           this.nodes = CommonHelper.mapFlatToTreeNodes(res);
         },
         (err) => {

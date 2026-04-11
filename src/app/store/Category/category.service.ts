@@ -1,6 +1,5 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import { HttpHelperService } from '../../Shared/Service/http-helper.service';
 import { CategoryFilterRequestDto } from '../../Model/Category';
 

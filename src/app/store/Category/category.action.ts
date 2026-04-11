@@ -1,17 +1,17 @@
-// category.actions.ts
 import { createAction, props } from '@ngrx/store';
-import { CategoryFilterRequestDto } from '../../Model/Category';
+import {  CategoryFilterRequestDto } from '../../Model/Category';
 
 export const loadCategoryTree = createAction(
-  '[Category] Load Category Tree', 
-  props<{ filter: CategoryFilterRequestDto }>()  // Adding filter as a payload
+  '[Category] Load Category Tree',
+  props<{ filter: CategoryFilterRequestDto }>()
 );
-
-export const loadCategoryTreeApi = createAction('[Category] Load Category Tree API');
 
 export const loadCategoryTreeSuccess = createAction(
   '[Category] Load Category Tree Success',
-  props<{ categoryTree: any[] }>()
+  props<{
+    categoryTree: any[];
+    filter: CategoryFilterRequestDto;
+  }>()
 );
 
 export const loadCategoryTreeFailure = createAction(
@@ -19,7 +19,6 @@ export const loadCategoryTreeFailure = createAction(
   props<{ error: string }>()
 );
 
-export const setCategoryTreeLoading = createAction(
-  '[Category] Set Category Tree Loading',
-  props<{ isLoading: boolean }>()
+export const clearCategoryTree = createAction(
+  '[Category] Clear Category Tree'
 );

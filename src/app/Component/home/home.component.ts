@@ -100,6 +100,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .Post(`Category/GetCategoryTree`, this.oCategoryFilterRequestDto)
       .subscribe(
         (res: any) => {
+               console.log('home component:', res);
           this.megaMenus = CommonHelper.buildMenu(res);
           // this.categoryList = res;
           console.log(this.megaMenus);

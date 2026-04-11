@@ -128,6 +128,7 @@ export class CommonCategoryTreeComponent implements OnInit, AfterViewInit {
           this.categoryList = Array.isArray(res) ? res : [];
           const treeData = this.buildTree(this.categoryList);
           this.dataSource.setData(treeData);
+          console.log('common category tree component:', res);
           setTimeout(() => {
             // this.treeControl.expandAll();
           });

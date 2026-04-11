@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, inject, LOCALE_ID, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ProductFilterDto } from '../../Model/Product';
@@ -22,6 +22,15 @@ import { CustomCategoryFilterDto } from '../../Model/CustomCategory';
 import { CategoryNavbarComponent } from '../category-navbar/category-navbar.component';
 import { NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
+import { Store } from '@ngrx/store';
+import {
+  selectCategoryTree,
+  selectCategoryTreeLoading,
+  selectCategoryTreeError,
+  selectShouldLoadCategoryTree,
+} from '../../store/Category/category.selector';
+import { take } from 'rxjs';
+import { loadCategoryTree } from '../../store/Category/category.action';
 @Component({
   selector: 'app-easy-to-buy-home',
   standalone: true,
@@ -54,9 +63,17 @@ export class EasyToBuyHomeComponent implements OnInit {
   public homeMiddleList: any[] = [];
 
   groupedCategories: any[] = [];
-  public oCategoryFilterRequestDto = new CategoryFilterRequestDto();
-
   nodes: any[] = [];
+  private store = inject(Store);
+  categoryTree$ = this.store.select(selectCategoryTree);
+  loading$ = this.store.select(selectCategoryTreeLoading);
+  error$ = this.store.select(selectCategoryTreeError);
+
+  oCategoryFilterRequestDto: any = {
+    companyId: 0,
+    parentId: -1,
+    isActive: true,
+  };
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -73,30 +90,54 @@ export class EasyToBuyHomeComponent implements OnInit {
     this.GetAllCustomCategories();
     this.GetProduct();
     this.GetAllBanners();
-    this.GetCategoryTree();
+    this.getCategoryTree();
+
+    this.categoryTree$.subscribe((res) => {
+      this.nodes = CommonHelper.buildMenu(res || []);
+    });
+
+    this.error$.subscribe((err) => {
+      if (err) {
+        this.toast.error(err, 'Error!!', { progressBar: true });
+      }
+    });
   }
 
-  private GetCategoryTree() {
-    let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.companyId = Number(
-      CommonHelper.GetComapyId(),
+  private getCategoryTree(): void {
+    this.oCategoryFilterRequestDto = {
+      ...this.oCategoryFilterRequestDto,
+      companyId: Number(CommonHelper.GetComapyId()),
+      parentId: -1,
+      isActive: CommonHelper.booleanConvert(
+        this.oCategoryFilterRequestDto.isActive,
+      ),
+    };
+
+    this.store
+      .select(selectShouldLoadCategoryTree(this.oCategoryFilterRequestDto))
+      .pipe(take(1))
+      .subscribe((shouldLoad) => {
+        if (shouldLoad) {
+          this.store.dispatch(
+            loadCategoryTree({ filter: this.oCategoryFilterRequestDto }),
+          );
+        }
+      });
+  }
+
+  refreshCategoryTree(): void {
+    this.oCategoryFilterRequestDto = {
+      ...this.oCategoryFilterRequestDto,
+      companyId: Number(CommonHelper.GetComapyId()),
+      parentId: -1,
+      isActive: CommonHelper.booleanConvert(
+        this.oCategoryFilterRequestDto.isActive,
+      ),
+    };
+
+    this.store.dispatch(
+      loadCategoryTree({ filter: this.oCategoryFilterRequestDto }),
     );
-    this.oCategoryFilterRequestDto.parentId = -1;
-    this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
-      this.oCategoryFilterRequestDto.isActive,
-    );
-    // After the hash is generated, proceed with the API call
-    this.http
-      .Post(`Category/GetCategoryTree`, this.oCategoryFilterRequestDto)
-      .subscribe(
-        (res: any) => {
-          this.nodes = CommonHelper.buildMenu(res);
-          console.log(this.nodes);
-        },
-        (err) => {
-          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
-        },
-      );
   }
 
   private GetProduct() {
@@ -212,19 +253,19 @@ export class EasyToBuyHomeComponent implements OnInit {
     const value = classValue;
 
     switch (value) {
-      case "12":
+      case '12':
         return 1;
-      case "2":
+      case '2':
         return 6;
-      case "3":
+      case '3':
         return 4;
-      case "4":
+      case '4':
         return 3;
-      case "5":
+      case '5':
         return 5;
-      case "6":
+      case '6':
         return 6;
-      case "7":
+      case '7':
         return 7;
       default:
         return 4;

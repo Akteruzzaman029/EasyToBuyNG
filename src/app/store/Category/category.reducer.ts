@@ -1,38 +1,44 @@
-// category.reducer.ts
 import { createReducer, on } from '@ngrx/store';
 import {
-  loadCategoryTreeApi,
-  loadCategoryTreeSuccess,
+  clearCategoryTree,
+  loadCategoryTree,
   loadCategoryTreeFailure,
-  setCategoryTreeLoading,
+  loadCategoryTreeSuccess,
 } from './category.action';
+import {  CategoryFilterRequestDto } from '../../Model/Category';
 
 export interface CategoryTreeState {
-  categorytree: any[];
+  categoryTree: any[];
   loading: boolean;
+  loaded: boolean;
   error: string | null;
+  lastFilter: CategoryFilterRequestDto | null;
 }
 
 export const initialCategoryTreeState: CategoryTreeState = {
-  categorytree: [],
+  categoryTree: [],
   loading: false,
+  loaded: false,
   error: null,
+  lastFilter: null,
 };
 
 export const reducer = createReducer(
   initialCategoryTreeState,
 
-  on(loadCategoryTreeApi, (state) => ({
+  on(loadCategoryTree, (state) => ({
     ...state,
     loading: true,
     error: null,
   })),
 
-  on(loadCategoryTreeSuccess, (state, { categoryTree }) => ({
+  on(loadCategoryTreeSuccess, (state, { categoryTree, filter }) => ({
     ...state,
-    categorytree: categoryTree,
+    categoryTree,
     loading: false,
+    loaded: true,
     error: null,
+    lastFilter: filter,
   })),
 
   on(loadCategoryTreeFailure, (state, { error }) => ({
@@ -41,8 +47,5 @@ export const reducer = createReducer(
     error,
   })),
 
-  on(setCategoryTreeLoading, (state, { isLoading }) => ({
-    ...state,
-    loading: isLoading,
-  }))
+  on(clearCategoryTree, () => initialCategoryTreeState)
 );

@@ -1,4 +1,6 @@
 export class CategoryFilterRequestDto {
+    categoryId: any;
+    parentCategoryId: any;
 
     constructor() {
         this.name = '';

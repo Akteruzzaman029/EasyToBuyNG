@@ -21,10 +21,12 @@ import { provideNzIcons } from 'ng-zorro-antd/icon';
 import {
   FileOutline,
   MinusSquareOutline,
-  PlusSquareOutline
+  PlusSquareOutline,
 } from '@ant-design/icons-angular/icons';
 import { counterFeature } from './store/Counter/counter.feature';
 import { fromFeature } from './store/from/from.feature';
+import { CategoryEffects } from './store/Category/category.effect';
+import { categoryTreeFeature } from './store/Category/category.feature';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -41,25 +43,23 @@ export const appConfig: ApplicationConfig = {
       positionClass: 'toast-bottom-right', // Position of toast notifications
       preventDuplicates: true, // Prevent duplicate toasts
     }),
-    provideNzIcons([
-      FileOutline,
-      MinusSquareOutline,
-      PlusSquareOutline
-    ]),
+    provideNzIcons([FileOutline, MinusSquareOutline, PlusSquareOutline]),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }), // Provides Toastr for showing notifications
-    provideStore(), // Registers the counter reducer with the store
+    provideStore({
+      [categoryTreeFeature.name]: categoryTreeFeature.reducer,
+    }),
     provideState(counterFeature), // Registers the counter feature with the store
     provideState(fromFeature), // Registers the counter feature with the store
-    provideEffects(),
+    provideEffects(CategoryEffects),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),
       autoPause: true,
       trace: false,
-      connectInZone: true
-    })
+      connectInZone: true,
+    }),
   ],
 };

@@ -57,6 +57,7 @@ export class CategoryNavbarComponent implements OnInit, OnDestroy {
       .Post(`Category/GetCategoryTree`, this.oCategoryFilterRequestDto)
       .subscribe(
         (res: any) => {
+               console.log('category navbar component:', res);
           this.megaMenus = this.buildMenu(res);
           console.log(this.megaMenus);
         },
