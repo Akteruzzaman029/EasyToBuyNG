@@ -1,9 +1,4 @@
-import {
-  Component,
-  LOCALE_ID,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
@@ -21,6 +16,15 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { CategoryFilterRequestDto } from '../../Model/Category';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { Store } from '@ngrx/store';
+import {
+  selectCategoryTree,
+  selectCategoryTreeLoading,
+  selectCategoryTreeError,
+  selectShouldLoadCategoryTree,
+} from '../../store/Category/category.selector';
+import { take } from 'rxjs';
+import { loadCategoryTree } from '../../store/Category/category.action';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -35,7 +39,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzButtonModule,
     NzDrawerModule,
     NzSpaceModule,
-    NzIconModule
+    NzIconModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -47,7 +51,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   public oCartFilterDto = new CartFilterDto();
   subscription: any;
   email: string = 'queries@rongtulicosmetics.com';
-  public oCategoryFilterRequestDto = new CategoryFilterRequestDto();
   visible = false;
   size: number | string = 360;
 
@@ -77,6 +80,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.expandedChildId = this.expandedChildId === id ? null : id;
   }
 
+  private store = inject(Store);
+  categoryTree$ = this.store.select(selectCategoryTree);
+  loading$ = this.store.select(selectCategoryTreeLoading);
+  error$ = this.store.select(selectCategoryTreeError);
+
+  oCategoryFilterRequestDto: any = {
+    companyId: 0,
+    parentId: -1,
+    isActive: true,
+  };
+
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -88,40 +102,45 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.oCurrentUser = CommonHelper.GetUser();
   }
 
-  private GetCategoryTree() {
-    let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.companyId = Number(CommonHelper.GetComapyId());
-    this.oCategoryFilterRequestDto.parentId = -1;
-    this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
-      this.oCategoryFilterRequestDto.isActive,
-    );
-    // After the hash is generated, proceed with the API call
-    this.http
-      .Post(`Category/GetCategoryTree`, this.oCategoryFilterRequestDto)
-      .subscribe(
-        (res: any) => {
-               console.log('home component:', res);
-          this.megaMenus = CommonHelper.buildMenu(res);
-          // this.categoryList = res;
-          console.log(this.megaMenus);
-        },
-        (err) => {
-          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
-        },
-      );
-  }
-
   ngOnInit(): void {
-    console.log(
-      this.authService.isMobile(),
-      this.authService.isTablet(),
-      this.authService.isDesktop(),
-    );
-    this.GetCategoryTree();
+    this.getCategoryTree();
+
+    this.categoryTree$.subscribe((res) => {
+      this.megaMenus = CommonHelper.buildMenu(res);
+    });
+
+    this.error$.subscribe((err) => {
+      if (err) {
+        this.toast.error(err, 'Error!!', { progressBar: true });
+      }
+    });
+
     this.subscription = this.cartService.onCartUpdated().subscribe(() => {
       // re‑load your cart count, re‑render badge, etc.
       this.loadCart();
     });
+  }
+
+  private getCategoryTree(): void {
+    this.oCategoryFilterRequestDto = {
+      ...this.oCategoryFilterRequestDto,
+      companyId: Number(CommonHelper.GetComapyId()),
+      parentId: -1,
+      isActive: CommonHelper.booleanConvert(
+        this.oCategoryFilterRequestDto.isActive,
+      ),
+    };
+
+    this.store
+      .select(selectShouldLoadCategoryTree(this.oCategoryFilterRequestDto))
+      .pipe(take(1))
+      .subscribe((shouldLoad) => {
+        if (shouldLoad) {
+          this.store.dispatch(
+            loadCategoryTree({ filter: this.oCategoryFilterRequestDto }),
+          );
+        }
+      });
   }
 
   ngOnDestroy() {

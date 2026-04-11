@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit, TrackByFunction } from '@angular/core';
+import { Component, inject, OnInit, TrackByFunction } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
 import { Router, RouterModule } from '@angular/router';
@@ -19,6 +19,15 @@ import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CustomCategoryConfigFilterDto } from '../../Model/CustomCategoryConfig';
+import { Store } from '@ngrx/store';
+import { take } from 'rxjs';
+import { loadCategoryTree } from '../../store/Category/category.action';
+import {
+  selectCategoryTree,
+  selectCategoryTreeLoading,
+  selectCategoryTreeError,
+  selectShouldLoadCategoryTree,
+} from '../../store/Category/category.selector';
 
 function dig(path = '0', level = 3): NzTreeNodeOptions[] {
   const list: NzTreeNodeOptions[] = [];
@@ -119,6 +128,12 @@ export class CustomCategoryComponent implements OnInit {
 
   nodes: NzTreeNodeOptions[] = [];
   isVisibleModal = false;
+
+  private store = inject(Store);
+  categoryTree$ = this.store.select(selectCategoryTree);
+  loading$ = this.store.select(selectCategoryTreeLoading);
+  error$ = this.store.select(selectCategoryTreeError);
+
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -128,8 +143,19 @@ export class CustomCategoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getCategoryTree();
+
+    this.categoryTree$.subscribe((res) => {
+      this.nodes = CommonHelper.mapFlatToTreeNodes(res);
+    });
+
+    this.error$.subscribe((err) => {
+      if (err) {
+        this.toast.error(err, 'Error!!', { progressBar: true });
+      }
+    });
     this.GetAllCustomCategoryConfigs();
-    this.GetCategoryTree();
+
     this.GetCustomCategory();
   }
 
@@ -206,28 +232,28 @@ export class CustomCategoryComponent implements OnInit {
       );
   }
 
-  private GetCategoryTree() {
-    let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.companyId = Number(
-      CommonHelper.GetComapyId(),
-    );
-    this.oCategoryFilterRequestDto.parentId = -1;
-    this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
-      this.oCategoryFilterRequestDto.isActive,
-    );
-    // After the hash is generated, proceed with the API call
-    this.http
-      .Post(`Category/GetCategoryTree`, this.oCategoryFilterRequestDto)
-      .subscribe(
-        (res: any) => {
-          console.log('custom category component:', res);
-          this.nodes = CommonHelper.mapFlatToTreeNodes(res);
-        },
-        (err) => {
-          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
-        },
-      );
+  private getCategoryTree(): void {
+    this.oCategoryFilterRequestDto = {
+      ...this.oCategoryFilterRequestDto,
+      companyId: Number(CommonHelper.GetComapyId()),
+      parentId: -1,
+      isActive: CommonHelper.booleanConvert(
+        this.oCategoryFilterRequestDto.isActive,
+      ),
+    };
+
+    this.store
+      .select(selectShouldLoadCategoryTree(this.oCategoryFilterRequestDto))
+      .pipe(take(1))
+      .subscribe((shouldLoad) => {
+        if (shouldLoad) {
+          this.store.dispatch(
+            loadCategoryTree({ filter: this.oCategoryFilterRequestDto }),
+          );
+        }
+      });
   }
+
   private GetAllCustomCategoryConfigs() {
     this.oCustomCategoryConfigFilterDto.companyId = Number(
       CommonHelper.GetComapyId(),

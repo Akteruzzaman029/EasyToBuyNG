@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit, TrackByFunction } from '@angular/core';
+import { Component, inject, OnInit, TrackByFunction } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
 import { Router, RouterModule } from '@angular/router';
@@ -17,6 +17,15 @@ import { NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { Store } from '@ngrx/store';
+import { take } from 'rxjs';
+import { loadCategoryTree } from '../../store/Category/category.action';
+import {
+  selectCategoryTree,
+  selectCategoryTreeLoading,
+  selectCategoryTreeError,
+  selectShouldLoadCategoryTree,
+} from '../../store/Category/category.selector';
 @Component({
   selector: 'app-category',
   standalone: true,
@@ -39,7 +48,6 @@ export class CategoryComponent implements OnInit {
   public DeafultCol = AGGridHelper.DeafultCol;
   public rowData!: any[];
   public categoryList: any[] = [];
-  public oCategoryFilterRequestDto = new CategoryFilterRequestDto();
   public oCategoryRequestDto = new CategoryRequestDto();
 
   public categoryId = 0;
@@ -76,6 +84,18 @@ export class CategoryComponent implements OnInit {
 
   nodes: NzTreeNodeOptions[] = [];
   isVisibleModal = false;
+
+  private store = inject(Store);
+  categoryTree$ = this.store.select(selectCategoryTree);
+  loading$ = this.store.select(selectCategoryTreeLoading);
+  error$ = this.store.select(selectCategoryTreeError);
+
+  oCategoryFilterRequestDto: any = {
+    companyId: 0,
+    parentId: -1,
+    isActive: true,
+  };
+
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -85,7 +105,17 @@ export class CategoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.GetCategoryTree();
+    this.getCategoryTree();
+
+    this.categoryTree$.subscribe((res) => {
+      this.nodes = CommonHelper.mapFlatToTreeNodes(res);
+    });
+
+    this.error$.subscribe((err) => {
+      if (err) {
+        this.toast.error(err, 'Error!!', { progressBar: true });
+      }
+    });
     this.GetCategory();
   }
 
@@ -123,7 +153,9 @@ export class CategoryComponent implements OnInit {
 
   private GetCategory() {
     let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.companyId = Number(CommonHelper.GetComapyId());
+    this.oCategoryFilterRequestDto.companyId = Number(
+      CommonHelper.GetComapyId(),
+    );
     this.oCategoryFilterRequestDto.parentId = Number(
       this.oCategoryFilterRequestDto.parentId < 0
         ? 0
@@ -159,25 +191,26 @@ export class CategoryComponent implements OnInit {
       );
   }
 
-  private GetCategoryTree() {
-    let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.companyId = Number(CommonHelper.GetComapyId());
-    this.oCategoryFilterRequestDto.parentId = -1;
-    this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
-      this.oCategoryFilterRequestDto.isActive,
-    );
-    // After the hash is generated, proceed with the API call
-    this.http
-      .Post(`Category/GetCategoryTree`, this.oCategoryFilterRequestDto)
-      .subscribe(
-        (res: any) => {
-          console.log("category component:", res);
-          this.nodes = CommonHelper.mapFlatToTreeNodes(res);
-        },
-        (err) => {
-          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
-        },
-      );
+  private getCategoryTree(): void {
+    this.oCategoryFilterRequestDto = {
+      ...this.oCategoryFilterRequestDto,
+      companyId: Number(CommonHelper.GetComapyId()),
+      parentId: -1,
+      isActive: CommonHelper.booleanConvert(
+        this.oCategoryFilterRequestDto.isActive,
+      ),
+    };
+
+    this.store
+      .select(selectShouldLoadCategoryTree(this.oCategoryFilterRequestDto))
+      .pipe(take(1))
+      .subscribe((shouldLoad) => {
+        if (shouldLoad) {
+          this.store.dispatch(
+            loadCategoryTree({ filter: this.oCategoryFilterRequestDto }),
+          );
+        }
+      });
   }
 
   public InsertCategory() {

@@ -125,20 +125,7 @@ export class EasyToBuyHomeComponent implements OnInit {
       });
   }
 
-  refreshCategoryTree(): void {
-    this.oCategoryFilterRequestDto = {
-      ...this.oCategoryFilterRequestDto,
-      companyId: Number(CommonHelper.GetComapyId()),
-      parentId: -1,
-      isActive: CommonHelper.booleanConvert(
-        this.oCategoryFilterRequestDto.isActive,
-      ),
-    };
 
-    this.store.dispatch(
-      loadCategoryTree({ filter: this.oCategoryFilterRequestDto }),
-    );
-  }
 
   private GetProduct() {
     this.oProductFilterDto.companyId = Number(CommonHelper.GetComapyId());

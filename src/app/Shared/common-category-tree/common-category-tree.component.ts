@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
+  inject,
   OnInit,
   Output,
 } from '@angular/core';
@@ -21,6 +22,15 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../Service/auth.service';
 import { CommonHelper } from '../Service/common-helper.service';
 import { HttpHelperService } from '../Service/http-helper.service';
+import { Store } from '@ngrx/store';
+import {
+  selectCategoryTree,
+  selectCategoryTreeLoading,
+  selectCategoryTreeError,
+  selectShouldLoadCategoryTree,
+} from '../../store/Category/category.selector';
+import { take } from 'rxjs';
+import { loadCategoryTree } from '../../store/Category/category.action';
 
 interface ApiCategoryNode {
   id: number;
@@ -69,7 +79,6 @@ interface FlatNode {
   providers: [DatePipe],
 })
 export class CommonCategoryTreeComponent implements OnInit, AfterViewInit {
-  public oCategoryFilterRequestDto = new CategoryFilterRequestDto();
   public categoryList: ApiCategoryNode[] = [];
   @Output() nodeClicked = new EventEmitter<FlatNode | null>();
   showLeafIcon = false;
@@ -99,6 +108,18 @@ export class CommonCategoryTreeComponent implements OnInit, AfterViewInit {
 
   dataSource = new NzTreeFlatDataSource(this.treeControl, this.treeFlattener);
   selectedNode: FlatNode | null = null;
+
+  private store = inject(Store);
+  categoryTree$ = this.store.select(selectCategoryTree);
+  loading$ = this.store.select(selectCategoryTreeLoading);
+  error$ = this.store.select(selectCategoryTreeError);
+
+  oCategoryFilterRequestDto: any = {
+    companyId: 0,
+    parentId: -1,
+    isActive: true,
+  };
+
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -106,43 +127,46 @@ export class CommonCategoryTreeComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.GetCategoryTree();
+    this.getCategoryTree();
+
+    this.categoryTree$.subscribe((res) => {
+      this.categoryList = Array.isArray(res) ? res : [];
+      const treeData = this.buildTree(this.categoryList);
+      this.dataSource.setData(treeData);
+      console.log('common category tree component:', res);
+    });
+
+    this.error$.subscribe((err) => {
+      if (err) {
+        this.toast.error(err, 'Error!!', { progressBar: true });
+      }
+    });
   }
 
   ngAfterViewInit(): void {}
 
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
 
-  private GetCategoryTree() {
-    this.oCategoryFilterRequestDto.parentId = -1;
-    this.oCategoryFilterRequestDto.companyId =
-      Number(CommonHelper.GetComapyId()) || 0;
-    this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
-      this.oCategoryFilterRequestDto.isActive,
-    );
+  private getCategoryTree(): void {
+    this.oCategoryFilterRequestDto = {
+      ...this.oCategoryFilterRequestDto,
+      companyId: Number(CommonHelper.GetComapyId()),
+      parentId: -1,
+      isActive: CommonHelper.booleanConvert(
+        this.oCategoryFilterRequestDto.isActive,
+      ),
+    };
 
-    this.http
-      .Post(`Category/GetCategoryTree`, this.oCategoryFilterRequestDto)
-      .subscribe(
-        (res: any) => {
-          this.categoryList = Array.isArray(res) ? res : [];
-          const treeData = this.buildTree(this.categoryList);
-          this.dataSource.setData(treeData);
-          console.log('common category tree component:', res);
-          setTimeout(() => {
-            // this.treeControl.expandAll();
-          });
-        },
-        (err) => {
-          this.toast.error(
-            err?.ErrorMessage || 'Something went wrong',
-            'Error!!',
-            {
-              progressBar: true,
-            },
+    this.store
+      .select(selectShouldLoadCategoryTree(this.oCategoryFilterRequestDto))
+      .pipe(take(1))
+      .subscribe((shouldLoad) => {
+        if (shouldLoad) {
+          this.store.dispatch(
+            loadCategoryTree({ filter: this.oCategoryFilterRequestDto }),
           );
-        },
-      );
+        }
+      });
   }
 
   private buildTree(data: ApiCategoryNode[]): TreeNode[] {

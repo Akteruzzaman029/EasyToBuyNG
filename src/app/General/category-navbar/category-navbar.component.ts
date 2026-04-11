@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -9,6 +9,15 @@ import { AuthService } from '../../Shared/Service/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonHelper } from '../../Shared/Service/common-helper.service';
 import { CategoryFilterRequestDto } from '../../Model/Category';
+import { Store } from '@ngrx/store';
+import {
+  selectCategoryTree,
+  selectCategoryTreeLoading,
+  selectCategoryTreeError,
+  selectShouldLoadCategoryTree,
+} from '../../store/Category/category.selector';
+import { take } from 'rxjs';
+import { loadCategoryTree } from '../../store/Category/category.action';
 
 @Component({
   selector: 'app-category-navbar',
@@ -27,7 +36,18 @@ export class CategoryNavbarComponent implements OnInit, OnDestroy {
   megaMenus: any[] = [];
   activeMegaMenu: any | null = null;
   private closeTimeout: any;
-  public oCategoryFilterRequestDto = new CategoryFilterRequestDto();
+
+  private store = inject(Store);
+  categoryTree$ = this.store.select(selectCategoryTree);
+  loading$ = this.store.select(selectCategoryTreeLoading);
+  error$ = this.store.select(selectCategoryTreeError);
+
+  oCategoryFilterRequestDto: any = {
+    companyId: 0,
+    parentId: -1,
+    isActive: true,
+  };
+
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -37,64 +57,73 @@ export class CategoryNavbarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.GetCategoryTree();
+    this.getCategoryTree();
+
+    this.categoryTree$.subscribe((res) => {
+      this.megaMenus = this.buildMenu(res);
+      console.log('category navbar component:', res);
+    });
+
+    this.error$.subscribe((err) => {
+      if (err) {
+        this.toast.error(err, 'Error!!', { progressBar: true });
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.cancelClose();
   }
 
-  // 🔥 Load from API
-  private GetCategoryTree() {
-    let currentUser = CommonHelper.GetUser();
-    this.oCategoryFilterRequestDto.companyId = Number(CommonHelper.GetComapyId());
-    this.oCategoryFilterRequestDto.parentId = -1;
-    this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
-      this.oCategoryFilterRequestDto.isActive,
-    );
-    // After the hash is generated, proceed with the API call
-    this.http
-      .Post(`Category/GetCategoryTree`, this.oCategoryFilterRequestDto)
-      .subscribe(
-        (res: any) => {
-               console.log('category navbar component:', res);
-          this.megaMenus = this.buildMenu(res);
-          console.log(this.megaMenus);
-        },
-        (err) => {
-          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
-        },
-      );
-  }
+  private getCategoryTree(): void {
+    this.oCategoryFilterRequestDto = {
+      ...this.oCategoryFilterRequestDto,
+      companyId: Number(CommonHelper.GetComapyId()),
+      parentId: -1,
+      isActive: CommonHelper.booleanConvert(
+        this.oCategoryFilterRequestDto.isActive,
+      ),
+    };
 
+    this.store
+      .select(selectShouldLoadCategoryTree(this.oCategoryFilterRequestDto))
+      .pipe(take(1))
+      .subscribe((shouldLoad) => {
+        if (shouldLoad) {
+          this.store.dispatch(
+            loadCategoryTree({ filter: this.oCategoryFilterRequestDto }),
+          );
+        }
+      });
+  }
 
   // 🔥 Convert API → Menu
   buildMenu(data: any[]): any[] {
-    const active = data.filter(x => x.isActive);
+    const active = data.filter((x) => x.isActive);
 
     const parents = active
-      .filter(x => x.parentId === 0)
+      .filter((x) => x.parentId === 0)
       .sort((a, b) => a.sequenceNo - b.sequenceNo);
 
-    const children = active.filter(x => x.parentId !== 0);
+    const children = active.filter((x) => x.parentId !== 0);
 
-    return parents.map(parent => {
+    return parents.map((parent) => {
       const childList = children
-        .filter(x => x.parentId === parent.id)
+        .filter((x) => x.parentId === parent.id)
         .sort((a, b) => a.sequenceNo - b.sequenceNo);
 
       return {
         id: parent.id,
         parentId: parent.parentId,
         title: parent.name,
-        columns: this.makeColumns(childList)
+        columns: this.makeColumns(childList),
       };
     });
   }
 
   // 🔥 Split into columns
   makeColumns(children: any[]): any[] {
-      const groupSize = 6;
+    const groupSize = 6;
     const columns: any[] = [];
 
     for (let i = 0; i < children.length; i += groupSize) {
@@ -102,7 +131,7 @@ export class CategoryNavbarComponent implements OnInit, OnDestroy {
 
       columns.push({
         title: group[0]?.subCategoryName || 'Category',
-        items: group
+        items: group,
       });
     }
 
@@ -136,15 +165,15 @@ export class CategoryNavbarComponent implements OnInit, OnDestroy {
     if (item.parentId === 0) {
       this.router.navigate(['/product-category'], {
         queryParams: {
-          categoryId: item.id
-        }
+          categoryId: item.id,
+        },
       });
     } else {
       this.router.navigate(['/product-category'], {
         queryParams: {
           categoryId: item.parentId,
-          subCategoryId: item.id
-        }
+          subCategoryId: item.id,
+        },
       });
     }
 
