@@ -12,4 +12,8 @@ export class CategoryService {
   getCategoryTree(filter: CategoryFilterRequestDto): Observable<any[]> {
     return this.http.Post<any[]>('Category/GetCategoryTree', filter);
   }
+
+  getAllCategories(filter: CategoryFilterRequestDto): Observable<any[]> {
+    return this.http.Post<any[]>('Category/GetAllCategories', filter);
+  }
 }

@@ -31,6 +31,8 @@ import { bannerFeature } from './store/Banner/banner.feature';
 import { customCategoryFeature } from './store/CustomCategory/custom-category.feature';
 import { CustomCategoryEffects } from './store/CustomCategory/custom-category.effect';
 import { BannerEffects } from './store/Banner/banner.effect';
+import { brandFeature } from './store/Brand/brand.feature';
+import { BrandEffects } from './store/Brand/brand.effect';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -56,10 +58,11 @@ export const appConfig: ApplicationConfig = {
       [categoryTreeFeature.name]: categoryTreeFeature.reducer,
        [bannerFeature.name]: bannerFeature.reducer,
       [customCategoryFeature.name]: customCategoryFeature.reducer,
+      [brandFeature.name]: brandFeature.reducer,
     }),
     provideState(counterFeature), // Registers the counter feature with the store
     provideState(fromFeature), // Registers the counter feature with the store
-    provideEffects(CategoryEffects,BannerEffects, CustomCategoryEffects),
+    provideEffects(CategoryEffects,BannerEffects, CustomCategoryEffects,BrandEffects),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),

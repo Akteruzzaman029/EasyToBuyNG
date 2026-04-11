@@ -2,20 +2,23 @@ import { createSelector } from '@ngrx/store';
 import { CategoryFilterRequestDto } from '../../Model/Category';
 import { categoryTreeFeature } from './category.feature';
 
+// Selectors for category tree state
 export const selectCategoryTree = categoryTreeFeature.selectCategoryTree;
 export const selectCategoryTreeLoading = categoryTreeFeature.selectLoading;
 export const selectCategoryTreeLoaded = categoryTreeFeature.selectLoaded;
 export const selectCategoryTreeError = categoryTreeFeature.selectError;
 export const selectLastCategoryFilter = categoryTreeFeature.selectLastFilter;
 
+// Selectors for category list state
+
 export const selectHasCategoryTreeData = createSelector(
   selectCategoryTree,
-  (categoryTree) => categoryTree.length > 0
+  (categoryTree) => categoryTree.length > 0,
 );
 
 function isSameFilter(
   a: CategoryFilterRequestDto | null,
-  b: CategoryFilterRequestDto | null
+  b: CategoryFilterRequestDto | null,
 ): boolean {
   if (!a || !b) return false;
 
@@ -27,7 +30,9 @@ function isSameFilter(
   );
 }
 
-export const selectShouldLoadCategoryTree = (filter: CategoryFilterRequestDto) =>
+export const selectShouldLoadCategoryTree = (
+  filter: CategoryFilterRequestDto,
+) =>
   createSelector(
     selectCategoryTreeLoaded,
     selectHasCategoryTreeData,
@@ -38,5 +43,5 @@ export const selectShouldLoadCategoryTree = (filter: CategoryFilterRequestDto) =
       if (!lastFilter) return true;
 
       return !isSameFilter(lastFilter, filter);
-    }
+    },
   );

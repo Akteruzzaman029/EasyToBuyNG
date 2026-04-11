@@ -103,8 +103,6 @@ export class ProductCategoryComponent implements OnInit {
   ngOnInit(): void {
     this.GetAllBrands();
     this.GetAllCategories();
-    this.GetAllPackTypes();
-    this.GetAllMeasurementUnits();
     this.GetProduct();
   }
 
@@ -220,8 +218,6 @@ export class ProductCategoryComponent implements OnInit {
 
   public onCategoryChange(event: any) {
     this.oProductFilterDto.categoryId = Number(event.target.value);
-    this.subCategoryList = [];
-    this.GetAllSubCategories();
   }
 
   private GetAllCategories() {
@@ -237,33 +233,13 @@ export class ProductCategoryComponent implements OnInit {
       .subscribe(
         (res: any) => {
           this.categoryList = res;
-          this.GetAllSubCategories();
         },
         (err) => {
           this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
         },
       );
   }
-  private GetAllSubCategories() {
-    this.oCategoryFilterRequestDto.parentId =
-      Number(this.oProductFilterDto.categoryId) || 0;
-    this.oCategoryFilterRequestDto.companyId =
-      Number(CommonHelper.GetComapyId()) || 0;
-    this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
-      this.oCategoryFilterRequestDto.isActive,
-    );
-    // After the hash is generated, proceed with the API call
-    this.http
-      .Post(`Category/GetAllCategories`, this.oCategoryFilterRequestDto)
-      .subscribe(
-        (res: any) => {
-          this.subCategoryList = res;
-        },
-        (err) => {
-          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
-        },
-      );
-  }
+
   private GetAllSubCategoriesFrom() {
     this.oCategoryFilterRequestDto.parentId =
       Number(this.oProductRequestDto.categoryId) || 0;
@@ -283,23 +259,6 @@ export class ProductCategoryComponent implements OnInit {
       );
   }
 
-  private GetAllPackTypes() {
-    this.oPackTypeFilterDto.companyId = Number(CommonHelper.GetComapyId());
-    this.oPackTypeFilterDto.isActive = CommonHelper.booleanConvert(
-      this.oPackTypeFilterDto.isActive,
-    );
-    // After the hash is generated, proceed with the API call
-    this.http
-      .Post(`PackType/GetAllPackTypes`, this.oPackTypeFilterDto)
-      .subscribe(
-        (res: any) => {
-          this.packTypeList = res;
-        },
-        (err) => {
-          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
-        },
-      );
-  }
   private GetAllBrands() {
     this.oPackTypeFilterDto.companyId = Number(CommonHelper.GetComapyId());
     this.oPackTypeFilterDto.isActive = CommonHelper.booleanConvert(
@@ -320,28 +279,6 @@ export class ProductCategoryComponent implements OnInit {
         this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
       },
     );
-  }
-  private GetAllMeasurementUnits() {
-    this.oMeasurementUnitFilterDto.companyId = Number(
-      CommonHelper.GetComapyId(),
-    );
-    this.oMeasurementUnitFilterDto.isActive = CommonHelper.booleanConvert(
-      this.oMeasurementUnitFilterDto.isActive,
-    );
-    // After the hash is generated, proceed with the API call
-    this.http
-      .Post(
-        `MeasurementUnit/GetAllMeasurementUnits`,
-        this.oMeasurementUnitFilterDto,
-      )
-      .subscribe(
-        (res: any) => {
-          this.measurementUnitList = res;
-        },
-        (err) => {
-          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
-        },
-      );
   }
 
   public onFileChange(event: any): void {

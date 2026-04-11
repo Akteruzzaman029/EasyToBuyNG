@@ -122,8 +122,8 @@ export class CategoryTreeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.GetCategorys();
-    this.GetCategory();
+    // this.GetCategorys();
+    // this.GetCategory();
     this.GetCategoryTree();
   }
 
