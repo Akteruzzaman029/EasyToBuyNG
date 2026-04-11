@@ -177,7 +177,7 @@ export class BannerComponent implements OnInit {
   }
 
   public UpdateBanner() {
-    debugger
+    
     if (this.oBannerRequestDto.name == '') {
       this.toast.warning('Please enter name', 'Warning!!', {
         progressBar: true,

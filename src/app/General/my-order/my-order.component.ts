@@ -41,7 +41,7 @@ export class MyOrderComponent {
 
     this.http.Post(url, searchModel).subscribe({
       next: (res: any) => {
-        debugger
+        
         if (res && res.items) {
           this.orderList.set(res.items);
           this.totalRecords = res.totalRecords;

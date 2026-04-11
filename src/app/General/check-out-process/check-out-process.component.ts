@@ -83,12 +83,12 @@ export class CheckOutProcessComponent implements OnInit, OnDestroy {
         console.log('Latitude:', location.latitude);
         console.log('Longitude:', location.longitude);
         console.log('Accuracy:', location.accuracy);
-        debugger;
+        
         this.locationService
           .reverseGeocode(location.latitude, location.longitude)
           .subscribe({
             next: (res) => {
-              debugger;
+              
               this.fullAddress = res.display_name || '';
               this.placeName =
                 res.address?.road ||

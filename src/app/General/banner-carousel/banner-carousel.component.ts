@@ -1,6 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { HttpHelperService } from '../../Shared/Service/http-helper.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Store } from '@ngrx/store';
+import { take } from 'rxjs';
+import { CommonHelper } from '../../Shared/Service/common-helper.service';
+import { loadBanners } from '../../store/Banner/banner.action';
+import {
+  selectHomeSliderList,
+  selectBannerError,
+  selectShouldLoadBanners,
+} from '../../store/Banner/banner.selector';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-banner-carousel',
   standalone: true,
@@ -9,21 +27,75 @@ import { HttpHelperService } from '../../Shared/Service/http-helper.service';
   styleUrl: './banner-carousel.component.scss',
 })
 export class BannerCarouselComponent implements OnInit, OnDestroy {
-  @Input() items: any[] = [];
-  @Input() autoPlayInterval = 3000;
-
+  public homeSliderList: any[] = [];
   currentIndex = 0;
   private intervalId: ReturnType<typeof setInterval> | null = null;
 
-  constructor(private http: HttpHelperService) {}
+  private store = inject(Store);
+  private destroyRef = inject(DestroyRef);
+
+  oBannerFilterRequestDto: any = {
+    companyId: 0,
+    isActive: true,
+  };
+
+  constructor(
+    private http: HttpHelperService,
+    private toast: ToastrService,
+  ) {}
+
   ngOnInit(): void {
-    if (this.items.length > 1) {
-      this.startAutoPlay();
-    }
+    this.GetAllBanners();
+
+    this.store
+      .select(selectHomeSliderList)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((res) => {
+        this.homeSliderList = res || [];
+        this.currentIndex = 0;
+
+        if (this.homeSliderList.length > 1) {
+          this.startAutoPlay();
+        } else {
+          this.stopAutoPlay();
+        }
+      });
+
+    this.store
+      .select(selectBannerError)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((err) => {
+        if (err) {
+          this.toast.error(err, 'Error!!', { progressBar: true });
+        }
+      });
   }
+
+  private GetAllBanners(): void {
+    const filter = {
+      ...this.oBannerFilterRequestDto,
+      companyId: Number(CommonHelper.GetComapyId()),
+      isActive: CommonHelper.booleanConvert(
+        this.oBannerFilterRequestDto.isActive,
+      ),
+    };
+
+    this.oBannerFilterRequestDto = filter;
+
+    this.store
+      .select(selectShouldLoadBanners(filter))
+      .pipe(take(1))
+      .subscribe((shouldLoad) => {
+        if (shouldLoad) {
+          this.store.dispatch(loadBanners({ filter }));
+        }
+      });
+  }
+
   public GetImageUrl(fileId: number): string {
     return `${this.http.appUrl}UploadedFile/GetImage/${fileId}`;
   }
+
   ngOnDestroy(): void {
     this.stopAutoPlay();
   }
@@ -34,14 +106,15 @@ export class BannerCarouselComponent implements OnInit, OnDestroy {
   }
 
   nextSlide(): void {
-    if (!this.items.length) return;
-    this.currentIndex = (this.currentIndex + 1) % this.items.length;
+    if (!this.homeSliderList.length) return;
+    this.currentIndex = (this.currentIndex + 1) % this.homeSliderList.length;
   }
 
   prevSlide(): void {
-    if (!this.items.length) return;
+    if (!this.homeSliderList.length) return;
     this.currentIndex =
-      (this.currentIndex - 1 + this.items.length) % this.items.length;
+      (this.currentIndex - 1 + this.homeSliderList.length) %
+      this.homeSliderList.length;
   }
 
   onNextClick(): void {
@@ -55,10 +128,13 @@ export class BannerCarouselComponent implements OnInit, OnDestroy {
   }
 
   private startAutoPlay(): void {
+    if (this.homeSliderList.length <= 1) return;
+
     this.stopAutoPlay();
+
     this.intervalId = setInterval(() => {
       this.nextSlide();
-    }, this.autoPlayInterval);
+    }, 3000);
   }
 
   private stopAutoPlay(): void {
@@ -69,7 +145,7 @@ export class BannerCarouselComponent implements OnInit, OnDestroy {
   }
 
   private restartAutoPlay(): void {
-    if (this.items.length > 1) {
+    if (this.homeSliderList.length > 1) {
       this.startAutoPlay();
     }
   }

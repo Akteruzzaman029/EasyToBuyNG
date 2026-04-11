@@ -27,6 +27,10 @@ import { counterFeature } from './store/Counter/counter.feature';
 import { fromFeature } from './store/from/from.feature';
 import { CategoryEffects } from './store/Category/category.effect';
 import { categoryTreeFeature } from './store/Category/category.feature';
+import { bannerFeature } from './store/Banner/banner.feature';
+import { customCategoryFeature } from './store/CustomCategory/custom-category.feature';
+import { CustomCategoryEffects } from './store/CustomCategory/custom-category.effect';
+import { BannerEffects } from './store/Banner/banner.effect';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -50,10 +54,12 @@ export const appConfig: ApplicationConfig = {
     }), // Provides Toastr for showing notifications
     provideStore({
       [categoryTreeFeature.name]: categoryTreeFeature.reducer,
+       [bannerFeature.name]: bannerFeature.reducer,
+      [customCategoryFeature.name]: customCategoryFeature.reducer,
     }),
     provideState(counterFeature), // Registers the counter feature with the store
     provideState(fromFeature), // Registers the counter feature with the store
-    provideEffects(CategoryEffects),
+    provideEffects(CategoryEffects,BannerEffects, CustomCategoryEffects),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),

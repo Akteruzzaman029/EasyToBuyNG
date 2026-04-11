@@ -41,7 +41,7 @@ public oOrderFilterDto=new OrderFilterDto();
   }
 
   ngOnInit(): void {
-    debugger
+    
     if (this.oCurrentUser.userId == '') {
       this.route.navigateByUrl('login');
     }

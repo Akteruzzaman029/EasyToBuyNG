@@ -1,28 +1,27 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject, LOCALE_ID, OnInit } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  LOCALE_ID,
+  OnInit,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ProductFilterDto } from '../../Model/Product';
 import { ToastrService } from 'ngx-toastr';
 import { UserResponseDto } from '../../Model/UserResponseDto';
 import { AuthService } from '../../Shared/Service/auth.service';
 import { CommonHelper } from '../../Shared/Service/common-helper.service';
 import { HttpHelperService } from '../../Shared/Service/http-helper.service';
-import { TruncatePipe } from '../../Shared/Pipe/truncate.pipe';
 import { CartService } from '../../Shared/Service/cart.service';
 import { CartRequestDto } from '../../Model/Cart';
-import { CategoryWiseProductComponent } from '../category-wise-product/category-wise-product.component';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
-import { CategoryGroupComponent } from '../category-group/category-group.component';
-import { NzCarouselModule } from 'ng-zorro-antd/carousel';
+
 import { BannerCarouselComponent } from '../banner-carousel/banner-carousel.component';
-import { BannerFilterRequestDto } from '../../Model/Banner';
-import { CategoryFilterRequestDto } from '../../Model/Category';
-import { CustomCategoryFilterDto } from '../../Model/CustomCategory';
-import { CategoryNavbarComponent } from '../category-navbar/category-navbar.component';
-import { NzTreeNodeOptions } from 'ng-zorro-antd/tree';
-import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
+
 import { Store } from '@ngrx/store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   selectCategoryTree,
   selectCategoryTreeLoading,
@@ -31,6 +30,13 @@ import {
 } from '../../store/Category/category.selector';
 import { take } from 'rxjs';
 import { loadCategoryTree } from '../../store/Category/category.action';
+
+import { loadCustomCategories } from '../../store/CustomCategory/custom-category.action';
+import {
+  selectCustomCategories,
+  selectCustomCategoryError,
+  selectShouldLoadCustomCategories,
+} from '../../store/CustomCategory/custom-category.selector';
 @Component({
   selector: 'app-easy-to-buy-home',
   standalone: true,
@@ -39,11 +45,7 @@ import { loadCategoryTree } from '../../store/Category/category.action';
     FormsModule,
     RouterModule,
     NzStepsModule,
-    TruncatePipe,
-    CategoryWiseProductComponent,
-    CategoryGroupComponent,
     BannerCarouselComponent,
-    CategoryNavbarComponent,
   ],
   templateUrl: './easy-to-buy-home.component.html',
   styleUrl: './easy-to-buy-home.component.scss',
@@ -54,17 +56,12 @@ export class EasyToBuyHomeComponent implements OnInit {
   public oCartRequestDto = new CartRequestDto();
   public oCurrentUser = new UserResponseDto();
 
-  public oCustomCategoryFilterDto = new CustomCategoryFilterDto();
   public productList: any[] = [];
-
-  public oBannerFilterRequestDto = new BannerFilterRequestDto();
-  public homeSliderList: any[] = [];
-  public homeTopList: any[] = [];
-  public homeMiddleList: any[] = [];
 
   groupedCategories: any[] = [];
   nodes: any[] = [];
   private store = inject(Store);
+  private destroyRef = inject(DestroyRef);
   categoryTree$ = this.store.select(selectCategoryTree);
   loading$ = this.store.select(selectCategoryTreeLoading);
   error$ = this.store.select(selectCategoryTreeError);
@@ -74,13 +71,18 @@ export class EasyToBuyHomeComponent implements OnInit {
     parentId: -1,
     isActive: true,
   };
+
+  oCustomCategoryFilterDto: any = {
+    companyId: 0,
+    categoryId: -1,
+    isActive: true,
+  };
+
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
     private http: HttpHelperService,
-    private router: Router,
     private cartService: CartService,
-    private datePipe: DatePipe,
   ) {
     this.oCurrentUser = CommonHelper.GetUser();
   }
@@ -88,8 +90,24 @@ export class EasyToBuyHomeComponent implements OnInit {
   ngOnInit(): void {
     // Initialization logic can go here
     this.GetAllCustomCategories();
+    this.store
+      .select(selectCustomCategories)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((res) => {
+        this.groupedCategories = this.groupByCustomConfig(res || []);
+      });
+
+    this.store
+      .select(selectCustomCategoryError)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((err) => {
+        if (err) {
+          this.toast.error(err, 'Error!!', { progressBar: true });
+        }
+      });
+
     this.GetProduct();
-    this.GetAllBanners();
+
     this.getCategoryTree();
 
     this.categoryTree$.subscribe((res) => {
@@ -125,8 +143,6 @@ export class EasyToBuyHomeComponent implements OnInit {
       });
   }
 
-
-
   private GetProduct() {
     this.oProductFilterDto.companyId = Number(CommonHelper.GetComapyId());
     this.oProductFilterDto.categoryId = Number(
@@ -154,46 +170,27 @@ export class EasyToBuyHomeComponent implements OnInit {
       },
     );
   }
-  private GetAllBanners() {
-    this.oBannerFilterRequestDto.companyId = Number(CommonHelper.GetComapyId());
-    this.oBannerFilterRequestDto.isActive = CommonHelper.booleanConvert(
-      this.oBannerFilterRequestDto.isActive,
-    );
-    // After the hash is generated, proceed with the API call
-    this.http.Post(`Banner/GetAllBanners`, this.oProductFilterDto).subscribe(
-      (res: any) => {
-        this.homeSliderList = CommonHelper.getBannerByType('home_slider', res);
-        this.homeTopList = CommonHelper.getBannerByType('home_top', res);
-        this.homeMiddleList = CommonHelper.getBannerByType('home_middle', res);
-      },
-      (err) => {
-        this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
-      },
-    );
-  }
 
-  private GetAllCustomCategories() {
-    this.oCustomCategoryFilterDto.companyId = Number(
-      CommonHelper.GetComapyId(),
-    );
-    this.oCustomCategoryFilterDto.categoryId = Number(-1);
-    this.oCustomCategoryFilterDto.isActive = CommonHelper.booleanConvert(
-      this.oCustomCategoryFilterDto.isActive,
-    );
-    // After the hash is generated, proceed with the API call
-    this.http
-      .Post(
-        `CustomCategory/GetAllCustomCategories`,
-        this.oCustomCategoryFilterDto,
-      )
-      .subscribe(
-        (res: any) => {
-          this.groupedCategories = this.groupByCustomConfig(res);
-        },
-        (err) => {
-          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
-        },
-      );
+  private GetAllCustomCategories(): void {
+    const filter = {
+      ...this.oCustomCategoryFilterDto,
+      companyId: Number(CommonHelper.GetComapyId()),
+      categoryId: -1,
+      isActive: CommonHelper.booleanConvert(
+        this.oCustomCategoryFilterDto.isActive,
+      ),
+    };
+
+    this.oCustomCategoryFilterDto = filter;
+
+    this.store
+      .select(selectShouldLoadCustomCategories(filter))
+      .pipe(take(1))
+      .subscribe((shouldLoad) => {
+        if (shouldLoad) {
+          this.store.dispatch(loadCustomCategories({ filter }));
+        }
+      });
   }
 
   groupByCustomConfig(data: any[]): any[] {

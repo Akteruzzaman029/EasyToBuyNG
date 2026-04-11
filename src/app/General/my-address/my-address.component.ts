@@ -37,7 +37,7 @@ export class MyAddressComponent {
   }
 
   onSaveAddress() {
-    debugger
+    
     if (!this.selectedDistrictName || !this.selectedAreaName || !this.streetAddress) {
       this.toast.error('Fill all required fields');
       return;
@@ -72,7 +72,7 @@ export class MyAddressComponent {
   }
 
   onEditAddress(addr: any) {
-    debugger
+    
     this.isEditMode = true;
     this.showAddressForm = true;
     this.selectedAddressId = addr.id;
@@ -84,7 +84,7 @@ export class MyAddressComponent {
   }
 
   getAddressList(page: number = 1) {
-    debugger
+    
     const userJson = localStorage.getItem("UserResponseDto");
     const user = userJson ? JSON.parse(userJson) : null;
     const userId = user ? user.userId : null;
