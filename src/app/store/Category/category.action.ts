@@ -22,3 +22,22 @@ export const loadCategoryTreeFailure = createAction(
 export const clearCategoryTree = createAction(
   '[Category] Clear Category Tree'
 );
+
+// NEW: category list actions
+export const loadCategories = createAction(
+  '[Category] Load Categories',
+  props<{ filter: CategoryFilterRequestDto }>()
+);
+
+export const loadCategoriesSuccess = createAction(
+  '[Category] Load Categories Success',
+  props<{
+    categories: any[];
+    filter: CategoryFilterRequestDto;
+  }>()
+);
+
+export const loadCategoriesFailure = createAction(
+  '[Category] Load Categories Failure',
+  props<{ error: string }>()
+);

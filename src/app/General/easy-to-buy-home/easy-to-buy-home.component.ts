@@ -106,7 +106,7 @@ export class EasyToBuyHomeComponent implements OnInit {
         }
       });
 
-    this.GetProduct();
+    // this.GetProduct();
 
     this.getCategoryTree();
 

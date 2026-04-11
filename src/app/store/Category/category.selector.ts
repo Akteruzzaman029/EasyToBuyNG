@@ -9,7 +9,16 @@ export const selectCategoryTreeLoaded = categoryTreeFeature.selectLoaded;
 export const selectCategoryTreeError = categoryTreeFeature.selectError;
 export const selectLastCategoryFilter = categoryTreeFeature.selectLastFilter;
 
-// Selectors for category list state
+// NEW: category list selectors
+export const selectCategories = categoryTreeFeature.selectCategories;
+export const selectCategoryListLoading =
+  categoryTreeFeature.selectCategoryListLoading;
+export const selectCategoryListLoaded =
+  categoryTreeFeature.selectCategoryListLoaded;
+export const selectCategoryListError =
+  categoryTreeFeature.selectCategoryListError;
+export const selectLastCategoriesFilter =
+  categoryTreeFeature.selectCategoryListLastFilter;
 
 export const selectHasCategoryTreeData = createSelector(
   selectCategoryTree,
@@ -37,6 +46,27 @@ export const selectShouldLoadCategoryTree = (
     selectCategoryTreeLoaded,
     selectHasCategoryTreeData,
     selectLastCategoryFilter,
+    (loaded, hasData, lastFilter) => {
+      if (!loaded) return true;
+      if (!hasData) return true;
+      if (!lastFilter) return true;
+
+      return !isSameFilter(lastFilter, filter);
+    },
+  );
+
+// NEW: category list load check
+
+export const selectHasCategoriesData = createSelector(
+  selectCategories,
+  (categories) => categories.length > 0,
+);
+
+export const selectShouldLoadCategories = (filter: CategoryFilterRequestDto) =>
+  createSelector(
+    selectCategoryListLoaded,
+    selectHasCategoriesData,
+    selectLastCategoriesFilter,
     (loaded, hasData, lastFilter) => {
       if (!loaded) return true;
       if (!hasData) return true;

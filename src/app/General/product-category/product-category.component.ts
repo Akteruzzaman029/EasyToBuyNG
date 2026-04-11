@@ -1,5 +1,11 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit, TrackByFunction } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  TrackByFunction,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
 import { PaginationComponent } from '../../Shared/pagination/pagination.component';
@@ -21,6 +27,21 @@ import { NzSliderModule } from 'ng-zorro-antd/slider';
 import { CommonCategoryTreeComponent } from '../../Shared/common-category-tree/common-category-tree.component';
 import { DebounceInputDirective } from '../../Shared/directives/debounce-input.directive';
 import { BrandFilterDto } from '../../Model/Brand';
+import { take } from 'rxjs';
+import { loadBrands } from '../../store/Brand/brand.action';
+import {
+  selectBrandError,
+  selectMappedBrands,
+  selectShouldLoadBrands,
+} from '../../store/Brand/brand.selector';
+import { Store } from '@ngrx/store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { loadCategories } from '../../store/Category/category.action';
+import {
+  selectCategories,
+  selectCategoryListError,
+  selectShouldLoadCategories,
+} from '../../store/Category/category.selector';
 @Component({
   selector: 'app-product-category',
   standalone: true,
@@ -85,6 +106,9 @@ export class ProductCategoryComponent implements OnInit {
   brandSearchText = '';
   priceRange = [0, 50000];
 
+  private store = inject(Store);
+  private destroyRef = inject(DestroyRef);
+
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -101,9 +125,44 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.GetAllBrands();
-    this.GetAllCategories();
     this.GetProduct();
+
+    this.GetAllCategories();
+
+    this.store
+      .select(selectCategories)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((res) => {
+        this.categoryList = res || [];
+      });
+
+    this.store
+      .select(selectCategoryListError)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((err) => {
+        if (err) {
+          this.toast.error(err, 'Error!!', { progressBar: true });
+        }
+      });
+
+    this.GetAllBrands();
+
+    this.store
+      .select(selectMappedBrands)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((res) => {
+        this.brandList = res || [];
+        this.filteredBrandList = [...this.brandList];
+      });
+
+    this.store
+      .select(selectBrandError)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((err) => {
+        if (err) {
+          this.toast.error(err, 'Error!!', { progressBar: true });
+        }
+      });
   }
 
   PageChange(event: any) {
@@ -220,24 +279,26 @@ export class ProductCategoryComponent implements OnInit {
     this.oProductFilterDto.categoryId = Number(event.target.value);
   }
 
-  private GetAllCategories() {
-    this.oCategoryFilterRequestDto.parentId = 0;
-    this.oCategoryFilterRequestDto.companyId =
-      Number(CommonHelper.GetComapyId()) || 0;
-    this.oCategoryFilterRequestDto.isActive = CommonHelper.booleanConvert(
-      this.oCategoryFilterRequestDto.isActive,
-    );
-    // After the hash is generated, proceed with the API call
-    this.http
-      .Post(`Category/GetAllCategories`, this.oCategoryFilterRequestDto)
-      .subscribe(
-        (res: any) => {
-          this.categoryList = res;
-        },
-        (err) => {
-          this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
-        },
-      );
+  private GetAllCategories(): void {
+    const filter = {
+      ...this.oCategoryFilterRequestDto,
+      parentId: 0,
+      companyId: Number(CommonHelper.GetComapyId()) || 0,
+      isActive: CommonHelper.booleanConvert(
+        this.oCategoryFilterRequestDto.isActive,
+      ),
+    };
+
+    this.oCategoryFilterRequestDto = filter;
+
+    this.store
+      .select(selectShouldLoadCategories(filter))
+      .pipe(take(1))
+      .subscribe((shouldLoad) => {
+        if (shouldLoad) {
+          this.store.dispatch(loadCategories({ filter }));
+        }
+      });
   }
 
   private GetAllSubCategoriesFrom() {
@@ -259,26 +320,43 @@ export class ProductCategoryComponent implements OnInit {
       );
   }
 
-  private GetAllBrands() {
-    this.oPackTypeFilterDto.companyId = Number(CommonHelper.GetComapyId());
-    this.oPackTypeFilterDto.isActive = CommonHelper.booleanConvert(
-      this.oPackTypeFilterDto.isActive,
-    );
-    // After the hash is generated, proceed with the API call
-    this.http.Post(`Brand/GetAllBrands`, this.oPackTypeFilterDto).subscribe(
-      (res: any) => {
-        this.brandList = res.map((x: any) => ({
-          id: x.id,
-          name: x.name,
-          productCount: x.productCount,
-          isChecked: false,
-        }));
-        this.filteredBrandList = [...this.brandList];
-      },
-      (err) => {
-        this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
-      },
-    );
+  // private GetAllBrands() {
+  //   this.oPackTypeFilterDto.companyId = Number(CommonHelper.GetComapyId());
+  //   this.oPackTypeFilterDto.isActive = CommonHelper.booleanConvert(
+  //     this.oPackTypeFilterDto.isActive,
+  //   );
+  //   // After the hash is generated, proceed with the API call
+  //   this.http.Post(`Brand/GetAllBrands`, this.oPackTypeFilterDto).subscribe(
+  //     (res: any) => {
+  //       this.brandList = res.map((x: any) => ({
+  //         id: x.id,
+  //         name: x.name,
+  //         productCount: x.productCount,
+  //         isChecked: false,
+  //       }));
+  //       this.filteredBrandList = [...this.brandList];
+  //     },
+  //     (err) => {
+  //       this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
+  //     },
+  //   );
+  // }
+
+  private GetAllBrands(): void {
+    const filter = {
+      ...this.oPackTypeFilterDto,
+      companyId: Number(CommonHelper.GetComapyId()),
+      isActive: CommonHelper.booleanConvert(this.oPackTypeFilterDto.isActive),
+    };
+    this.oPackTypeFilterDto = filter;
+    this.store
+      .select(selectShouldLoadBrands(filter))
+      .pipe(take(1))
+      .subscribe((shouldLoad) => {
+        if (shouldLoad) {
+          this.store.dispatch(loadBrands({ filter }));
+        }
+      });
   }
 
   public onFileChange(event: any): void {
