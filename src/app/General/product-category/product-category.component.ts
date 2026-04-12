@@ -176,7 +176,6 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   onCategoryNodeClicked(node: any): void {
-    console.log(node);
     if (node.parentId > 0) {
       this.oProductFilterDto.subCategoryId = Number(node.id);
       this.oProductFilterDto.categoryId = Number(node.parentId);
@@ -253,16 +252,13 @@ export class ProductCategoryComponent implements OnInit {
     // After the hash is generated, proceed with the API call
     this.http
       .Post(
-        `Product/GetProduct?pageNumber=${this.pageIndex}`,
+        // `Product/GetProduct?pageNumber=${this.pageIndex}`,
+        `Product/GetAllProducts`,
         this.oProductFilterDto,
       )
       .subscribe(
         (res: any) => {
-          console.log(res);
-          this.productList = res.items;
-          this.pageIndex = res.pageIndex;
-          this.totalPages = res.totalPages;
-          this.totalRecords = res.totalRecords;
+          this.productList = res;
         },
         (err) => {
           this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });

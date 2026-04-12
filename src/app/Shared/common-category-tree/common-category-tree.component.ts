@@ -169,11 +169,12 @@ export class CommonCategoryTreeComponent implements OnInit, AfterViewInit {
       });
   }
 
-  private buildTree(data: ApiCategoryNode[]): TreeNode[] {
+  private buildTree(data: any[]): TreeNode[] {
     const map = new Map<number, TreeNode>();
     const roots: TreeNode[] = [];
+    const rootIds = new Set<number>();
+    const sequenceMap = new Map<number, number>();
 
-    // create all nodes
     for (const item of data) {
       map.set(item.id, {
         id: item.id,
@@ -184,29 +185,36 @@ export class CommonCategoryTreeComponent implements OnInit, AfterViewInit {
         isActive: item.isActive,
         children: [],
       });
+
+      sequenceMap.set(item.id, item.sequenceNo ?? 0);
     }
 
-    // assign parent-child
     for (const item of data) {
       const currentNode = map.get(item.id);
       if (!currentNode) continue;
 
-      if (
+      const isRoot =
         item.parentId === 0 ||
         item.parentId === -1 ||
-        !map.has(item.parentId)
-      ) {
-        roots.push(currentNode);
+        item.parentId == null ||
+        !map.has(item.parentId);
+
+      if (isRoot) {
+        if (!rootIds.has(item.id)) {
+          roots.push(currentNode);
+          rootIds.add(item.id);
+        }
       } else {
         const parentNode = map.get(item.parentId);
-        parentNode?.children?.push(currentNode);
+        if (parentNode && parentNode.children) {
+          parentNode.children.push(currentNode);
+        } else {
+          if (!rootIds.has(item.id)) {
+            roots.push(currentNode);
+            rootIds.add(item.id);
+          }
+        }
       }
-    }
-
-    // optional sorting by sequenceNo
-    const sequenceMap = new Map<number, number>();
-    for (const item of data) {
-      sequenceMap.set(item.id, item.sequenceNo ?? 0);
     }
 
     const sortTree = (nodes: TreeNode[]) => {
@@ -215,13 +223,16 @@ export class CommonCategoryTreeComponent implements OnInit, AfterViewInit {
       );
 
       for (const node of nodes) {
-        if (node.children && node.children.length > 0) {
+        if(!node.children) {
+          node.children = [];
+        }
+
+        if (node.children.length > 0 && node.children) {
           sortTree(node.children);
-        } else {
-          delete node.children;
         }
       }
     };
+
     sortTree(roots);
     return roots;
   }
