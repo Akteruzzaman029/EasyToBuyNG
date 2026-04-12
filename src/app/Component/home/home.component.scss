@@ -1,0 +1,42 @@
+.bag-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ff4f7a;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 14px;
+  /* font-weight: 700; */
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.bag-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: #fff;
+}
+
+.bag-text {
+  letter-spacing: 0.3px;
+}
+
+.bag-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  background: #ffffff;
+  color: #ff4f7a;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}

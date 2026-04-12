@@ -7,9 +7,8 @@ import {
   TrackByFunction,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AgGridAngular } from 'ag-grid-angular';
 import { PaginationComponent } from '../../Shared/pagination/pagination.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ProductFilterDto, ProductRequestDto } from '../../Model/Product';
 import { AGGridHelper } from '../../Shared/Service/AGGridHelper';
@@ -108,7 +107,7 @@ export class ProductCategoryComponent implements OnInit {
 
   private store = inject(Store);
   private destroyRef = inject(DestroyRef);
-
+  private route = inject(ActivatedRoute);
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -163,8 +162,19 @@ export class ProductCategoryComponent implements OnInit {
           this.toast.error(err, 'Error!!', { progressBar: true });
         }
       });
+
+    this.loadFilterFromQueryParams();
   }
 
+  private loadFilterFromQueryParams(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.oProductFilterDto.categoryId = Number(params['categoryId']) || 0;
+      this.oProductFilterDto.subCategoryId =
+        Number(params['subCategoryId']) || 0;
+
+      this.Filter();
+    });
+  }
   PageChange(event: any) {
     this.pageIndex = Number(event);
     this.GetProduct();
@@ -176,12 +186,29 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   onCategoryNodeClicked(node: any): void {
-    if (node.parentId > 0) {
-      this.oProductFilterDto.subCategoryId = Number(node.id);
-      this.oProductFilterDto.categoryId = Number(node.parentId);
+    console.log('Category node clicked:', node);
+    if (node) {
+      if (node.parentId > 0) {
+        this.oProductFilterDto.subCategoryId = Number(node.id);
+        this.oProductFilterDto.categoryId = Number(node.parentId);
+      } else {
+        this.oProductFilterDto.categoryId = Number(node.id);
+        this.oProductFilterDto.subCategoryId = 0;
+      }
     } else {
-      this.oProductFilterDto.categoryId = Number(node.id);
+      this.oProductFilterDto.categoryId = 0;
+      this.oProductFilterDto.subCategoryId = 0;
     }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        categoryId: this.oProductFilterDto.categoryId || 0,
+        subCategoryId: this.oProductFilterDto.subCategoryId || 0,
+      },
+      queryParamsHandling: 'merge',
+    });
+
     this.Filter();
   }
 

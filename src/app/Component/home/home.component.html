@@ -9,7 +9,8 @@
           <i class="bi bi-list"></i>
         </button>
         <img *ngIf="this.authService.isMobile()==false" src="logo.png" alt="Logo" class="h-8 cursor-pointer">
-        <span *ngIf="this.authService.isMobile()==false" class="text-white fs-4 fw-bold ms-2 cursor-pointer">Rongtuli Cosmetics</span>
+        <span *ngIf="this.authService.isMobile()==false" class="text-white fs-4 fw-bold ms-2 cursor-pointer">Rongtuli
+          Cosmetics</span>
       </div>
 
       <!-- Center: Location and Search -->
@@ -45,6 +46,20 @@
           class="btn btn-light text-white">
           <span class="fw-semibold text-black">My Account</span>
         </button>
+
+        <button class="bag-btn ms-3" (click)="offcanvasButton()">
+          <span class="bag-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 8V7a5 5 0 0 1 10 0v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <path d="M6 8h12l-1 11H7L6 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+            </svg>
+          </span>
+
+          <span class="bag-text">BAG</span>
+
+          <span class="bag-count"> {{ cartItemCount }}</span>
+        </button>
+
       </div>
     </div>
   </div>
@@ -60,7 +75,11 @@
 </div>
 
 <div class="floating-compare" (click)="offcanvasButton()"
-  style="position: fixed; bottom: 20px; right: 20px; z-index: 1050;">
+  style="position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  z-index: 1050;">
   <a class="btn btn-outline-primary position-relative">
     <i class="bi bi-cart3 fs-4"></i> <!-- Bootstrap cart icon -->
     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
