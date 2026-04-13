@@ -7,10 +7,20 @@ import { NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 export class CommonHelper {
   private http = inject(HttpHelperService);
   static http: any;
-  constructor() {}
+  constructor() { }
 
+  // public static CommonButtonClick(elementId: string) {
+  //   document.getElementById(elementId)?.click();
+  // }
   public static CommonButtonClick(elementId: string) {
-    document.getElementById(elementId)?.click();
+    const element = document.getElementById(elementId);
+    if (element) {
+      setTimeout(() => {
+        element.click();
+      }, 50);
+    } else {
+      console.warn(`Element with ID ${elementId} not found.`);
+    }
   }
 
   public static getBannerByType(typeTag: string, bannerList: any[]): any[] {
@@ -27,7 +37,7 @@ export class CommonHelper {
     return companyId;
   }
 
- public static buildMenu(data: any[]): any[] {
+  public static buildMenu(data: any[]): any[] {
     const active = data.filter((x) => x.isActive);
 
     const parents = active
@@ -51,7 +61,7 @@ export class CommonHelper {
   }
 
   // 🔥 Split into columns
- private static  makeColumns(children: any[]): any[] {
+  private static makeColumns(children: any[]): any[] {
     const groupSize = 6;
     const columns: any[] = [];
 

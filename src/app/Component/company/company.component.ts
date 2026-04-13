@@ -11,6 +11,7 @@ import { AGGridHelper } from '../../Shared/Service/AGGridHelper';
 import { AuthService } from '../../Shared/Service/auth.service';
 import { CommonHelper } from '../../Shared/Service/common-helper.service';
 import { HttpHelperService } from '../../Shared/Service/http-helper.service';
+import { debounceTime, distinctUntilChanged, map, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-company',
@@ -43,11 +44,19 @@ export class CompanyComponent implements OnInit {
     { field: 'shortName', width: 150, headerName: 'Short Name', filter: true },
     { field: 'address', width: 150, headerName: 'Address', filter: true },
     { field: 'remarks', headerName: 'Remarks' },
-    { field: 'isActive', headerName: 'Status' },
+    {
+      field: 'isActive', headerName: 'Status', width: 120, cellRenderer: (params: any) => {
+        return params.value ? 'Active' : 'Inactive';
+      }, cellStyle: (params: any) => {
+        return { color: params.value ? 'green' : 'red', 'font-weight': 'bold' };
+      }
+    }
   ];
   trackByFn: TrackByFunction<any> | any;
   trackByCompany: TrackByFunction<any> | any;
   trackByCompanyFrom: TrackByFunction<any> | any;
+  private searchSubject = new Subject<string>();
+
   constructor(
     public authService: AuthService,
     private toast: ToastrService,
@@ -55,6 +64,20 @@ export class CompanyComponent implements OnInit {
     private router: Router,
     private datePipe: DatePipe) {
     this.oCurrentUser = CommonHelper.GetUser();
+
+    this.searchSubject.pipe(
+      debounceTime(800),
+      map(val => val ? val.trim().toLowerCase() : ""),  
+      distinctUntilChanged()
+    ).subscribe((val) => {
+      if (val !== "" && val.length > 2) {
+        this.pageIndex = 1;
+        this.GetCompany();
+      } else if (val === "") {
+        this.pageIndex = 1;
+        this.GetCompany();
+      }
+    });
   }
 
 
@@ -72,12 +95,15 @@ export class CompanyComponent implements OnInit {
     this.rowData = [];
   }
 
-  Filter() {
-    this.GetCompany();
+  onSearchChange(searchValue: string) {
+    this.searchSubject.next(searchValue);
   }
 
-  private GetCompany() {
+  // Filter() {
+  //   this.GetCompany();
+  // }
 
+  private GetCompany() {
     this.oCompanyFilterDto.isActive = CommonHelper.booleanConvert(this.oCompanyFilterDto.isActive);
     // After the hash is generated, proceed with the API call
     this.http.Post(`Company/GetCompany?pageNumber=${this.pageIndex}`, this.oCompanyFilterDto).subscribe(
@@ -92,9 +118,6 @@ export class CompanyComponent implements OnInit {
     );
 
   }
-
-
-
 
   public InsertCompany() {
 
@@ -185,6 +208,14 @@ export class CompanyComponent implements OnInit {
     CommonHelper.CommonButtonClick("openCommonDelete");
   }
 
-
+  onGridSelectionChanged() {
+    let getSelectedItem = AGGridHelper.GetSelectedRow(this.companyGridApi);
+    if (getSelectedItem) {
+      this.oCompanyRequestDto = { ...getSelectedItem };
+      this.oCompanyRequestDto.isActive = CommonHelper.booleanConvert(getSelectedItem.isActive);
+    } else {
+      this.oCompanyRequestDto = new CompanyRequestDto();
+    }
+  }
 }
 
