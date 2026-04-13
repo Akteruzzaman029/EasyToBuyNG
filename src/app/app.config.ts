@@ -33,6 +33,8 @@ import { CustomCategoryEffects } from './store/CustomCategory/custom-category.ef
 import { BannerEffects } from './store/Banner/banner.effect';
 import { brandFeature } from './store/Brand/brand.feature';
 import { BrandEffects } from './store/Brand/brand.effect';
+import { companyFeature } from './store/Comapny/company.feature';
+import { CompanyEffects } from './store/Comapny/company.effect';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -55,6 +57,7 @@ export const appConfig: ApplicationConfig = {
       registrationStrategy: 'registerWhenStable:30000',
     }), // Provides Toastr for showing notifications
     provideStore({
+       [companyFeature.name]: companyFeature.reducer,
       [categoryTreeFeature.name]: categoryTreeFeature.reducer,
        [bannerFeature.name]: bannerFeature.reducer,
       [customCategoryFeature.name]: customCategoryFeature.reducer,
@@ -62,7 +65,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideState(counterFeature), // Registers the counter feature with the store
     provideState(fromFeature), // Registers the counter feature with the store
-    provideEffects(CategoryEffects,BannerEffects, CustomCategoryEffects,BrandEffects),
+    provideEffects(CategoryEffects,BannerEffects, CustomCategoryEffects,BrandEffects, CompanyEffects), // Registers the effects for handling side effects
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),
