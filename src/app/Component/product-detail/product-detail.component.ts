@@ -69,6 +69,7 @@ export class ProductDetailComponent implements OnInit {
     );
   }
 
+  
   quantity = 1;
 
   productImages: ProductImage[] = [
