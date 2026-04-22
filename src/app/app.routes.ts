@@ -92,6 +92,7 @@ import { SalesOrderComponent } from './Component/OrderProcess/sales-order/sales-
 import { SalesOrderItemComponent } from './Component/OrderProcess/sales-order-item/sales-order-item.component';
 import { CounterComponent } from './store/Counter/counter/counter.component';
 import { LocationPickerComponent } from './Component/admin/location-picker/location-picker.component';
+import { AdminDashboardComponent } from './Component/admin-dashboard/admin-dashboard.component';
 
 export const routes: Routes = [
   {
@@ -337,7 +338,7 @@ export const routes: Routes = [
       },
       {
         path: 'dashboard',
-        component: DashboardComponent,
+        component: AdminDashboardComponent,
         title: 'Dashboard',
         data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
       },

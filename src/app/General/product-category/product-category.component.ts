@@ -402,7 +402,7 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   public details(product: any) {
-    this.router.navigateByUrl('details/' + product.id);
+    this.router.navigateByUrl('product-detail/' + product.id);
   }
   public AddToCart(product: any): void {
     // Logic to add the product to the cart

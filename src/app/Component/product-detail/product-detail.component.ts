@@ -1,8 +1,10 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../Shared/Service/auth.service';
+import { HttpHelperService } from '../../Shared/Service/http-helper.service';
 
 interface ProductImage {
   id: number;
@@ -31,19 +33,50 @@ interface ProductDetailsModel {
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule,FormsModule,RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './product-detail.component.html',
-  styleUrl: './product-detail.component.scss'
+  styleUrl: './product-detail.component.scss',
 })
-export class ProductDetailComponent  {
+export class ProductDetailComponent implements OnInit {
+  public oProduct: any;
+  constructor(
+    public authService: AuthService,
+    private toast: ToastrService,
+    private http: HttpHelperService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private datePipe: DatePipe,
+  ) {}
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (id) {
+        this.GetProductDetailsById(Number(id));
+      }
+    });
+  }
+
+  private GetProductDetailsById(productId: number) {
+    // After the hash is generated, proceed with the API call
+    this.http.Get(`Product/GetProductDetailsById/${productId}`).subscribe(
+      (res: any) => {
+        this.oProduct = res;
+      },
+      (err) => {
+        this.toast.error(err.ErrorMessage, 'Error!!', { progressBar: true });
+      },
+    );
+  }
+
   quantity = 1;
 
   productImages: ProductImage[] = [
-    { id: 1, url: 'https://via.placeholder.com/700x700?text=Product+1' },
-    { id: 2, url: 'https://via.placeholder.com/700x700?text=Product+2' },
-    { id: 3, url: 'https://via.placeholder.com/700x700?text=Product+3' },
-    { id: 4, url: 'https://via.placeholder.com/700x700?text=Product+4' },
-    { id: 5, url: 'https://via.placeholder.com/700x700?text=Product+5' },
+    { id: 1, url: 'https://bk.shajgoj.com/storage/2026/04/lux-body-wash-black-orchid-scent-juniper-oil-245ml-free-1.jpg' },
+    { id: 2, url: 'https://bk.shajgoj.com/storage/2026/04/lux-body-wash-black-orchid-scent-juniper-oil-245ml-free-1.jpg' },
+    { id: 3, url: 'https://bk.shajgoj.com/storage/2026/04/lux-body-wash-black-orchid-scent-juniper-oil-245ml-free-1.jpg' },
+    { id: 4, url: 'https://bk.shajgoj.com/storage/2026/04/lux-body-wash-black-orchid-scent-juniper-oil-245ml-free-1.jpg' },
+    { id: 5, url: 'https://bk.shajgoj.com/storage/2026/04/lux-body-wash-black-orchid-scent-juniper-oil-245ml-free-1.jpg' },
   ];
 
   selectedImage = this.productImages[0].url;
