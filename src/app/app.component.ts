@@ -8,7 +8,6 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { CommonHelper } from './Shared/Service/common-helper.service';
 import { NotificationService } from './Shared/Service/notification.service';
-import { HttpHelperService } from './Shared/Service/http-helper.service';
 import { AuthService } from './Shared/Service/auth.service';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
