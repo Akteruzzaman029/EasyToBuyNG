@@ -26,6 +26,7 @@ import {
   selectCategoryTreeError,
   selectShouldLoadCategoryTree,
 } from '../../store/Category/category.selector';
+import { ConfirmService } from '../../Shared/Service/ConfirmService';
 @Component({
   selector: 'app-category',
   standalone: true,
@@ -75,7 +76,13 @@ export class CategoryComponent implements OnInit {
       filter: true,
     },
     { field: 'sequenceNo', headerName: 'SLNo' },
-    { field: 'isActive', headerName: 'Status' },
+    {
+      field: 'isActive', headerName: 'Status', width: 120, cellRenderer: (params: any) => {
+        return params.value ? 'Active' : 'Inactive';
+      }, cellStyle: (params: any) => {
+        return { color: params.value ? 'green' : 'red', 'font-weight': 'bold' };
+      }
+    },
     { field: 'remarks', headerName: 'Remarks' },
   ];
   trackByFn: TrackByFunction<any> | any;
@@ -102,7 +109,8 @@ export class CategoryComponent implements OnInit {
     private http: HttpHelperService,
     private router: Router,
     private datePipe: DatePipe,
-  ) {}
+    private confirmService: ConfirmService
+  ) { }
 
   ngOnInit(): void {
     this.getCategoryTree();
@@ -329,22 +337,22 @@ export class CategoryComponent implements OnInit {
     this.isVisibleModal = true;
   }
 
-  delete() {
-    let getSelectedItem = AGGridHelper.GetSelectedRow(this.categoryGridApi);
-    if (getSelectedItem == null) {
-      this.toast.warning('Please select an item', 'Warning!!', {
-        progressBar: true,
-      });
-    }
-    this.categoryId = Number(getSelectedItem.id);
-    this.oCategoryRequestDto.name = getSelectedItem.name;
-    this.oCategoryRequestDto.parentId = Number(getSelectedItem.parentId);
-    this.oCategoryRequestDto.fileId = Number(getSelectedItem.fileId);
-    this.oCategoryRequestDto.sequenceNo = Number(getSelectedItem.sequenceNo);
-    this.oCategoryRequestDto.isActive = getSelectedItem.isActive;
-    this.oCategoryRequestDto.remarks = getSelectedItem.remarks;
-    CommonHelper.CommonButtonClick('openCommonDelete');
-  }
+  // delete() {
+  //   let getSelectedItem = AGGridHelper.GetSelectedRow(this.categoryGridApi);
+  //   if (getSelectedItem == null) {
+  //     this.toast.warning('Please select an item', 'Warning!!', {
+  //       progressBar: true,
+  //     });
+  //   }
+  //   this.categoryId = Number(getSelectedItem.id);
+  //   this.oCategoryRequestDto.name = getSelectedItem.name;
+  //   this.oCategoryRequestDto.parentId = Number(getSelectedItem.parentId);
+  //   this.oCategoryRequestDto.fileId = Number(getSelectedItem.fileId);
+  //   this.oCategoryRequestDto.sequenceNo = Number(getSelectedItem.sequenceNo);
+  //   this.oCategoryRequestDto.isActive = getSelectedItem.isActive;
+  //   this.oCategoryRequestDto.remarks = getSelectedItem.remarks;
+  //   CommonHelper.CommonButtonClick('openCommonDelete');
+  // }
 
   public GetImageUrl(fileId: number): string {
     return `${this.http.appUrl}UploadedFile/GetImage/${fileId}`;
@@ -384,5 +392,12 @@ export class CategoryComponent implements OnInit {
       this.pageIndex++;
       this.GetCategory();
     }
+  }
+
+  delete() {
+    this.confirmService.open("Category Delete", "Are you sure you want to delete this Category?", () => {
+      this.DeleteCategory();
+    }
+    );
   }
 }
