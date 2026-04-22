@@ -18,6 +18,7 @@ import {
   selectShouldLoadCompanyByCode,
 } from './store/Comapny/company.selector';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ConfirmService } from './Shared/Service/ConfirmService';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -37,6 +38,11 @@ export class AppComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   title = 'E-commerce';
   domain: string = '';
+
+  modalTitle = '';
+  modalMessage = '';
+  private confirmCallback: any;
+  
   ngOnInit() {
     this.domain = window.location.host;
     this.GetCompanyByCode();
@@ -70,5 +76,20 @@ export class AppComponent implements OnInit {
           this.store.dispatch(loadCompanyByCode({ code: this.domain }));
         }
       });
+  }
+
+  constructor(private confirmService: ConfirmService) {
+    this.confirmService.confirmState.subscribe(state => {
+      this.modalTitle = state.title;
+      this.modalMessage = state.message;
+      this.confirmCallback = state.onConfirm;
+    });
+  }
+
+  executeAction() {
+    if (this.confirmCallback) {
+      this.confirmCallback();  
+      document.getElementById("closeCommonDelete")?.click();  
+    }
   }
 }
