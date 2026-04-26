@@ -33,6 +33,7 @@ export class QRCodeScannerComponent implements AfterViewInit {
         // Set the first available device (or you can choose a specific one)
         this.selectedDevice = this.devices[0];
         this.scanner.device = this.selectedDevice;
+        this.requestCameraPermission();
       } else {
         this.isCameraAvailable = false;
         this.permissionDenied = false;
@@ -42,18 +43,20 @@ export class QRCodeScannerComponent implements AfterViewInit {
       this.permissionDenied = true;
       this.isCameraAvailable = false;
     });
+  }
 
-    // Check permissions
-    navigator.permissions.query({ name: 'camera' }).then(result => {
-      if (result.state === 'granted') {
+  // Request camera access
+  requestCameraPermission() {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => {
         console.log('Camera permission granted');
-      } else if (result.state === 'prompt') {
-        console.log('Camera permission prompt');
-      } else {
+      })
+      .catch((error) => {
+        console.error('Camera permission denied', error);
         this.permissionDenied = true;
-        console.log('Camera permission denied');
-      }
-    });
+        this.isCameraAvailable = false;
+        this.toast.error('Camera permission denied. Please allow camera access.', 'Permission Denied', { progressBar: true });
+      });
   }
 
   // Success callback when QR code is scanned
@@ -79,4 +82,3 @@ export class QRCodeScannerComponent implements AfterViewInit {
     }
   }
 }
-
