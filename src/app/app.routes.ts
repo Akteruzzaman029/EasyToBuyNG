@@ -93,6 +93,7 @@ import { SalesOrderItemComponent } from './Component/OrderProcess/sales-order-it
 import { CounterComponent } from './store/Counter/counter/counter.component';
 import { LocationPickerComponent } from './Component/admin/location-picker/location-picker.component';
 import { AdminDashboardComponent } from './Component/admin-dashboard/admin-dashboard.component';
+import { QRCodeScannerComponent } from './Component/qrcode-scanner/qrcode-scanner.component';
 
 export const routes: Routes = [
   {
@@ -194,6 +195,14 @@ export const routes: Routes = [
         path: 'checkout-process',
         component: CheckOutProcessComponent,
         title: 'Checkout Process',
+        data: {
+          roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
+        },
+      },
+      {
+        path: 'qrcode-scanner',
+        component: QRCodeScannerComponent,
+        title: 'QR Code Scanner',
         data: {
           roles: [UserRole.NORMALUSER, UserRole.ADMIN, UserRole.SYSTEMADMIN],
         },

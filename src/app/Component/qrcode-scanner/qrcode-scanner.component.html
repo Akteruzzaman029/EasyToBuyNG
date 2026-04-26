@@ -1,0 +1,6 @@
+<zxing-scanner 
+  (scanSuccess)="onScanSuccess($event)" 
+  [device]="selectedDevice">
+</zxing-scanner>
+
+<div *ngIf="!devices.length">No devices found. Please ensure your camera is connected and accessible.</div>
