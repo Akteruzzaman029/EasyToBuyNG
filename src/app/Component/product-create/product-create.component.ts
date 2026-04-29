@@ -173,7 +173,6 @@ export class ProductCreateComponent implements OnInit {
   }
 
   public onGridFileChange(event: any, index: number): void {
-    debugger
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
@@ -181,10 +180,11 @@ export class ProductCreateComponent implements OnInit {
       this.http.UploadFile(`UploadedFile/Upload`, file).subscribe({
         next: (res: any) => {
           this.oProductRequestDto.productImages[index].fileId = res.id;
-          const baseUrl = "/img/";
-          this.oProductRequestDto.productImages[index].imageUrl = baseUrl + res.fileName;
 
-          this.toast.success("ইমেজ আপলোড সফল হয়েছে");
+          this.toast.success("ফাইল আপলোড এবং পাথ সেট করা হয়েছে");
+        },
+        error: (err) => {
+          this.toast.error("আপলোড ব্যর্থ হয়েছে");
         }
       });
     }
