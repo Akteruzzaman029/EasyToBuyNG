@@ -341,9 +341,13 @@ export class ProductComponent implements OnInit {
 
   }
   add() {
-    CommonHelper.CommonButtonClick("openCommonModel");
-    this.oProductRequestDto = new ProductRequestDto();
-    this.productId = 0;
+    // CommonHelper.CommonButtonClick("openCommonModel");
+    // this.oProductRequestDto = new ProductRequestDto();
+    // this.productId = 0;
+    const baseUrl = window.location.origin + window.location.pathname;
+    const targetUrl = `${baseUrl}#/admin/product-create`;
+
+    window.open(targetUrl, '_blank');
   }
 
   edit() {

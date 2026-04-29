@@ -94,6 +94,7 @@ import { CounterComponent } from './store/Counter/counter/counter.component';
 import { LocationPickerComponent } from './Component/admin/location-picker/location-picker.component';
 import { AdminDashboardComponent } from './Component/admin-dashboard/admin-dashboard.component';
 import { QRCodeScannerComponent } from './Component/qrcode-scanner/qrcode-scanner.component';
+import { ProductCreateComponent } from './Component/product-create/product-create.component';
 
 export const routes: Routes = [
   {
@@ -704,6 +705,12 @@ export const routes: Routes = [
         title: 'Location Selection',
         data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
       },
+      {
+        path: 'product-create',
+        component: ProductCreateComponent,
+        title: 'Product Create',
+        data: { roles: [UserRole.ADMIN, UserRole.SYSTEMADMIN] },
+      }
     ],
   },
   {

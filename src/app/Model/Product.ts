@@ -53,6 +53,8 @@ export class ProductRequestDto {
     this.remarks = '';
     this.userId = '';
     this.isActive = true;
+    this.productImages = [];
+    this.productSizes = [];
   }
   public companyId: number;
   public categoryId: number;
@@ -74,4 +76,34 @@ export class ProductRequestDto {
   public remarks: string;
   public userId: string;
   public isActive: boolean;
+  public productImages: ProductImageDto[];
+  public productSizes: ProductSizeDto[];
+}
+
+export class ProductImageDto {
+  public id: number = 0;
+  public companyId: number = 0;
+  public productId: number = 0;
+  public isPrimary: boolean = true;
+  public imageUrl: string = '';
+  public fileId: number = 0;
+  public sequenceNo: number = 0;
+  public remarks: string = '';
+  public isActive: boolean = true;
+}
+
+export class ProductSizeDto {
+  public id: number = 0;
+  public companyId: number = 0;
+  public productId: number = 0;
+  public size: string = '';
+  public price: number = 0;
+  public stock: number = 0;
+  public discountType: number = 0;
+  public discountValue: number = 0;
+  public discountStartDate: string = new Date().toISOString();
+  public discountEndDate: string = new Date().toISOString();
+  public sequenceNo: number = 0;
+  public remarks: string = '';
+  public isActive: boolean = true;
 }
