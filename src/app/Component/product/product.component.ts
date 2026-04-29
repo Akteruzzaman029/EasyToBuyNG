@@ -350,33 +350,48 @@ export class ProductComponent implements OnInit {
     window.open(targetUrl, '_blank');
   }
 
+  // edit() {
+  //   let getSelectedItem = AGGridHelper.GetSelectedRow(this.productGridApi);
+  //   if (getSelectedItem == null) {
+  //     this.toast.warning("Please select an item", "Warning!!", { progressBar: true })
+  //   }
+  //   this.productId = Number(getSelectedItem.id);
+  //   this.oProductRequestDto.name = getSelectedItem.name;
+  //   this.oProductRequestDto.shortName = getSelectedItem.shortName;
+  //   this.oProductRequestDto.modelNo = getSelectedItem.modelNo;
+  //   this.oProductRequestDto.description = getSelectedItem.description;
+  //   this.oProductRequestDto.categoryId = Number(getSelectedItem.categoryId);
+  //   this.oProductRequestDto.subCategoryId = Number(getSelectedItem.subCategoryId);
+  //   this.oProductRequestDto.measurementUnitId = Number(getSelectedItem.measurementUnitId);
+  //   this.oProductRequestDto.packTypeId = Number(getSelectedItem.packTypeId);
+  //   this.oProductRequestDto.purchasePrice = Number(getSelectedItem.purchasePrice);
+  //   this.oProductRequestDto.vat = Number(getSelectedItem.vat);
+  //   this.oProductRequestDto.fileId = Number(getSelectedItem.fileId);
+  //   this.oProductRequestDto.stock = Number(getSelectedItem.stock);
+  //   this.oProductRequestDto.discount = Number(getSelectedItem.discount);
+  //   this.oProductRequestDto.isConsider = CommonHelper.booleanConvert(getSelectedItem.isConsider);
+  //   this.oProductRequestDto.isBarCode = CommonHelper.booleanConvert(getSelectedItem.isBarCode);
+  //   this.oProductRequestDto.isFixedAmount = CommonHelper.booleanConvert(getSelectedItem.isFixedAmount);
+  //   this.oProductRequestDto.isActive = CommonHelper.booleanConvert(getSelectedItem.isActive);
+  //   this.oProductRequestDto.remarks = getSelectedItem.remarks;
+  //   this.oProductRequestDto.userId = (this.oCurrentUser?.userId);
+  //   this.GetAllSubCategoriesFrom();
+  //   CommonHelper.CommonButtonClick("openCommonModel");
+  // }
   edit() {
     let getSelectedItem = AGGridHelper.GetSelectedRow(this.productGridApi);
+
     if (getSelectedItem == null) {
-      this.toast.warning("Please select an item", "Warning!!", { progressBar: true })
+      this.toast.warning("Please select an item", "Warning!!", { progressBar: true });
+      return;
     }
-    this.productId = Number(getSelectedItem.id);
-    this.oProductRequestDto.name = getSelectedItem.name;
-    this.oProductRequestDto.shortName = getSelectedItem.shortName;
-    this.oProductRequestDto.modelNo = getSelectedItem.modelNo;
-    this.oProductRequestDto.description = getSelectedItem.description;
-    this.oProductRequestDto.categoryId = Number(getSelectedItem.categoryId);
-    this.oProductRequestDto.subCategoryId = Number(getSelectedItem.subCategoryId);
-    this.oProductRequestDto.measurementUnitId = Number(getSelectedItem.measurementUnitId);
-    this.oProductRequestDto.packTypeId = Number(getSelectedItem.packTypeId);
-    this.oProductRequestDto.purchasePrice = Number(getSelectedItem.purchasePrice);
-    this.oProductRequestDto.vat = Number(getSelectedItem.vat);
-    this.oProductRequestDto.fileId = Number(getSelectedItem.fileId);
-    this.oProductRequestDto.stock = Number(getSelectedItem.stock);
-    this.oProductRequestDto.discount = Number(getSelectedItem.discount);
-    this.oProductRequestDto.isConsider = CommonHelper.booleanConvert(getSelectedItem.isConsider);
-    this.oProductRequestDto.isBarCode = CommonHelper.booleanConvert(getSelectedItem.isBarCode);
-    this.oProductRequestDto.isFixedAmount = CommonHelper.booleanConvert(getSelectedItem.isFixedAmount);
-    this.oProductRequestDto.isActive = CommonHelper.booleanConvert(getSelectedItem.isActive);
-    this.oProductRequestDto.remarks = getSelectedItem.remarks;
-    this.oProductRequestDto.userId = (this.oCurrentUser?.userId);
-    this.GetAllSubCategoriesFrom();
-    CommonHelper.CommonButtonClick("openCommonModel");
+
+    const productId = getSelectedItem.id;
+    const baseUrl = window.location.origin + window.location.pathname;
+
+    const targetUrl = `${baseUrl}#/admin/product-create?id=${productId}`;
+
+    window.open(targetUrl, '_blank');
   }
 
   delete() {

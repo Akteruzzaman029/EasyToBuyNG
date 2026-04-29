@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CategoryFilterRequestDto } from '../../Model/Category';
 import { PackTypeFilterDto } from '../../Model/PackType';
 import { MeasurementUnitFilterDto } from '../../Model/MeasurementUnit';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-create',
@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
   styleUrl: './product-create.component.scss'
 })
 export class ProductCreateComponent implements OnInit {
-
+  public productId: number = 0;
   public oProductRequestDto = new ProductRequestDto();
 
   public categoryList: any[] = [];
@@ -33,13 +33,37 @@ export class ProductCreateComponent implements OnInit {
   constructor(
     private http: HttpHelperService,
     private toast: ToastrService,
-    private router: Router
+    private router: Router, private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
     this.GetAllCategories();
     this.GetAllPackTypes();
     this.GetAllMeasurementUnits();
+    this.route.queryParams.subscribe(params => {
+      if (params['id']) {
+        this.productId = Number(params['id']);
+        this.GetProductDetailsById(this.productId);
+      }
+    });
+  }
+
+  private GetProductDetailsById(id: number) {
+    this.http.Get(`Product/GetProductDetailsById/${id}`).subscribe((res: any) => {
+      this.oProductRequestDto = res;
+
+      if (this.oProductRequestDto.categoryId > 0) {
+        this.onCategoryChange(null);
+      }
+    });
+  }
+
+  public Save() {
+    if (this.productId > 0) {
+      this.UpdateProduct();
+    } else {
+      this.InsertProduct();
+    }
   }
 
   private GetAllCategories() {
@@ -188,6 +212,71 @@ export class ProductCreateComponent implements OnInit {
         }
       });
     }
+  }
+
+  public UpdateProduct() {
+    if (!this.oProductRequestDto.name) {
+      this.toast.warning("দয়া করে প্রোডাক্টের নাম লিখুন", "Warning!");
+      return;
+    }
+
+    const companyId = Number(CommonHelper.GetComapyId());
+    this.oProductRequestDto.companyId = companyId;
+    this.oProductRequestDto.userId = CommonHelper.GetUser()?.userId;
+
+    this.oProductRequestDto.categoryId = Number(this.oProductRequestDto.categoryId);
+    this.oProductRequestDto.subCategoryId = Number(this.oProductRequestDto.subCategoryId);
+    this.oProductRequestDto.measurementUnitId = Number(this.oProductRequestDto.measurementUnitId);
+    this.oProductRequestDto.packTypeId = Number(this.oProductRequestDto.packTypeId);
+    this.oProductRequestDto.purchasePrice = Number(this.oProductRequestDto.purchasePrice);
+    this.oProductRequestDto.vat = Number(this.oProductRequestDto.vat);
+    this.oProductRequestDto.stock = Number(this.oProductRequestDto.stock);
+    this.oProductRequestDto.discount = Number(this.oProductRequestDto.discount);
+
+    this.oProductRequestDto.isConsider = CommonHelper.booleanConvert(this.oProductRequestDto.isConsider);
+    this.oProductRequestDto.isBarCode = CommonHelper.booleanConvert(this.oProductRequestDto.isBarCode);
+    this.oProductRequestDto.isFixedAmount = CommonHelper.booleanConvert(this.oProductRequestDto.isFixedAmount);
+    this.oProductRequestDto.isActive = CommonHelper.booleanConvert(this.oProductRequestDto.isActive);
+
+    if (this.oProductRequestDto.productImages && this.oProductRequestDto.productImages.length > 0) {
+      this.oProductRequestDto.productImages.forEach(img => {
+        img.companyId = companyId;
+        img.productId = this.productId; // আপডেট মোডে এটি নিশ্চিত করা জরুরি
+        img.sequenceNo = Number(img.sequenceNo) || 0;
+        img.fileId = Number(img.fileId) || 0;
+
+        // CommonHelper ব্যবহার করে বুলিয়ান কনভার্সন
+        img.isPrimary = CommonHelper.booleanConvert(img.isPrimary);
+        img.isActive = CommonHelper.booleanConvert(img.isActive);
+      });
+    }
+
+    if (this.oProductRequestDto.productSizes && this.oProductRequestDto.productSizes.length > 0) {
+      this.oProductRequestDto.productSizes.forEach(size => {
+        size.companyId = companyId;
+        size.productId = this.productId; // আপডেট মোডে এটি নিশ্চিত করা জরুরি
+        size.price = Number(size.price) || 0;
+        size.stock = Number(size.stock) || 0;
+        size.discountValue = Number(size.discountValue) || 0;
+        size.sequenceNo = Number(size.sequenceNo) || 0;
+
+        size.isActive = CommonHelper.booleanConvert(size.isActive);
+      });
+    }
+
+    this.http.Post(`Product/UpdateProduct/${this.productId}`, this.oProductRequestDto).subscribe({
+      next: (res: any) => {
+        this.toast.success("প্রোডাক্টটি সফলভাবে আপডেট হয়েছে", "Success!");
+
+        setTimeout(() => {
+          this.router.navigate(['/admin/product']);
+        }, 1500);
+      },
+      error: (err) => {
+        console.error("Update SQL Error:", err);
+        this.toast.error(err.ErrorMessage || "আপডেট করার সময় সমস্যা হয়েছে", "Error!");
+      }
+    });
   }
 
 }
