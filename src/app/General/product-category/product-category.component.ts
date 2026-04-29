@@ -48,7 +48,6 @@ import {
     CommonModule,
     FormsModule,
     NzSliderModule,
-    PaginationComponent,
     TruncatePipe,
     CommonCategoryTreeComponent,
     DebounceInputDirective,
@@ -124,6 +123,11 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.authService.searchParam.subscribe((value) => {
+      this.oProductFilterDto.name = value;
+      this.Filter();
+    });
     this.GetProduct();
 
     this.GetAllCategories();

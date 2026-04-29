@@ -40,3 +40,54 @@
   font-weight: 700;
   line-height: 1;
 }
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+app-root {
+  display: block;
+  min-height: 100vh;
+}
+
+app-mobile-footer {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 2147483647 !important;
+  display: block !important;
+  width: 100% !important;
+  background: transparent !important;
+  pointer-events: none;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Make footer clickable */
+app-mobile-footer .mobile-bottom-nav {
+  pointer-events: auto;
+}
+
+/* Prevent page content hidden behind bottom nav */
+@media (max-width: 1024px) {
+  .page-content {
+    padding-bottom: 110px !important;
+  }
+
+  footer {
+    padding-bottom: 110px !important;
+  }
+
+  .floating-compare {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1025px) {
+  app-mobile-footer {
+    display: none !important;
+  }
+}
