@@ -4,6 +4,8 @@
     <div class="row g-3">
 
         <!-- LEFT SIDEBAR -->
+        @if (authService.isMobile()==false ) {
+
         <aside class="col-12 col-lg-3 col-xl-2">
             <div class="p-3 border rounded-3 bg-white">
                 <h6 class="fw-semibold mb-3">Filter by Price</h6>
@@ -44,10 +46,10 @@
 
 
         </aside>
-
+        }
 
         <!-- RIGHT CONTENT -->
-        <main class="col-12 col-lg-9 col-xl-10">
+        <main class="col-12 col-lg col-xl">
             <!-- Top bar -->
             <div class="d-flex flex-column flex-md-row gap-2 align-items-md-center justify-content-between mb-3">
                 <div class="flex-grow-1">
@@ -73,15 +75,6 @@
                     </select>
                 </div>
             </div>
-
-            <!-- Active filter chip row -->
-            <!-- <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                <span class="badge rounded-pill text-bg-danger px-3 py-2">
-                    Makeup &gt; Face &gt; Makeup Remover
-                    <button class="btn btn-sm btn-link text-white text-decoration-none ms-1 p-0">✕</button>
-                </span>
-                <button class="btn btn-link text-decoration-none p-0">Clear all</button>
-            </div> -->
 
             <!-- Product grid -->
             <div class="row g-3">
@@ -130,5 +123,58 @@
 
             </div>
         </main>
+    </div>
+</div>
+
+
+<button class="btn btn-primary" hidden id="offcanvasBottomButton" type="button" data-bs-toggle="offcanvas"
+    data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">Toggle bottom offcanvas</button>
+
+<div class="offcanvas offcanvas-bottom" style="height: 75vh;" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasBottomLabel">Filter</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <aside class="col-12 col-lg-3 col-xl-2">
+            <div class="p-3 border rounded-3 bg-white">
+                <h6 class="fw-semibold mb-3">Filter by Price</h6>
+                <!-- Simple "fake" slider (Bootstrap has no native range slider UI like the screenshot).
+             You can use <input type="range"> or a library (noUiSlider) for the real one. -->
+                <nz-slider nzRange [(ngModel)]="priceRange" [nzMin]="1" [nzMax]="50000"
+                    (ngModelChange)="onPriceRangeChange($event)" />
+                <div class="d-flex justify-content-between small text-muted mb-4">
+                    <span>৳ {{priceRange[0]}}</span>
+                    <span>৳ {{priceRange[1]}}</span>
+                </div>
+                <h6 class="fw-semibold mb-3">Product Categories</h6>
+                <!-- Category list -->
+                <app-common-category-tree (nodeClicked)="onCategoryNodeClicked($event)"></app-common-category-tree>
+
+            </div>
+
+
+            <div class="brand-filter-card px-2 mt-3">
+                <h6 class="fw-semibold mb-3">Filter by Brand</h6>
+
+                <div class="search-box">
+                    <input type="text" [(ngModel)]="brandSearchText" (ngModelChange)="onBrandSearch()"
+                        placeholder="Search here..." class="search-input" />
+                </div>
+
+                <div class="brand-list">
+                    <label class="brand-item" *ngFor="let item of filteredBrandList">
+                        <div class="brand-left">
+                            <input type="checkbox" [checked]="item.isChecked" (change)="onBrandChecked(item)" />
+                            <span class="brand-name">{{ item.name }}</span>
+                        </div>
+
+                        <span class="brand-count">{{ item.productCount }}</span>
+                    </label>
+                </div>
+            </div>
+
+
+        </aside>
     </div>
 </div>

@@ -15,9 +15,12 @@ export class MobileFooterComponent implements OnInit {
   @Input() cartItemsCount: number = 0;
 
   ngOnInit(): void {}
-  
+
   reditect() {
-    debugger
     CommonHelper.CommonButtonClick('offcanvasButton');
+  }
+  
+  filter() {
+    CommonHelper.CommonButtonClick('offcanvasBottomButton');
   }
 }

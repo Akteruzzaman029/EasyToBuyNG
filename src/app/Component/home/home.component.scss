@@ -62,7 +62,7 @@ app-mobile-footer {
   display: block !important;
   width: 100% !important;
   background: transparent !important;
-  pointer-events: none;
+  // pointer-events: none;
   padding-bottom: env(safe-area-inset-bottom);
 }
 
