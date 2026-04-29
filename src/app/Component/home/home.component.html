@@ -1,23 +1,18 @@
 <!-- Header Component -->
 <header class="p-3" style="background-color: rgb(211, 97, 0) !important;">
   <div class="container">
-    @if (authService.isMobile()) {
+    @if (authService.isMobile() || authService.isTablet()) {
     <div class="row align-items-center">
-      <!-- Left Side: Logo -->
-      <div routerLink="/" class="  col col-md-auto cursor-pointer d-flex align-items-center mb-md-0">
-
+      <div  class="  col col-md-auto cursor-pointer d-flex align-items-center mb-md-0">
         <button (click)="open()" *ngIf="this.authService.isMobile()==true" class="btn btn-light text-danger me-3">
           <i class="bi bi-list"></i>
         </button>
-        <img *ngIf="this.authService.isMobile()==false" src="logo.png" alt="Logo" class="h-8 cursor-pointer">
-        <span *ngIf="this.authService.isMobile()==false" class="text-white fs-4 fw-bold ms-2 cursor-pointer">Rongtuli
-          Cosmetics</span>
+        
+        <img  routerLink="/" src="logo.png" alt="Logo" class="h-8 cursor-pointer">
       </div>
 
       <!-- Center: Location and Search -->
       <div class="col col-md-auto d-flex align-items-center justify-content-center justify-content-md-start ">
-
-        <!-- Search Bar -->
         <div class="position-relative">
           <input type="text" [(ngModel)]="searchTxt" appDebounceInput [debounceTimeMs]="2000"
             (debounceValue)="onSearch($event)" placeholder="Search your products"
@@ -30,34 +25,16 @@
 
       <!-- Right Side: App Download, Language, Sign In/Sign Up -->
       <div class=" col col-md-auto d-flex align-items-center justify-content-center justify-content-md-end ">
-        <!-- <button class="btn btn-warning text-white me-3">
-                    Download App Now
-                </button>
-                <button class="btn btn-light me-3 text-black">বাংলা</button> -->
         <button routerLink="/login" *ngIf="this.authService.isLogin()==false" class="btn btn-light text-white">
-          <span class="fw-semibold text-black">Sign in / Sign up</span>
+          <span class="fw-semibold text-danger"> <i class="bi bi-person-circle"></i></span>
         </button>
         <button routerLink="/account" *ngIf="this.authService.isLogin()==true && this.authService.isMobile()==false"
           class="btn btn-light text-white">
-          <span class="fw-semibold text-black">My Account</span>
+          <span class="fw-semibold text-black"><i class="bi bi-person-circle"></i></span>
         </button>
-
-        <button class="bag-btn ms-3" (click)="offcanvasButton()">
-          <span class="bag-icon">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 8V7a5 5 0 0 1 10 0v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-              <path d="M6 8h12l-1 11H7L6 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-            </svg>
-          </span>
-
-          <span class="bag-text">BAG</span>
-
-          <span class="bag-count"> {{ cartItemCount }}</span>
-        </button>
-
       </div>
     </div>
-    } @else if (authService.isTablet()) {
+    } @else if (authService.isDesktop()) {
     <div class="row align-items-center">
       <!-- Left Side: Logo -->
       <div routerLink="/" class="  col col-md-auto cursor-pointer d-flex align-items-center mb-md-0">
@@ -200,7 +177,7 @@
 </div>
 
 @if (authService.isMobile() || authService.isTablet()) {
-  <app-mobile-footer></app-mobile-footer>
+  <app-mobile-footer [cartItemsCount]="cartItemCount"></app-mobile-footer>
 }
 
 <div class="floating-compare" (click)="offcanvasButton()" style="position: fixed;
