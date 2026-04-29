@@ -1,5 +1,5 @@
 <nav class="mobile-bottom-nav">
-  <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="mobile-nav-item">
+  <a  [routerLink]="'/'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="mobile-nav-item">
     <i class="bi bi-house"></i>
     <span>Home</span>
   </a>
@@ -14,10 +14,10 @@
     <span>Categories</span>
   </a>
 
-  <a routerLink="/cart" routerLinkActive="active" class="mobile-nav-item">
+  <a  (click)="reditect()" class="mobile-nav-item">
     <span class="nav-icon-wrapper">
       <i class="bi bi-bag"></i>
-      <span class="cart-badge">0</span>
+      <span class="cart-badge">{{cartItemsCount}}</span>
     </span>
     <span>Cart</span>
   </a>
