@@ -80,3 +80,17 @@
 ::ng-deep .ant-select-tree-dropdown {
   z-index: 2055 !important;
 }
+
+@media (max-width: 1024px) {
+  .page-content {
+    padding-bottom: 100px;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .floating-compare {
+    display: none !important;
+  }
+}

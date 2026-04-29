@@ -25,6 +25,8 @@ import {
 } from '../../store/Category/category.selector';
 import { take } from 'rxjs';
 import { loadCategoryTree } from '../../store/Category/category.action';
+import { DebounceInputDirective } from '../../Shared/directives/debounce-input.directive';
+import { MobileFooterComponent } from "../../Shared/mobile-footer/mobile-footer.component";
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -40,7 +42,9 @@ import { loadCategoryTree } from '../../store/Category/category.action';
     NzDrawerModule,
     NzSpaceModule,
     NzIconModule,
-  ],
+    DebounceInputDirective,
+    MobileFooterComponent
+],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   providers: [DatePipe, { provide: LOCALE_ID, useValue: 'en-US' }],
@@ -54,12 +58,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   visible = false;
   size: number | string = 360;
 
+  searchTxt: string = '';
   expandedParentId: number | null = null;
   expandedChildId: number | null = null;
 
   drawerTitle = 'Menu';
 
   megaMenus: any[] = []; // your API transformed menu data
+
+  onSearch(value: any): void {
+    this.authService.searchParam.next(value);
+    this.router.navigate(['//product-category']);
+  }
 
   open(): void {
     this.visible = true;

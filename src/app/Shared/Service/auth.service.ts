@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Subject, Observable, tap, catchError, throwError } from 'rxjs';
 import { CommonHelper } from './common-helper.service';
 import { HttpHelperService } from './http-helper.service';
@@ -10,18 +10,26 @@ export enum UserRole {
   NORMALUSER = 'NormalUser',
 }
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
   public tokenSubject = new Subject<any>();
   public cartChange = new Subject<any>();
   public isLoginSubject = new Subject<any>();
-  constructor(private http: HttpHelperService) { }
+  public searchParam = new Subject<any>();
+
+  public screenType = signal<'mobile' | 'tablet' | 'desktop'>('desktop');
+  constructor(private http: HttpHelperService) {
+    this.updateScreenType();
+
+    window.addEventListener('resize', () => {
+      this.updateScreenType();
+    });
+  }
 
   public isLogin(): boolean {
     if (this.isLocalStorageAvailable()) {
-      let token = localStorage.getItem("Token");
+      let token = localStorage.getItem('Token');
       return token == null ? false : true;
     }
     return false;
@@ -40,14 +48,16 @@ export class AuthService {
 
   public GetCurrentUserRole(): string {
     try {
-      let token = localStorage.getItem("Token");
+      let token = localStorage.getItem('Token');
       if (!token) {
-        return "NormalUser"
+        return 'NormalUser';
       }
       const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+      return payload[
+        'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+      ];
     } catch (error) {
-      return "NormalUser";
+      return 'NormalUser';
     }
   }
 
@@ -82,41 +92,44 @@ export class AuthService {
 
   refreshToken(): Observable<any> {
     let currentUser = CommonHelper.GetUser();
-    const payload =
-    {
+    const payload = {
       userId: currentUser?.userId,
-      refreshToken: currentUser?.refreshToken
-    }
-    return this.http.Login(`Auth/RefreshToken`,payload).pipe(
+      refreshToken: currentUser?.refreshToken,
+    };
+    return this.http.Login(`Auth/RefreshToken`, payload).pipe(
       tap((res: any) => {
-        localStorage.setItem("Token", res.jwtToken)
-        localStorage.setItem("UserResponseDto", JSON.stringify(res))
+        localStorage.setItem('Token', res.jwtToken);
+        localStorage.setItem('UserResponseDto', JSON.stringify(res));
       }),
       catchError((error: any) => {
-        console.log("refreshToken Error : ", error)
+        console.log('refreshToken Error : ', error);
         return throwError(() => new Error(error));
-      })
+      }),
     );
   }
 
-  // Method to detect mobile devices
+  private updateScreenType(): void {
+    const width = window.innerWidth;
+
+    if (width < 768) {
+      this.screenType.set('mobile');
+    } else if (width >= 768 && width < 1024) {
+      this.screenType.set('tablet');
+    } else {
+      this.screenType.set('desktop');
+    }
+  }
+
   isMobile(): boolean {
-    const userAgent = navigator.userAgent || navigator.vendor ;
-    // Check if the device is a mobile
-    return /iPhone|iPad|iPod|Android/i.test(userAgent);
+    return this.screenType() === 'mobile';
   }
 
-  // Method to detect tablet devices
   isTablet(): boolean {
-    const userAgent = navigator.userAgent || navigator.vendor ;
-    // Check if the device is a tablet (could be further refined with media queries)
-    return /iPad|Android|tablet/i.test(userAgent);
+    return this.screenType() === 'tablet';
   }
 
-  // Method to detect desktop devices
   isDesktop(): boolean {
-    // Check if the device is a desktop (everything that's not mobile or tablet)
-    return !this.isMobile() && !this.isTablet();
+    return this.screenType() === 'desktop';
   }
 
   // Method to get the screen width for responsive design (optional)
